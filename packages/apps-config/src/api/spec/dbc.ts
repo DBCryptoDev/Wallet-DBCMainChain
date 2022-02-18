@@ -101,10 +101,22 @@ const definitions: OverrideBundleDefinition = {
             WaitingFulfill: null,
             Online: null,
             StakerReportOffline: "(BlockNumber, Box<MachineStatus>)",
-            ReporterReportOffline:
-              "(StashSlashReason, Box<MachineStatus>, AccountId, Vec<AccountId>)",
+            ReporterReportOffline: "(StashSlashReason, Box<MachineStatus>, AccountId, Vec<AccountId>)",
             Creating: null,
             Rented: null,
+          },
+        },
+        StashSlashReason: {
+          _enum: {
+            RentedReportOffline: "BlockNumber",
+            OnlineReportOffline: "BlockNumber",
+            RentedInaccessible: "BlockNumber",
+            RentedHardwareMalfunction: "BlockNumber",
+            RentedHardwareCounterfeit: "BlockNumber",
+            OnlineRentFailed: "BlockNumber",
+            CommitteeRefusedOnline: null,
+            CommitteeRefusedMutHardware: null,
+            ReonlineShouldReward: null,
           },
         },
         MachineInfoDetail: {
@@ -201,12 +213,7 @@ const definitions: OverrideBundleDefinition = {
           status: "OCVerifyStatus",
         },
         OCVerifyStatus: {
-          _enum: [
-            "SubmittingHash",
-            "SubmittingRaw",
-            "Summarizing",
-            "Finished",
-          ],
+          _enum: ["SubmittingHash", "SubmittingRaw", "Summarizing", "Finished"],
         },
         OCPendingSlashInfo: {
           machine_id: "MachineId",
@@ -283,12 +290,7 @@ const definitions: OverrideBundleDefinition = {
           slash_result: "SlashResult",
         },
         ReportResultType: {
-          _enum: [
-            "ReportSucceed",
-            "ReportRefused",
-            "ReporterNotSubmitEncryptedInfo",
-            "NoConsensus",
-          ],
+          _enum: ["ReportSucceed", "ReportRefused", "ReporterNotSubmitEncryptedInfo", "NoConsensus"],
         },
         SlashResult: {
           _enum: ["Pending", "Canceled", "Executed"],
@@ -319,13 +321,7 @@ const definitions: OverrideBundleDefinition = {
           reason: "Vec<u8>",
         },
         ReportStatus: {
-          _enum: [
-            "Reported",
-            "WaitingBook",
-            "Verifying",
-            "SubmittingRaw",
-            "CommitteeConfirmed",
-          ],
+          _enum: ["Reported", "WaitingBook", "Verifying", "SubmittingRaw", "CommitteeConfirmed"],
         },
         MachineFaultType: {
           _enum: {
