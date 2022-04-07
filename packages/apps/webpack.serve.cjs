@@ -13,17 +13,17 @@ module.exports = merge(baseConfig(__dirname, "development"), {
     firewall: false,
     open: false,
     port: 3000,
-    static: path.resolve(__dirname, "build")
+    static: path.resolve(__dirname, "build"),
   },
   plugins: [
     new HtmlWebpackPlugin({
       PAGE_TITLE: "Polkadot/Substrate Portal",
       inject: true,
-      template: path.join(__dirname, "public/index.html")
+      template: path.join(__dirname, "public/index.html"),
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
   ],
   watchOptions: {
-    ignored: [".yarn", "build", "node_modules"]
-  }
+    ignored: [".yarn", "build", "node_modules"],
+  },
 });

@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/app-calendar authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { EntryInfoTyped } from './types';
+import type { EntryInfoTyped } from "./types";
 
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useMemo } from "react";
+import styled from "styled-components";
 
-import DayItem from './DayItem';
+import DayItem from "./DayItem";
 
 interface Props {
   className?: string;
@@ -20,34 +20,30 @@ interface Props {
 const MN_TO_MS = 60 * 1000;
 const HR_TO_MS = 60 * MN_TO_MS;
 
-function filterEntries (date: Date, minutes: number, index: number, scheduled: EntryInfoTyped[]): EntryInfoTyped[] {
-  const start = date.getTime() + (index * HR_TO_MS);
+function filterEntries(date: Date, minutes: number, index: number, scheduled: EntryInfoTyped[]): EntryInfoTyped[] {
+  const start = date.getTime() + index * HR_TO_MS;
   const end = start + HR_TO_MS;
-  const explicit = start + (minutes * MN_TO_MS);
+  const explicit = start + minutes * MN_TO_MS;
 
   return scheduled
     .filter(({ dateTime }) => dateTime >= explicit && dateTime < end)
-    .sort((a, b) => (a.dateTime - b.dateTime) || a.type.localeCompare(b.type));
+    .sort((a, b) => a.dateTime - b.dateTime || a.type.localeCompare(b.type));
 }
 
-function DayHour ({ className = '', date, hour, index, minutes, scheduled }: Props): React.ReactElement<Props> | null {
-  const filtered = useMemo(
-    () => filterEntries(date, minutes, index, scheduled),
-    [date, index, minutes, scheduled]
-  );
+function DayHour({ className = "", date, hour, index, minutes, scheduled }: Props): React.ReactElement<Props> | null {
+  const filtered = useMemo(() => filterEntries(date, minutes, index, scheduled), [date, index, minutes, scheduled]);
 
-  const hourStr = `${` ${hour}`.slice(-2)} ${hour >= 12 ? 'pm' : 'am'}`;
+  const hourStr = `${` ${hour}`.slice(-2)} ${hour >= 12 ? "pm" : "am"}`;
 
   return (
-    <div className={`${className}${filtered.length ? ' hasItems' : ''}`}>
-      <div className={`hourLabel${filtered.length ? ' highlight--color' : ''}`}>{hourStr}</div>
-      <div className='hourContainer'>
-        {filtered.map((item, index): React.ReactNode => (
-          <DayItem
-            item={item}
-            key={index}
-          />
-        ))}
+    <div className={`${className}${filtered.length ? " hasItems" : ""}`}>
+      <div className={`hourLabel${filtered.length ? " highlight--color" : ""}`}>{hourStr}</div>
+      <div className="hourContainer">
+        {filtered.map(
+          (item, index): React.ReactNode => (
+            <DayItem item={item} key={index} />
+          )
+        )}
       </div>
     </div>
   );

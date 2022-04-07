@@ -1,14 +1,14 @@
 // Copyright 2017-2021 @polkadot/app-tech-comm authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Hash, Proposal, ProposalIndex } from '@polkadot/types/interfaces';
+import type { Hash, Proposal, ProposalIndex } from "@polkadot/types/interfaces";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { Button, InputAddress, Modal, ProposedAction, TxButton } from '@polkadot/react-components';
-import { useApi, useToggle, useWeight } from '@polkadot/react-hooks';
+import { Button, InputAddress, Modal, ProposedAction, TxButton } from "@polkadot/react-components";
+import { useApi, useToggle, useWeight } from "@polkadot/react-hooks";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 interface Props {
   hasFailed: boolean;
@@ -18,7 +18,7 @@ interface Props {
   proposal: Proposal;
 }
 
-function Close ({ hasFailed, hash, idNumber, members, proposal }: Props): React.ReactElement<Props> | null {
+function Close({ hasFailed, hash, idNumber, members, proposal }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const [isOpen, toggleOpen] = useToggle();
@@ -32,24 +32,22 @@ function Close ({ hasFailed, hash, idNumber, members, proposal }: Props): React.
   return (
     <>
       {isOpen && (
-        <Modal
-          header={t<string>('Close proposal')}
-          size='large'
-        >
+        <Modal header={t<string>("Close proposal")} size="large">
           <Modal.Content>
-            <Modal.Columns hint={t<string>('The proposal that will be affected. Once closed for the current voting round, it would need to be re-submitted for a subsequent voting round.')}>
-              <ProposedAction
-                idNumber={idNumber}
-                proposal={proposal}
-              />
+            <Modal.Columns
+              hint={t<string>(
+                "The proposal that will be affected. Once closed for the current voting round, it would need to be re-submitted for a subsequent voting round."
+              )}
+            >
+              <ProposedAction idNumber={idNumber} proposal={proposal} />
             </Modal.Columns>
-            <Modal.Columns hint={t<string>('The committee account that will apply the close for the current round.')}>
+            <Modal.Columns hint={t<string>("The committee account that will apply the close for the current round.")}>
               <InputAddress
                 filter={members}
-                help={t<string>('Select the account you wish close the proposal with.')}
-                label={t<string>('sending account')}
+                help={t<string>("Select the account you wish close the proposal with.")}
+                label={t<string>("sending account")}
                 onChange={setAccountId}
-                type='account'
+                type="account"
               />
             </Modal.Columns>
           </Modal.Content>
@@ -69,11 +67,7 @@ function Close ({ hasFailed, hash, idNumber, members, proposal }: Props): React.
           </Modal.Actions>
         </Modal>
       )}
-      <Button
-        icon='times'
-        label={t<string>('Close')}
-        onClick={toggleOpen}
-      />
+      <Button icon="times" label={t<string>("Close")} onClick={toggleOpen} />
     </>
   );
 }

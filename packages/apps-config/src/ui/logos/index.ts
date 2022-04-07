@@ -126,11 +126,11 @@ export const chainLogos: Record<string, unknown> = [
   ["PHOENIX PC1", nodePhoenix],
   ["DBC Mainnet", dbcLogo],
   ["DBC testnet", dbcLogo],
-  ["DBC Network", dbcLogo]
+  ["DBC Network", dbcLogo],
 ].reduce(
   (logos, [chain, logo]): Record<string, unknown> => ({
     ...logos,
-    [(chain as string).toLowerCase()]: logo
+    [(chain as string).toLowerCase()]: logo,
   }),
   {}
 );
@@ -211,11 +211,11 @@ export const nodeLogos: Record<string, unknown> = [
   ["PHOENIX Collator", nodePhoenix],
   ["DBC Mainnet", dbcLogo],
   ["DBC testnet", dbcLogo],
-  ["DBC Network", dbcLogo]
+  ["DBC Network", dbcLogo],
 ].reduce(
   (logos, [node, logo]): Record<string, unknown> => ({
     ...logos,
-    [(node as string).toLowerCase().replace(/-/g, " ")]: logo
+    [(node as string).toLowerCase().replace(/-/g, " ")]: logo,
   }),
   {}
 );
@@ -306,12 +306,12 @@ export const namedLogos: Record<string, unknown> = {
   unique: nodeUnique,
   vln: nodeVln,
   westend: nodePolkadot,
-  zero: nodeZero
+  zero: nodeZero,
 };
 
 // extension logos
 export const extensionLogos: Record<string, unknown> = {
-  "polkadot-js": extensionPolkadotJs
+  "polkadot-js": extensionPolkadotJs,
 };
 
 // external logos, i.e. for explorers
@@ -321,12 +321,12 @@ export const externalLogos: Record<string, unknown> = {
   polkascan: externalPolkascan,
   polkassembly: externalPolkassembly,
   polkastats: externalPolkastats,
-  subscan: externalSubscan
+  subscan: externalSubscan,
 };
 
 // empty logos
 export const emptyLogos: Record<string, unknown> = {
-  empty: emptyLogo
+  empty: emptyLogo,
 };
 
 // preload all

@@ -1,8 +1,17 @@
 // Copyright 2017-2021 @polkadot/app-parachains authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type BN from 'bn.js';
-import type { AuctionIndex, BlockNumber, FundInfo, LeasePeriodOf, ParachainProposal, ParaId, ParaInfo, SessionIndex } from '@polkadot/types/interfaces';
+import type BN from "bn.js";
+import type {
+  AuctionIndex,
+  BlockNumber,
+  FundInfo,
+  LeasePeriodOf,
+  ParachainProposal,
+  ParaId,
+  ParaInfo,
+  SessionIndex,
+} from "@polkadot/types/interfaces";
 
 export interface AuctionInfo {
   endBlock: BlockNumber | null;

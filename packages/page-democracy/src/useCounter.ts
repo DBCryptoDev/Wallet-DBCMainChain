@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { useAccounts, useApi, useCall, useIsMountedRef } from '@polkadot/react-hooks';
+import { useAccounts, useApi, useCall, useIsMountedRef } from "@polkadot/react-hooks";
 
-export default function useCounter (): number {
+export default function useCounter(): number {
   const { hasAccounts } = useAccounts();
   const { api, isApiReady } = useApi();
   const mountedRef = useIsMountedRef();
@@ -14,10 +14,7 @@ export default function useCounter (): number {
   const [counter, setCounter] = useState(0);
 
   useEffect((): void => {
-    mountedRef.current && setCounter(
-      (proposals?.length || 0) +
-      (referenda?.length || 0)
-    );
+    mountedRef.current && setCounter((proposals?.length || 0) + (referenda?.length || 0));
   }, [mountedRef, proposals, referenda]);
 
   return counter;

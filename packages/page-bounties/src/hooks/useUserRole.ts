@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/app-bounties authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AccountId } from '@polkadot/types/interfaces';
+import type { AccountId } from "@polkadot/types/interfaces";
 
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { useAccounts, useMembers } from '@polkadot/react-hooks';
+import { useAccounts, useMembers } from "@polkadot/react-hooks";
 
-import { UserRole } from '../types';
+import { UserRole } from "../types";
 
-export type UserRolesInfo = { roles: UserRole[], isCurator: boolean };
+export type UserRolesInfo = { roles: UserRole[]; isCurator: boolean };
 
-export function useUserRole (curatorId?: AccountId): UserRolesInfo {
+export function useUserRole(curatorId?: AccountId): UserRolesInfo {
   const { allAccounts, hasAccounts } = useAccounts();
 
   const { isMember } = useMembers();
@@ -21,15 +21,15 @@ export function useUserRole (curatorId?: AccountId): UserRolesInfo {
   const roles: UserRole[] = [];
 
   if (isCurator) {
-    roles.push('Curator');
+    roles.push("Curator");
   }
 
   if (isMember) {
-    roles.push('Member');
+    roles.push("Member");
   }
 
   if (hasAccounts) {
-    roles.push('User');
+    roles.push("User");
   }
 
   return { isCurator: !!isCurator, roles };

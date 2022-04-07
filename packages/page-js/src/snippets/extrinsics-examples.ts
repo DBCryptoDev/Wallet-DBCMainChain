@@ -1,15 +1,15 @@
 // Copyright 2017-2021 @polkadot/app-js authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Snippet } from '@polkadot/app-js/types';
+import type { Snippet } from "@polkadot/app-js/types";
 
 // We must fix this :(
 /* eslint-disable sort-keys */
 
 export const extrinsicMakeTransfer: Snippet = {
-  value: 'extrinsicMakeTransfer',
-  text: 'Make transfer and listen to events',
-  label: { color: 'grey', children: 'Extrinsics', size: 'tiny' },
+  value: "extrinsicMakeTransfer",
+  text: "Make transfer and listen to events",
+  label: { color: "grey", children: "Extrinsics", size: "tiny" },
   code: `// Make a transfer from Alice to Bob and listen to system events.
 // You need to be connected to a development chain for this example to work.
 const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
@@ -32,5 +32,5 @@ await transfer.signAndSend(ALICE, ({ events = [], status }) => {
   events.forEach(({ phase, event: { data, method, section } }) => {
     console.log(phase.toString() + ' : ' + section + '.' + method + ' ' + data.toString());
   });
-});`
+});`,
 };

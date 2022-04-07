@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { UInt } from '@polkadot/types';
+import type { UInt } from "@polkadot/types";
 
-import BN from 'bn.js';
-import React from 'react';
-import styled from 'styled-components';
+import BN from "bn.js";
+import React from "react";
+import styled from "styled-components";
 
-import { BlockToTime } from '@polkadot/react-query';
-import { BN_HUNDRED, formatNumber, isUndefined } from '@polkadot/util';
+import { BlockToTime } from "@polkadot/react-query";
+import { BN_HUNDRED, formatNumber, isUndefined } from "@polkadot/util";
 
-import Labelled from './Labelled';
-import Progress from './Progress';
+import Labelled from "./Labelled";
+import Progress from "./Progress";
 
 interface ProgressProps {
   hideGraph?: boolean;
@@ -30,24 +30,17 @@ interface Props {
   progress?: ProgressProps;
 }
 
-function CardSummary ({ children, className = '', help, label, progress }: Props): React.ReactElement<Props> | null {
+function CardSummary({ children, className = "", help, label, progress }: Props): React.ReactElement<Props> | null {
   const value = progress && progress.value;
   const total = progress && progress.total;
-  const left = progress && !isUndefined(value) && !isUndefined(total) && value.gten(0) && total.gtn(0)
-    ? (
-      value.gt(total)
-        ? `>${
-          progress.isPercent
-            ? '100'
-            : formatNumber(total)
-        }`
-        : (
-          progress.isPercent
-            ? value.mul(BN_HUNDRED).div(total).toString()
-            : formatNumber(value)
-        )
-    )
-    : undefined;
+  const left =
+    progress && !isUndefined(value) && !isUndefined(total) && value.gten(0) && total.gtn(0)
+      ? value.gt(total)
+        ? `>${progress.isPercent ? "100" : formatNumber(total)}`
+        : progress.isPercent
+        ? value.mul(BN_HUNDRED).div(total).toString()
+        : formatNumber(value)
+      : undefined;
 
   if (progress && isUndefined(left)) {
     return null;
@@ -57,37 +50,22 @@ function CardSummary ({ children, className = '', help, label, progress }: Props
 
   return (
     <article className={className}>
-      <Labelled
-        help={help}
-        isSmall
-        label={label}
-      >
-        {children}{
-          progress && !progress.hideValue && (
-            <>
-              {isTimed && !children && (
-                <BlockToTime value={progress.total} />
+      <Labelled help={help} isSmall label={label}>
+        {children}
+        {progress && !progress.hideValue && (
+          <>
+            {isTimed && !children && <BlockToTime value={progress.total} />}
+            <div className={isTimed ? "isSecondary" : "isPrimary"}>
+              {!left || isUndefined(progress.total) ? (
+                "-"
+              ) : !isTimed || progress.isPercent || !progress.value ? (
+                `${left}${progress.isPercent ? "" : "/"}${progress.isPercent ? "%" : formatNumber(progress.total)}`
+              ) : (
+                <BlockToTime className="timer" value={progress.total.sub(progress.value)} />
               )}
-              <div className={isTimed ? 'isSecondary' : 'isPrimary'}>
-                {!left || isUndefined(progress.total)
-                  ? '-'
-                  : !isTimed || progress.isPercent || !progress.value
-                    ? `${left}${progress.isPercent ? '' : '/'}${
-                      progress.isPercent
-                        ? '%'
-                        : formatNumber(progress.total)
-                    }`
-                    : (
-                      <BlockToTime
-                        className='timer'
-                        value={progress.total.sub(progress.value)}
-                      />
-                    )
-                }
-              </div>
-            </>
-          )
-        }
+            </div>
+          </>
+        )}
       </Labelled>
       {progress && !progress.hideGraph && <Progress {...progress} />}
     </article>
@@ -147,7 +125,7 @@ export default React.memo(styled(CardSummary)`
     }
   }
 
-  @media(max-width: 767px) {
+  @media (max-width: 767px) {
     min-height: 4.8rem;
     padding: 0.25 0.4em;
 

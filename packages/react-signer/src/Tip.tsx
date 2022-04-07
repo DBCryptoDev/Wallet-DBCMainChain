@@ -1,20 +1,20 @@
 // Copyright 2017-2021 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import BN from 'bn.js';
-import React, { useEffect, useState } from 'react';
+import BN from "bn.js";
+import React, { useEffect, useState } from "react";
 
-import { InputBalance, Modal, Toggle } from '@polkadot/react-components';
-import { BN_ZERO } from '@polkadot/util';
+import { InputBalance, Modal, Toggle } from "@polkadot/react-components";
+import { BN_ZERO } from "@polkadot/util";
 
-import { useTranslation } from './translate';
+import { useTranslation } from "./translate";
 
 interface Props {
   className?: string;
   onChange: (tip: BN) => void;
 }
 
-function Tip ({ className, onChange }: Props): React.ReactElement<Props> | null {
+function Tip({ className, onChange }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const [tip, setTip] = useState(BN_ZERO);
   const [showTip, setShowTip] = useState(false);
@@ -26,23 +26,25 @@ function Tip ({ className, onChange }: Props): React.ReactElement<Props> | null 
   return (
     <Modal.Columns
       className={className}
-      hint={t<string>('Adding an optional tip to the transaction could allow for higher priority, especially when the chain is busy.')}
+      hint={t<string>(
+        "Adding an optional tip to the transaction could allow for higher priority, especially when the chain is busy."
+      )}
     >
       <Toggle
-        className='tipToggle'
+        className="tipToggle"
         label={
           showTip
-            ? t<string>('Include an optional tip for faster processing')
-            : t<string>('Do not include a tip for the block author')
+            ? t<string>("Include an optional tip for faster processing")
+            : t<string>("Do not include a tip for the block author")
         }
         onChange={setShowTip}
         value={showTip}
       />
       {showTip && (
         <InputBalance
-          help={t<string>('Add a tip to this extrinsic, paying the block author for greater priority')}
+          help={t<string>("Add a tip to this extrinsic, paying the block author for greater priority")}
           isZeroable
-          label={t<string>('Tip (optional)')}
+          label={t<string>("Tip (optional)")}
           onChange={setTip}
         />
       )}

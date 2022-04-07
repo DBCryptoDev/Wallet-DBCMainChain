@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import AccountName from '../AccountName';
-import IdentityIcon from '../IdentityIcon';
+import AccountName from "../AccountName";
+import IdentityIcon from "../IdentityIcon";
 
 interface Props {
   address: string;
@@ -15,19 +15,14 @@ interface Props {
   style?: Record<string, string>;
 }
 
-function KeyPair ({ address, className = '' }: Props): React.ReactElement<Props> {
+function KeyPair({ address, className = "" }: Props): React.ReactElement<Props> {
   return (
     <div className={`ui--KeyPair ${className}`}>
-      <IdentityIcon
-        className='icon'
-        value={address}
-      />
-      <div className='name'>
+      <IdentityIcon className="icon" value={address} />
+      <div className="name">
         <AccountName value={address} />
       </div>
-      <div className='address'>
-        {address}
-      </div>
+      <div className="address">{address}</div>
     </div>
   );
 }

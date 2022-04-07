@@ -1,15 +1,15 @@
 // Copyright 2017-2021 @polkadot/app-tech-comm authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AccountId, Hash } from '@polkadot/types/interfaces';
+import type { AccountId, Hash } from "@polkadot/types/interfaces";
 
-import BN from 'bn.js';
-import React, { useState } from 'react';
+import BN from "bn.js";
+import React, { useState } from "react";
 
-import { Button, MarkWarning, Modal, TxButton, VoteAccount } from '@polkadot/react-components';
-import { useAccounts, useApi, useToggle } from '@polkadot/react-hooks';
+import { Button, MarkWarning, Modal, TxButton, VoteAccount } from "@polkadot/react-components";
+import { useAccounts, useApi, useToggle } from "@polkadot/react-hooks";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 interface Props {
   hash: Hash | string;
@@ -18,7 +18,7 @@ interface Props {
   proposalId: BN | number;
 }
 
-function Voting ({ hash, members, prime, proposalId }: Props): React.ReactElement<Props> | null {
+function Voting({ hash, members, prime, proposalId }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const { hasAccounts } = useAccounts();
@@ -32,32 +32,30 @@ function Voting ({ hash, members, prime, proposalId }: Props): React.ReactElemen
   return (
     <>
       {isVotingOpen && (
-        <Modal
-          header={t<string>('Vote on proposal')}
-          size='small'
-        >
+        <Modal header={t<string>("Vote on proposal")} size="small">
           <Modal.Content>
-            <VoteAccount
-              filter={members}
-              onChange={setAccountId}
-            />
-            {(accountId === prime?.toString()) && (
-              <MarkWarning content={t<string>('You are voting with this collective\'s prime account. The vote will be the default outcome in case of any abstentions.')} />
+            <VoteAccount filter={members} onChange={setAccountId} />
+            {accountId === prime?.toString() && (
+              <MarkWarning
+                content={t<string>(
+                  "You are voting with this collective's prime account. The vote will be the default outcome in case of any abstentions."
+                )}
+              />
             )}
           </Modal.Content>
           <Modal.Actions onCancel={toggleVoting}>
             <TxButton
               accountId={accountId}
-              icon='ban'
-              label={t<string>('Vote Nay')}
+              icon="ban"
+              label={t<string>("Vote Nay")}
               onStart={toggleVoting}
               params={[hash, proposalId, false]}
               tx={api.tx.technicalCommittee.vote}
             />
             <TxButton
               accountId={accountId}
-              icon='check'
-              label={t<string>('Vote Aye')}
+              icon="check"
+              label={t<string>("Vote Aye")}
               onStart={toggleVoting}
               params={[hash, proposalId, true]}
               tx={api.tx.technicalCommittee.vote}
@@ -65,11 +63,7 @@ function Voting ({ hash, members, prime, proposalId }: Props): React.ReactElemen
           </Modal.Actions>
         </Modal>
       )}
-      <Button
-        icon='check'
-        label={t<string>('Vote')}
-        onClick={toggleVoting}
-      />
+      <Button icon="check" label={t<string>("Vote")} onClick={toggleVoting} />
     </>
   );
 }

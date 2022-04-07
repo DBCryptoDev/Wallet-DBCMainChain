@@ -1,26 +1,24 @@
 // Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React from "react";
 
-import { useApi } from '@polkadot/react-hooks';
+import { useApi } from "@polkadot/react-hooks";
 
-import DispatchQueue from './DispatchQueue';
-import Scheduler from './Scheduler';
+import DispatchQueue from "./DispatchQueue";
+import Scheduler from "./Scheduler";
 
 interface Props {
   className?: string;
 }
 
-function Execute ({ className }: Props): React.ReactElement<Props> {
+function Execute({ className }: Props): React.ReactElement<Props> {
   const { api } = useApi();
 
   return (
     <div className={className}>
       <DispatchQueue />
-      {api.query.scheduler && (
-        <Scheduler />
-      )}
+      {api.query.scheduler && <Scheduler />}
     </div>
   );
 }

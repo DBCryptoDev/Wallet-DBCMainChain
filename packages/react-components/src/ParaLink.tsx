@@ -1,21 +1,21 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type BN from 'bn.js';
+import type BN from "bn.js";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { useParaEndpoints } from '@polkadot/react-hooks';
+import { useParaEndpoints } from "@polkadot/react-hooks";
 
-import ChainImg from './ChainImg';
+import ChainImg from "./ChainImg";
 
 interface Props {
   className?: string;
   id: BN;
 }
 
-function ParaLink ({ className, id }: Props): React.ReactElement<Props> | null {
+function ParaLink({ className, id }: Props): React.ReactElement<Props> | null {
   const endpoints = useParaEndpoints(id);
 
   if (!endpoints.length) {
@@ -26,15 +26,13 @@ function ParaLink ({ className, id }: Props): React.ReactElement<Props> | null {
 
   return (
     <div className={className}>
-      <ChainImg
-        isInline
-        logo={info || 'empty'}
-        withoutHl
-      />
+      <ChainImg isInline logo={info || "empty"} withoutHl />
       <a
-        className='chainAlign'
+        className="chainAlign"
         href={`${window.location.origin}${window.location.pathname}?rpc=${encodeURIComponent(value)}`}
-      >{text}</a>
+      >
+        {text}
+      </a>
     </div>
   );
 }

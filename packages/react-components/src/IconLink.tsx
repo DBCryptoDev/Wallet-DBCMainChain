@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import Icon from './Icon';
+import Icon from "./Icon";
 
 interface Props {
   className?: string;
@@ -16,15 +16,9 @@ interface Props {
   onClick: () => void;
 }
 
-function IconLink ({ className = '', href, icon, label, onClick, rel, target }: Props): React.ReactElement<Props> {
+function IconLink({ className = "", href, icon, label, onClick, rel, target }: Props): React.ReactElement<Props> {
   return (
-    <a
-      className={className}
-      href={href}
-      onClick={onClick}
-      rel={rel}
-      target={target}
-    >
+    <a className={className} href={href} onClick={onClick} rel={rel} target={target}>
       {icon && <Icon icon={icon} />}
       {label}
     </a>

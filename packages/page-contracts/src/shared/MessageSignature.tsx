@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AbiMessage } from '@polkadot/api-contract/types';
+import type { AbiMessage } from "@polkadot/api-contract/types";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { Icon, Tooltip } from '@polkadot/react-components';
-import { encodeTypeDef } from '@polkadot/types/create';
-import { stringCamelCase } from '@polkadot/util';
+import { Icon, Tooltip } from "@polkadot/react-components";
+import { encodeTypeDef } from "@polkadot/types/create";
+import { stringCamelCase } from "@polkadot/util";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 const MAX_PARAM_LENGTH = 20;
 
@@ -22,55 +22,48 @@ export interface Props {
   withTooltip?: boolean;
 }
 
-function truncate (param: string): string {
+function truncate(param: string): string {
   return param.length > MAX_PARAM_LENGTH
     ? `${param.substring(0, MAX_PARAM_LENGTH / 2)}…${param.substring(param.length - MAX_PARAM_LENGTH / 2)}`
     : param;
 }
 
-function MessageSignature ({ className, message: { args, identifier, isConstructor, isMutating, returnType }, params = [], withTooltip = false }: Props): React.ReactElement<Props> {
+function MessageSignature({
+  className,
+  message: { args, identifier, isConstructor, isMutating, returnType },
+  params = [],
+  withTooltip = false,
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   return (
     <div className={className}>
-      <span className='ui--MessageSignature-name'>{stringCamelCase(identifier)}</span>
-      {' '}({args.map(({ name, type }, index): React.ReactNode => {
+      <span className="ui--MessageSignature-name">{stringCamelCase(identifier)}</span> (
+      {args.map(({ name, type }, index): React.ReactNode => {
         return (
           <React.Fragment key={`${name}-args-${index}`}>
-            {name}:
-            {' '}
-            <span className='ui--MessageSignature-type'>
-              {params && params[index]
-                ? <b>{truncate((params as string[])[index].toString())}</b>
-                : encodeTypeDef(type)
-              }
+            {name}:{" "}
+            <span className="ui--MessageSignature-type">
+              {params && params[index] ? (
+                <b>{truncate((params as string[])[index].toString())}</b>
+              ) : (
+                encodeTypeDef(type)
+              )}
             </span>
-            {index < (args.length) - 1 && ', '}
+            {index < args.length - 1 && ", "}
           </React.Fragment>
         );
-      })})
-      {(!isConstructor && returnType) && (
+      })}
+      )
+      {!isConstructor && returnType && (
         <>
-          :
-          {' '}
-          <span className='ui--MessageSignature-returnType'>
-            {encodeTypeDef(returnType)}
-          </span>
+          : <span className="ui--MessageSignature-returnType">{encodeTypeDef(returnType)}</span>
         </>
       )}
       {isMutating && (
         <>
-          <Icon
-            className='ui--MessageSignature-mutates'
-            icon='database'
-            tooltip={`mutates-${identifier}`}
-          />
-          {withTooltip && (
-            <Tooltip
-              text={t<string>('Mutates contract state')}
-              trigger={`mutates-${identifier}`}
-            />
-          )}
+          <Icon className="ui--MessageSignature-mutates" icon="database" tooltip={`mutates-${identifier}`} />
+          {withTooltip && <Tooltip text={t<string>("Mutates contract state")} trigger={`mutates-${identifier}`} />}
         </>
       )}
     </div>

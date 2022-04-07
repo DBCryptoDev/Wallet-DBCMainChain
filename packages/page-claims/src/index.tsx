@@ -1,29 +1,29 @@
 // Copyright 2017-2021 @polkadot/app-claims authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AppProps as Props } from '@polkadot/react-components/types';
-import type { Option } from '@polkadot/types';
-import type { EcdsaSignature, EthereumAddress, StatementKind } from '@polkadot/types/interfaces';
+import type { AppProps as Props } from "@polkadot/react-components/types";
+import type { Option } from "@polkadot/types";
+import type { EcdsaSignature, EthereumAddress, StatementKind } from "@polkadot/types/interfaces";
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { Trans } from 'react-i18next';
-import styled from 'styled-components';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { Trans } from "react-i18next";
+import styled from "styled-components";
 
-import { Button, Card, Columar, Input, InputAddress, Tabs, Tooltip } from '@polkadot/react-components';
-import { TokenUnit } from '@polkadot/react-components/InputNumber';
-import { useApi, useCall } from '@polkadot/react-hooks';
-import { u8aToHex, u8aToString } from '@polkadot/util';
-import { decodeAddress } from '@polkadot/util-crypto';
+import { Button, Card, Columar, Input, InputAddress, Tabs, Tooltip } from "@polkadot/react-components";
+import { TokenUnit } from "@polkadot/react-components/InputNumber";
+import { useApi, useCall } from "@polkadot/react-hooks";
+import { u8aToHex, u8aToString } from "@polkadot/util";
+import { decodeAddress } from "@polkadot/util-crypto";
 
-import AttestDisplay from './Attest';
-import ClaimDisplay from './Claim';
-import Statement from './Statement';
-import { useTranslation } from './translate';
-import { getStatement, recoverFromJSON } from './util';
-import Warning from './Warning';
+import AttestDisplay from "./Attest";
+import ClaimDisplay from "./Claim";
+import Statement from "./Statement";
+import { useTranslation } from "./translate";
+import { getStatement, recoverFromJSON } from "./util";
+import Warning from "./Warning";
 
-export { default as useCounter } from './useCounter';
+export { default as useCounter } from "./useCounter";
 
 enum Step {
   Account = 0,
@@ -32,7 +32,7 @@ enum Step {
   Claim = 3,
 }
 
-const PRECLAIMS_LOADING = 'PRECLAIMS_LOADING';
+const PRECLAIMS_LOADING = "PRECLAIMS_LOADING";
 
 // FIXME no embedded components (hossible to tweak)
 const Payload = styled.pre`
@@ -70,10 +70,10 @@ const Signature = styled.textarea`
 `;
 
 const transformStatement = {
-  transform: (option: Option<StatementKind>) => option.unwrapOr(null)
+  transform: (option: Option<StatementKind>) => option.unwrapOr(null),
 };
 
-function ClaimsApp ({ basePath }: Props): React.ReactElement<Props> {
+function ClaimsApp({ basePath }: Props): React.ReactElement<Props> {
   const [didCopy, setDidCopy] = useState(false);
   const [ethereumAddress, setEthereumAddress] = useState<string | undefined | null>(null);
   const [signature, setSignature] = useState<EcdsaSignature | null>(null);
@@ -86,14 +86,18 @@ function ClaimsApp ({ basePath }: Props): React.ReactElement<Props> {
   // - an `EthereumAddress` when there's a preclaim
   // - null if no preclaim
   // - `PRECLAIMS_LOADING` if we're fetching the results
-  const [preclaimEthereumAddress, setPreclaimEthereumAddress] = useState<string | null | undefined | typeof PRECLAIMS_LOADING>(PRECLAIMS_LOADING);
+  const [preclaimEthereumAddress, setPreclaimEthereumAddress] = useState<
+    string | null | undefined | typeof PRECLAIMS_LOADING
+  >(PRECLAIMS_LOADING);
   const isPreclaimed = !!preclaimEthereumAddress && preclaimEthereumAddress !== PRECLAIMS_LOADING;
 
-  const itemsRef = useRef([{
-    isRoot: true,
-    name: 'create',
-    text: t<string>('Claim tokens')
-  }]);
+  const itemsRef = useRef([
+    {
+      isRoot: true,
+      name: "create",
+      text: t<string>("Claim tokens"),
+    },
+  ]);
 
   // Everytime we change account, reset everything, and check if the accountId
   // has a preclaim.
@@ -176,49 +180,49 @@ function ClaimsApp ({ basePath }: Props): React.ReactElement<Props> {
 
   // If it's 1/ not preclaimed and 2/ not the old claiming process, fetch the
   // statement kind to sign.
-  const statementKind = useCall<StatementKind | null>(!isPreclaimed && !isOldClaimProcess && !!ethereumAddress && api.query.claims.signing, [ethereumAddress], transformStatement);
+  const statementKind = useCall<StatementKind | null>(
+    !isPreclaimed && !isOldClaimProcess && !!ethereumAddress && api.query.claims.signing,
+    [ethereumAddress],
+    transformStatement
+  );
 
-  const statementSentence = getStatement(systemChain, statementKind)?.sentence || '';
+  const statementSentence = getStatement(systemChain, statementKind)?.sentence || "";
 
   const prefix = u8aToString(api.consts.claims.prefix.toU8a(true));
-  const payload = accountId
-    ? `${prefix}${u8aToHex(decodeAddress(accountId), -1, false)}${statementSentence}`
-    : '';
+  const payload = accountId ? `${prefix}${u8aToHex(decodeAddress(accountId), -1, false)}${statementSentence}` : "";
 
   return (
     <main>
-      <Tabs
-        basePath={basePath}
-        items={itemsRef.current}
-      />
+      <Tabs basePath={basePath} items={itemsRef.current} />
       {!isOldClaimProcess && <Warning />}
       <h1>
-        <Trans>Claim your <em>{TokenUnit.abbr}</em> tokens</Trans>
+        <Trans>
+          Claim your <em>{TokenUnit.abbr}</em> tokens
+        </Trans>
       </h1>
       <Columar>
         <Columar.Column>
           <Card withBottomMargin>
-            <h3>{t<string>('1. Select your {{chain}} account', {
-              replace: {
-                chain: systemChain
-              }
-            })}</h3>
+            <h3>
+              {t<string>("1. Select your {{chain}} account", {
+                replace: {
+                  chain: systemChain,
+                },
+              })}
+            </h3>
             <InputAddress
               defaultValue={accountId}
-              help={t<string>('The account you want to claim to.')}
-              label={t<string>('claim to account')}
+              help={t<string>("The account you want to claim to.")}
+              label={t<string>("claim to account")}
               onChange={setAccountId}
-              type='all'
+              type="all"
             />
-            {(step === Step.Account) && (
+            {step === Step.Account && (
               <Button.Group>
                 <Button
-                  icon='sign-in-alt'
+                  icon="sign-in-alt"
                   isDisabled={preclaimEthereumAddress === PRECLAIMS_LOADING}
-                  label={preclaimEthereumAddress === PRECLAIMS_LOADING
-                    ? t<string>('Loading')
-                    : t<string>('Continue')
-                  }
+                  label={preclaimEthereumAddress === PRECLAIMS_LOADING ? t<string>("Loading") : t<string>("Continue")}
                   onClick={handleAccountStep}
                 />
               </Button.Group>
@@ -227,67 +231,69 @@ function ClaimsApp ({ basePath }: Props): React.ReactElement<Props> {
           {
             // We need to know the ethereuem address only for the new process
             // to be able to know the statement kind so that the users can sign it
-            (step >= Step.ETHAddress && !isPreclaimed && !isOldClaimProcess) && (
+            step >= Step.ETHAddress && !isPreclaimed && !isOldClaimProcess && (
               <Card withBottomMargin>
-                <h3>{t<string>('2. Enter the ETH address from the sale.')}</h3>
+                <h3>{t<string>("2. Enter the ETH address from the sale.")}</h3>
                 <Input
                   autoFocus
-                  className='full'
+                  className="full"
                   help={t<string>('The the Ethereum address you used during the pre-sale (starting by "0x")')}
-                  label={t<string>('Pre-sale ethereum address')}
+                  label={t<string>("Pre-sale ethereum address")}
                   onChange={onChangeEthereumAddress}
-                  value={ethereumAddress || ''}
+                  value={ethereumAddress || ""}
                 />
-                {(step === Step.ETHAddress) && (
+                {step === Step.ETHAddress && (
                   <Button.Group>
                     <Button
-                      icon='sign-in-alt'
+                      icon="sign-in-alt"
                       isDisabled={!ethereumAddress}
-                      label={t<string>('Continue')}
+                      label={t<string>("Continue")}
                       onClick={goToStepSign}
                     />
                   </Button.Group>
                 )}
               </Card>
-            )}
-          {(step >= Step.Sign && !isPreclaimed) && (
+            )
+          }
+          {step >= Step.Sign && !isPreclaimed && (
             <Card>
-              <h3>{t<string>('{{step}}. Sign with your ETH address', { replace: { step: isOldClaimProcess ? '2' : '3' } })}</h3>
-              {!isOldClaimProcess && (
-                <Statement
-                  kind={statementKind}
-                  systemChain={systemChain}
-                />
-              )}
-              <div>{t<string>('Copy the following string and sign it with the Ethereum account you used during the pre-sale in the wallet of your choice, using the string as the payload, and then paste the transaction signature object below:')}</div>
-              <CopyToClipboard
-                onCopy={onCopy}
-                text={payload}
-              >
-                <Payload
-                  data-for='tx-payload'
-                  data-tip
-                >
+              <h3>
+                {t<string>("{{step}}. Sign with your ETH address", {
+                  replace: { step: isOldClaimProcess ? "2" : "3" },
+                })}
+              </h3>
+              {!isOldClaimProcess && <Statement kind={statementKind} systemChain={systemChain} />}
+              <div>
+                {t<string>(
+                  "Copy the following string and sign it with the Ethereum account you used during the pre-sale in the wallet of your choice, using the string as the payload, and then paste the transaction signature object below:"
+                )}
+              </div>
+              <CopyToClipboard onCopy={onCopy} text={payload}>
+                <Payload data-for="tx-payload" data-tip>
                   {payload}
                 </Payload>
               </CopyToClipboard>
               <Tooltip
-                place='right'
-                text={didCopy ? t<string>('copied') : t<string>('click to copy')}
-                trigger='tx-payload'
+                place="right"
+                text={didCopy ? t<string>("copied") : t<string>("click to copy")}
+                trigger="tx-payload"
               />
-              <div>{t<string>('Paste the signed message into the field below. The placeholder text is there as a hint to what the message should look like:')}</div>
+              <div>
+                {t<string>(
+                  "Paste the signed message into the field below. The placeholder text is there as a hint to what the message should look like:"
+                )}
+              </div>
               <Signature
                 onChange={onChangeSignature}
                 placeholder={`{\n  "address": "0x ...",\n  "msg": "${prefix}:...",\n  "sig": "0x ...",\n  "version": "2"\n}`}
                 rows={10}
               />
-              {(step === Step.Sign) && (
+              {step === Step.Sign && (
                 <Button.Group>
                   <Button
-                    icon='sign-in-alt'
+                    icon="sign-in-alt"
                     isDisabled={!accountId || !signature}
-                    label={t<string>('Confirm claim')}
+                    label={t<string>("Confirm claim")}
                     onClick={goToStepClaim}
                   />
                 </Button.Group>
@@ -296,16 +302,17 @@ function ClaimsApp ({ basePath }: Props): React.ReactElement<Props> {
           )}
         </Columar.Column>
         <Columar.Column>
-          {(step >= Step.Claim) && (
-            isPreclaimed
-              ? <AttestDisplay
+          {step >= Step.Claim &&
+            (isPreclaimed ? (
+              <AttestDisplay
                 accountId={accountId}
                 ethereumAddress={ethereumAddress}
                 onSuccess={goToStepAccount}
                 statementKind={statementKind}
                 systemChain={systemChain}
               />
-              : <ClaimDisplay
+            ) : (
+              <ClaimDisplay
                 accountId={accountId}
                 ethereumAddress={ethereumAddress}
                 ethereumSignature={signature}
@@ -313,7 +320,7 @@ function ClaimsApp ({ basePath }: Props): React.ReactElement<Props> {
                 onSuccess={goToStepAccount}
                 statementKind={statementKind}
               />
-          )}
+            ))}
         </Columar.Column>
       </Columar>
     </main>

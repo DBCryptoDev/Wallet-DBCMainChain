@@ -1,21 +1,19 @@
 // Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface Props {
   children: React.ReactNode;
   className?: string;
-  type: 'warning' | 'error';
+  type: "warning" | "error";
 }
 
-function Banner ({ children, className = '', type }: Props): React.ReactElement<Props> | null {
+function Banner({ children, className = "", type }: Props): React.ReactElement<Props> | null {
   return (
     <article className={`${className} ${type} centered`}>
-      <div className='box'>
-        {children}
-      </div>
+      <div className="box">{children}</div>
     </article>
   );
 }

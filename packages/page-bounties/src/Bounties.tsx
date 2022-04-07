@@ -1,44 +1,45 @@
 // Copyright 2017-2021 @polkadot/app-bounties authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useRef } from 'react';
-import styled from 'styled-components';
+import React, { useRef } from "react";
+import styled from "styled-components";
 
-import Summary from '@polkadot/app-bounties/Summary';
-import { Button, Table } from '@polkadot/react-components';
+import Summary from "@polkadot/app-bounties/Summary";
+import { Button, Table } from "@polkadot/react-components";
 
-import Bounty from './Bounty';
-import BountyCreate from './BountyCreate';
-import { useBounties } from './hooks';
-import { useTranslation } from './translate';
+import Bounty from "./Bounty";
+import BountyCreate from "./BountyCreate";
+import { useBounties } from "./hooks";
+import { useTranslation } from "./translate";
 
 interface Props {
   className?: string;
 }
 
-function Bounties ({ className }: Props): React.ReactElement {
+function Bounties({ className }: Props): React.ReactElement {
   const { t } = useTranslation();
   const { bestNumber, bounties } = useBounties();
 
   const headerRef = useRef([
-    [t('bounties'), 'start', 3],
-    [t('value'), 'start'],
-    [t('curator'), 'start'],
-    [t('next action'), 'start', 3]
+    [t("bounties"), "start", 3],
+    [t("value"), "start"],
+    [t("curator"), "start"],
+    [t("next action"), "start", 3],
   ]);
 
   return (
     <div className={className}>
-      <Summary activeBounties={bounties?.length}/>
+      <Summary activeBounties={bounties?.length} />
       <Button.Group>
         <BountyCreate />
       </Button.Group>
       <Table
-        className='bounties-table-wrapper'
-        empty={bounties && t<string>('No open bounties')}
+        className="bounties-table-wrapper"
+        empty={bounties && t<string>("No open bounties")}
         header={headerRef.current}
       >
-        {bounties && bestNumber &&
+        {bounties &&
+          bestNumber &&
           bounties
             .sort((a, b) => b.index.cmp(a.index))
             .map(({ bounty, description, index, proposals }, count) => (
@@ -51,8 +52,7 @@ function Bounties ({ className }: Props): React.ReactElement {
                 key={index.toNumber()}
                 proposals={proposals}
               />
-            ))
-        }
+            ))}
       </Table>
     </div>
   );
@@ -69,7 +69,7 @@ export default React.memo(styled(Bounties)`
       }
     }
   }
-.ui--IdentityIcon {
+  .ui--IdentityIcon {
     margin-right: 0.42rem;
   }
 

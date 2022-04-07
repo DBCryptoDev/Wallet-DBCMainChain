@@ -1,8 +1,8 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import styled from "styled-components";
 
 interface Props {
   className?: string;
@@ -15,7 +15,16 @@ interface Props {
   value?: boolean;
 }
 
-function Toggle ({ className = '', isDisabled, isOverlay, isRadio, label, onChange, preventDefault, value }: Props): React.ReactElement<Props> {
+function Toggle({
+  className = "",
+  isDisabled,
+  isOverlay,
+  isRadio,
+  label,
+  onChange,
+  preventDefault,
+  value,
+}: Props): React.ReactElement<Props> {
   const _onClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
       if (!isDisabled) {
@@ -32,11 +41,13 @@ function Toggle ({ className = '', isDisabled, isOverlay, isRadio, label, onChan
 
   return (
     <div
-      className={`ui--Toggle${value ? ' isChecked' : ''}${isDisabled ? ' isDisabled' : ''}${isOverlay ? ' isOverlay' : ''}${isRadio ? ' isRadio' : ''} ${className}`}
+      className={`ui--Toggle${value ? " isChecked" : ""}${isDisabled ? " isDisabled" : ""}${
+        isOverlay ? " isOverlay" : ""
+      }${isRadio ? " isRadio" : ""} ${className}`}
       onClick={_onClick}
     >
       {label && <label>{label}</label>}
-      <div className={`ui--Toggle-Slider${isRadio ? ' highlight--before-border' : ''}`} />
+      <div className={`ui--Toggle-Slider${isRadio ? " highlight--before-border" : ""}`} />
     </div>
   );
 }

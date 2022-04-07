@@ -88,7 +88,7 @@ const spec: Record<string, OverrideBundleDefinition> = {
   "crust-parachain": crust,
   "cumulus-test-parachain": testPara,
   "datahighway-parachain": datahighwayParachain,
-  "node": dbc,
+  node: dbc,
   "dev-parachain": zenlink,
   "dock-main-runtime": dock,
   "dock-testnet": dock,

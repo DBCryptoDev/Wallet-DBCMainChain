@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import LabelHelp from './LabelHelp';
+import LabelHelp from "./LabelHelp";
 
 interface Props {
   className?: string;
@@ -22,25 +22,37 @@ interface Props {
 
 const defaultLabel: React.ReactNode = <div>&nbsp;</div>;
 
-function Labelled ({ className = '', children, help, isFull, isHidden, isOuter, isSmall, label = defaultLabel, labelExtra, withEllipsis, withLabel = true }: Props): React.ReactElement<Props> | null {
+function Labelled({
+  className = "",
+  children,
+  help,
+  isFull,
+  isHidden,
+  isOuter,
+  isSmall,
+  label = defaultLabel,
+  labelExtra,
+  withEllipsis,
+  withLabel = true,
+}: Props): React.ReactElement<Props> | null {
   if (isHidden) {
     return null;
   } else if (!withLabel) {
-    return (
-      <div className={className}>{children}</div>
-    );
+    return <div className={className}>{children}</div>;
   }
 
   return (
-    <div className={`ui--Labelled${isSmall ? ' isSmall' : ''}${isFull ? ' isFull' : ''}${isOuter ? ' isOuter' : ''} ${className}`}>
-      <label>{withEllipsis
-        ? <div className='withEllipsis'>{label}</div>
-        : label
-      }{help && <LabelHelp help={help} />}</label>
-      {labelExtra && <div className='labelExtra'>{labelExtra}</div>}
-      <div className='ui--Labelled-content'>
-        {children}
-      </div>
+    <div
+      className={`ui--Labelled${isSmall ? " isSmall" : ""}${isFull ? " isFull" : ""}${
+        isOuter ? " isOuter" : ""
+      } ${className}`}
+    >
+      <label>
+        {withEllipsis ? <div className="withEllipsis">{label}</div> : label}
+        {help && <LabelHelp help={help} />}
+      </label>
+      {labelExtra && <div className="labelExtra">{labelExtra}</div>}
+      <div className="ui--Labelled-content">{children}</div>
     </div>
   );
 }
@@ -100,7 +112,7 @@ export default React.memo(styled(Labelled)`
       }
 
       .labelExtra {
-        color: rgba(78, 78, 78, .85);
+        color: rgba(78, 78, 78, 0.85);
         font-weight: var(--font-weight-normal);
         right: 1.75rem;
         text-align: right;
@@ -124,7 +136,7 @@ export default React.memo(styled(Labelled)`
 
             .text {
               line-height: 1;
-              padding: 0.47rem 0
+              padding: 0.47rem 0;
             }
           }
 

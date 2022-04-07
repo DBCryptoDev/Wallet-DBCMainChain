@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/app-calendar authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-function DayTime (): React.ReactElement {
+function DayTime(): React.ReactElement {
   const [now, setNow] = useState(new Date());
 
-  useEffect((): () => void => {
+  useEffect((): (() => void) => {
     const intervalId = setInterval(() => setNow(new Date()), 1000);
 
     return (): void => {
@@ -14,7 +14,7 @@ function DayTime (): React.ReactElement {
     };
   }, []);
 
-  return <>{now.toLocaleTimeString().split(':').slice(0, 2).join(':')}</>;
+  return <>{now.toLocaleTimeString().split(":").slice(0, 2).join(":")}</>;
 }
 
 export default React.memo(DayTime);

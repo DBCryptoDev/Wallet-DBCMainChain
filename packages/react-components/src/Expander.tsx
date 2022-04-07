@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { IconName } from '@fortawesome/fontawesome-svg-core';
-import type { Text } from '@polkadot/types';
+import type { IconName } from "@fortawesome/fontawesome-svg-core";
+import type { Text } from "@polkadot/types";
 
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useMemo } from "react";
+import styled from "styled-components";
 
-import { LabelHelp } from '@polkadot/react-components';
-import { useToggle } from '@polkadot/react-hooks';
+import { LabelHelp } from "@polkadot/react-components";
+import { useToggle } from "@polkadot/react-hooks";
 
-import Icon from './Icon';
-import { useTranslation } from './translate';
+import Icon from "./Icon";
+import { useTranslation } from "./translate";
 
 interface Meta {
   documentation: Text[];
@@ -33,49 +33,59 @@ export interface Props {
   withHidden?: boolean;
 }
 
-function splitSingle (value: string[], sep: string): string[] {
+function splitSingle(value: string[], sep: string): string[] {
   return value.reduce((result: string[], value: string): string[] => {
     return value.split(sep).reduce((result: string[], value: string) => result.concat(value), result);
   }, []);
 }
 
-function splitParts (value: string): string[] {
-  return ['[', ']'].reduce((result: string[], sep) => splitSingle(result, sep), [value]);
+function splitParts(value: string): string[] {
+  return ["[", "]"].reduce((result: string[], sep) => splitSingle(result, sep), [value]);
 }
 
-function formatMeta (meta?: Meta): React.ReactNode | null {
+function formatMeta(meta?: Meta): React.ReactNode | null {
   if (!meta || !meta.documentation.length) {
     return null;
   }
 
   const strings = meta.documentation.map((doc) => doc.toString().trim());
   const firstEmpty = strings.findIndex((doc) => !doc.length);
-  const combined = (
-    firstEmpty === -1
-      ? strings
-      : strings.slice(0, firstEmpty)
-  ).join(' ').replace(/#(<weight>| <weight>).*<\/weight>/, '');
-  const parts = splitParts(combined.replace(/\\/g, '').replace(/`/g, ''));
+  const combined = (firstEmpty === -1 ? strings : strings.slice(0, firstEmpty))
+    .join(" ")
+    .replace(/#(<weight>| <weight>).*<\/weight>/, "");
+  const parts = splitParts(combined.replace(/\\/g, "").replace(/`/g, ""));
 
-  return <>{parts.map((part, index) => index % 2 ? <em key={index}>[{part}]</em> : <span key={index}>{part}</span>)}&nbsp;</>;
+  return (
+    <>
+      {parts.map((part, index) => (index % 2 ? <em key={index}>[{part}]</em> : <span key={index}>{part}</span>))}&nbsp;
+    </>
+  );
 }
 
-function Expander ({ children, className = '', help, helpIcon, isOpen, isPadded, onClick, renderChildren, summary, summaryHead, summaryMeta, summarySub, withHidden }: Props): React.ReactElement<Props> {
+function Expander({
+  children,
+  className = "",
+  help,
+  helpIcon,
+  isOpen,
+  isPadded,
+  onClick,
+  renderChildren,
+  summary,
+  summaryHead,
+  summaryMeta,
+  summarySub,
+  withHidden,
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [isExpanded, toggleExpanded] = useToggle(isOpen, onClick);
 
-  const demandChildren = useMemo(
-    () => isExpanded && renderChildren && renderChildren(),
-    [isExpanded, renderChildren]
-  );
+  const demandChildren = useMemo(() => isExpanded && renderChildren && renderChildren(), [isExpanded, renderChildren]);
 
-  const headerMain = useMemo(
-    () => summary || formatMeta(summaryMeta),
-    [summary, summaryMeta]
-  );
+  const headerMain = useMemo(() => summary || formatMeta(summaryMeta), [summary, summaryMeta]);
 
   const headerSub = useMemo(
-    () => summary ? (formatMeta(summaryMeta) || summarySub) : null,
+    () => (summary ? formatMeta(summaryMeta) || summarySub : null),
     [summary, summaryMeta, summarySub]
   );
 
@@ -85,35 +95,22 @@ function Expander ({ children, className = '', help, helpIcon, isOpen, isPadded,
   );
 
   return (
-    <div className={`ui--Expander${isExpanded ? ' isExpanded' : ''}${isPadded ? ' isPadded' : ''}${hasContent ? ' hasContent' : ''} ${className}`}>
-      <div
-        className='ui--Expander-summary'
-        onClick={toggleExpanded}
-      >
-        <div className='ui--Expander-summary-header'>
-          {help && (
-            <LabelHelp
-              help={help}
-              icon={helpIcon}
-            />
-          )}
+    <div
+      className={`ui--Expander${isExpanded ? " isExpanded" : ""}${isPadded ? " isPadded" : ""}${
+        hasContent ? " hasContent" : ""
+      } ${className}`}
+    >
+      <div className="ui--Expander-summary" onClick={toggleExpanded}>
+        <div className="ui--Expander-summary-header">
+          {help && <LabelHelp help={help} icon={helpIcon} />}
           {summaryHead}
-          {headerMain || t<string>('Details')}
-          {headerSub && (
-            <div className='ui--Expander-summary-header-sub'>{headerSub}</div>
-          )}
+          {headerMain || t<string>("Details")}
+          {headerSub && <div className="ui--Expander-summary-header-sub">{headerSub}</div>}
         </div>
-        <Icon
-          color={hasContent ? undefined : 'transparent'}
-          icon={
-            isExpanded
-              ? 'caret-up'
-              : 'caret-down'
-          }
-        />
+        <Icon color={hasContent ? undefined : "transparent"} icon={isExpanded ? "caret-up" : "caret-down"} />
       </div>
       {hasContent && (isExpanded || withHidden) && (
-        <div className='ui--Expander-content'>{children || demandChildren}</div>
+        <div className="ui--Expander-content">{children || demandChildren}</div>
       )}
     </div>
   );

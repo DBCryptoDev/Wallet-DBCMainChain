@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/app-contracts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { RawParams } from '@polkadot/react-params/types';
-import type { Registry, TypeDef } from '@polkadot/types/types';
+import type { RawParams } from "@polkadot/react-params/types";
+import type { Registry, TypeDef } from "@polkadot/types/types";
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
-import UIParams from '@polkadot/react-params';
+import UIParams from "@polkadot/react-params";
 
 interface Props {
   isDisabled?: boolean;
@@ -21,30 +21,27 @@ interface ParamDef {
   type: TypeDef;
 }
 
-function Params ({ isDisabled, onChange, onEnter, params: propParams, registry }: Props): React.ReactElement<Props> | null {
+function Params({
+  isDisabled,
+  onChange,
+  onEnter,
+  params: propParams,
+  registry,
+}: Props): React.ReactElement<Props> | null {
   const [params, setParams] = useState<ParamDef[]>([]);
 
   useEffect((): void => {
     propParams && setParams(propParams);
   }, [propParams]);
 
-  const _onChange = useCallback(
-    (values: RawParams) => onChange(values.map(({ value }) => value)),
-    [onChange]
-  );
+  const _onChange = useCallback((values: RawParams) => onChange(values.map(({ value }) => value)), [onChange]);
 
   if (!params.length) {
     return null;
   }
 
   return (
-    <UIParams
-      isDisabled={isDisabled}
-      onChange={_onChange}
-      onEnter={onEnter}
-      params={params}
-      registry={registry}
-    />
+    <UIParams isDisabled={isDisabled} onChange={_onChange} onEnter={onEnter} params={params} registry={registry} />
   );
 }
 

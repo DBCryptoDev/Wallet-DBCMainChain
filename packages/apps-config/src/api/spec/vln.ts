@@ -1,7 +1,7 @@
 // Copyright 2017-2021 @polkadot/apps-config authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { OverrideBundleDefinition } from '@polkadot/types/types';
+import type { OverrideBundleDefinition } from "@polkadot/types/types";
 
 // structs need to be in order
 /* eslint-disable sort-keys */
@@ -13,35 +13,31 @@ const definitions: OverrideBundleDefinition = {
       types: {
         Asset: {
           _enum: {
-            Collateral: 'Collateral',
-            Fiat: 'Fiat',
-            Usdv: null
-          }
+            Collateral: "Collateral",
+            Fiat: "Fiat",
+            Usdv: null,
+          },
         },
         Collateral: {
-          _enum: [
-            'Usdc'
-          ]
+          _enum: ["Usdc"],
         },
         Fiat: {
-          _enum: [
-            'Cop',
-            'Vez'
-          ]
+          _enum: ["Cop", "Vez"],
         },
-        CurrencyId: 'Asset',
-        OracleKey: 'Asset',
-        OracleValue: 'FixedU128',
-        CurrencyIdOf: 'Asset',
+        CurrencyId: "Asset",
+        OracleKey: "Asset",
+        OracleValue: "FixedU128",
+        CurrencyIdOf: "Asset",
         TimestampedValue: {
-          value: 'OracleValue',
-          timestamp: 'Moment'
+          value: "OracleValue",
+          timestamp: "Moment",
         },
-        TimestampedValueOf: 'TimestampedValue',
-        OrderedSet: 'Vec<AccountId>',
-        Share: 'Permill'
-      }
-    }]
+        TimestampedValueOf: "TimestampedValue",
+        OrderedSet: "Vec<AccountId>",
+        Share: "Permill",
+      },
+    },
+  ],
 };
 
 export default definitions;

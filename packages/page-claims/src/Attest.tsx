@@ -1,21 +1,21 @@
 // Copyright 2017-2021 @polkadot/app-claims authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TxCallback } from '@polkadot/react-components/Status/types';
-import type { Option } from '@polkadot/types';
-import type { BalanceOf, EthereumAddress, StatementKind } from '@polkadot/types/interfaces';
+import type { TxCallback } from "@polkadot/react-components/Status/types";
+import type { Option } from "@polkadot/types";
+import type { BalanceOf, EthereumAddress, StatementKind } from "@polkadot/types/interfaces";
 
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 
-import { Button, Card, TxButton } from '@polkadot/react-components';
-import { useAccounts, useApi } from '@polkadot/react-hooks';
-import { FormatBalance } from '@polkadot/react-query';
+import { Button, Card, TxButton } from "@polkadot/react-components";
+import { useAccounts, useApi } from "@polkadot/react-hooks";
+import { FormatBalance } from "@polkadot/react-query";
 
-import { ClaimStyles } from './Claim';
-import Statement from './Statement';
-import { useTranslation } from './translate';
-import { getStatement } from './util';
+import { ClaimStyles } from "./Claim";
+import Statement from "./Statement";
+import { useTranslation } from "./translate";
+import { getStatement } from "./util";
 
 interface Props {
   accountId: string;
@@ -26,7 +26,14 @@ interface Props {
   systemChain: string;
 }
 
-function Attest ({ accountId, className, ethereumAddress, onSuccess, statementKind, systemChain }: Props): React.ReactElement<Props> | null {
+function Attest({
+  accountId,
+  className,
+  ethereumAddress,
+  onSuccess,
+  statementKind,
+  systemChain,
+}: Props): React.ReactElement<Props> | null {
   const accounts = useAccounts();
   const { t } = useTranslation();
   const { api } = useApi();
@@ -65,12 +72,11 @@ function Attest ({ accountId, className, ethereumAddress, onSuccess, statementKi
     return (
       <Card isError>
         <div className={className}>
-          {t<string>('We found a pre-claim with this Polkadot address. However, attesting requires signing with this account. To continue with attesting, please add this account as an owned account first.')}
+          {t<string>(
+            "We found a pre-claim with this Polkadot address. However, attesting requires signing with this account. To continue with attesting, please add this account as an owned account first."
+          )}
           <h3>
-            <FormatBalance
-              label={t<string>('Account balance:')}
-              value={claimValue}
-            />
+            <FormatBalance label={t<string>("Account balance:")} value={claimValue} />
           </h3>
         </div>
       </Card>
@@ -80,18 +86,16 @@ function Attest ({ accountId, className, ethereumAddress, onSuccess, statementKi
   return (
     <Card isSuccess>
       <div className={className}>
-        <Statement
-          kind={statementKind}
-          systemChain={systemChain}
-        />
-        <h3><FormatBalance label={t<string>('Account balance:')}
-          value={claimValue} /></h3>
+        <Statement kind={statementKind} systemChain={systemChain} />
+        <h3>
+          <FormatBalance label={t<string>("Account balance:")} value={claimValue} />
+        </h3>
         <Button.Group>
           <TxButton
             accountId={accountId}
-            icon='paper-plane'
+            icon="paper-plane"
             isDisabled={!statementSentence}
-            label={t<string>('I agree')}
+            label={t<string>("I agree")}
             onSuccess={onSuccess}
             params={[statementSentence]}
             tx={api.tx.claims.attest}
@@ -102,4 +106,8 @@ function Attest ({ accountId, className, ethereumAddress, onSuccess, statementKi
   );
 }
 
-export default React.memo(styled(Attest)`${ClaimStyles}`);
+export default React.memo(
+  styled(Attest)`
+    ${ClaimStyles}
+  `
+);

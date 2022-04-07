@@ -1,18 +1,18 @@
 // Copyright 2017-2021 @polkadot/app-settings authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import FileSaver from 'file-saver';
-import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import FileSaver from "file-saver";
+import React, { useCallback, useEffect, useState } from "react";
+import styled from "styled-components";
 
-import { Button, Columar, Dropdown, Progress, Spinner, Toggle } from '@polkadot/react-components';
-import i18n from '@polkadot/react-components/i18n';
-import languageCache from '@polkadot/react-components/i18n/cache';
-import { useToggle } from '@polkadot/react-hooks';
-import { settings } from '@polkadot/ui-settings';
+import { Button, Columar, Dropdown, Progress, Spinner, Toggle } from "@polkadot/react-components";
+import i18n from "@polkadot/react-components/i18n";
+import languageCache from "@polkadot/react-components/i18n/cache";
+import { useToggle } from "@polkadot/react-hooks";
+import { settings } from "@polkadot/ui-settings";
 
-import { useTranslation } from '../translate';
-import StringInput from './StringInput';
+import { useTranslation } from "../translate";
+import StringInput from "./StringInput";
 
 type Progress = [[number, number, number], Record<string, [number, number, number]>];
 type Strings = Record<string, string>;
@@ -35,21 +35,21 @@ interface Defaults {
 
 const cache = new Map<string, unknown>();
 
-async function retrieveJson (url: string): Promise<any> {
+async function retrieveJson(url: string): Promise<any> {
   if (cache.has(url)) {
     return cache.get(url);
   }
 
   const response = await fetch(`locales/${url}`);
-  const json = await response.json() as unknown;
+  const json = (await response.json()) as unknown;
 
   cache.set(url, json);
 
   return json;
 }
 
-async function retrieveEnglish (): Promise<StringsMod> {
-  const paths = await retrieveJson('en/index.json') as Array<string>;
+async function retrieveEnglish(): Promise<StringsMod> {
+  const paths = (await retrieveJson("en/index.json")) as Array<string>;
   const strings: Strings[] = await Promise.all(paths.map((path) => retrieveJson(`en/${path}`) as Promise<Strings>));
 
   return strings.reduce((language: StringsMod, strings, index): StringsMod => {
@@ -59,9 +59,9 @@ async function retrieveEnglish (): Promise<StringsMod> {
   }, {});
 }
 
-async function retrieveAll (): Promise<Defaults> {
-  const _keys = await retrieveJson('index.json') as string[];
-  const keys = _keys.filter((lng) => lng !== 'en');
+async function retrieveAll(): Promise<Defaults> {
+  const _keys = (await retrieveJson("index.json")) as string[];
+  const keys = _keys.filter((lng) => lng !== "en");
   const missing = keys.filter((lng) => !languageCache[lng]);
   const english = await retrieveEnglish();
   const translations = missing.length
@@ -78,7 +78,7 @@ async function retrieveAll (): Promise<Defaults> {
     Object.keys(english).forEach((record): void => {
       Object.keys(english[record]).forEach((key): void => {
         if (!languageCache[lng][key]) {
-          languageCache[lng][key] = '';
+          languageCache[lng][key] = "";
         }
       });
     });
@@ -87,14 +87,13 @@ async function retrieveAll (): Promise<Defaults> {
   return {
     english,
     keys: keys.map((text) => ({ text, value: text })),
-    modules: Object
-      .keys(english)
-      .map((text) => ({ text: text.replace('.json', '').replace('app-', 'page-'), value: text }))
-      .sort((a, b) => a.text.localeCompare(b.text))
+    modules: Object.keys(english)
+      .map((text) => ({ text: text.replace(".json", "").replace("app-", "page-"), value: text }))
+      .sort((a, b) => a.text.localeCompare(b.text)),
   };
 }
 
-function calcProgress (english: StringsMod, language: Strings): Progress {
+function calcProgress(english: StringsMod, language: Strings): Progress {
   const breakdown: Record<string, [number, number, number]> = {};
   let done = 0;
   let total = 0;
@@ -119,39 +118,45 @@ function calcProgress (english: StringsMod, language: Strings): Progress {
   return [[done, total, 0], breakdown];
 }
 
-function doDownload (strings: Strings, withEmpty: boolean): void {
-  const sanitized = Object.keys(strings).sort().reduce((result: Strings, key): Strings => {
-    const sanitized = strings[key].trim();
+function doDownload(strings: Strings, withEmpty: boolean): void {
+  const sanitized = Object.keys(strings)
+    .sort()
+    .reduce((result: Strings, key): Strings => {
+      const sanitized = strings[key].trim();
 
-    if (sanitized || withEmpty) {
-      result[key] = sanitized;
-    }
+      if (sanitized || withEmpty) {
+        result[key] = sanitized;
+      }
 
-    return result;
-  }, {});
+      return result;
+    }, {});
 
   FileSaver.saveAs(
-    new Blob([JSON.stringify(sanitized, null, 2)], { type: 'application/json; charset=utf-8' }),
-    'translation.json'
+    new Blob([JSON.stringify(sanitized, null, 2)], { type: "application/json; charset=utf-8" }),
+    "translation.json"
   );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function progressDisplay ([done, total, _]: [number, number, number] = [0, 0, 0]): { done: number; progress: string; total: number } {
+function progressDisplay([done, total, _]: [number, number, number] = [0, 0, 0]): {
+  done: number;
+  progress: string;
+  total: number;
+} {
   return {
     done,
-    progress: (total ? (done * 100 / total) : 100).toFixed(2),
-    total
+    progress: (total ? (done * 100) / total : 100).toFixed(2),
+    total,
   };
 }
 
-function Translate ({ className }: Props): React.ReactElement<Props> {
+function Translate({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [withEmpty, toggleWithEmpty] = useToggle();
   const [{ english, keys, modules }, setDefaults] = useState<Defaults>({ english: {}, keys: [], modules: [] });
-  const [lng, setLng] = useState<string>('zh');
+  const [lng, setLng] = useState<string>("zh");
   const [[modProgress, allProgress], setProgress] = useState<Progress>([[0, 0, 0], {}]);
-  const [record, setRecord] = useState<string>('app-accounts.json');
+  const [record, setRecord] = useState<string>("app-accounts.json");
   const [strings, setStrings] = useState<Strings | null>(null);
 
   useEffect((): void => {
@@ -164,20 +169,12 @@ function Translate ({ className }: Props): React.ReactElement<Props> {
   }, [english, lng]);
 
   useEffect((): void => {
-    setLng(
-      keys.some(({ value }) => value === settings.i18nLang)
-        ? settings.i18nLang
-        : 'zh'
-    );
+    setLng(keys.some(({ value }) => value === settings.i18nLang) ? settings.i18nLang : "zh");
   }, [keys]);
 
   const _setString = useCallback(
     (key: string, value: string): void => {
-      setStrings((strings: Strings | null): Strings | null =>
-        strings
-          ? { ...strings, [key]: value }
-          : null
-      );
+      setStrings((strings: Strings | null): Strings | null => (strings ? { ...strings, [key]: value } : null));
 
       const hasPrevVal = !!languageCache[lng][key];
       const sanitized = value.trim();
@@ -197,17 +194,11 @@ function Translate ({ className }: Props): React.ReactElement<Props> {
     [english, lng]
   );
 
-  const _doApply = useCallback(
-    (): void => {
-      i18n.reloadResources().catch(console.error);
-    },
-    []
-  );
+  const _doApply = useCallback((): void => {
+    i18n.reloadResources().catch(console.error);
+  }, []);
 
-  const _onDownload = useCallback(
-    () => doDownload(strings || {}, withEmpty),
-    [strings, withEmpty]
-  );
+  const _onDownload = useCallback(() => doDownload(strings || {}, withEmpty), [strings, withEmpty]);
 
   if (!keys.length) {
     return <Spinner />;
@@ -221,70 +212,60 @@ function Translate ({ className }: Props): React.ReactElement<Props> {
             <div>
               <Dropdown
                 isFull
-                label={t<string>('the language to display translations for')}
+                label={t<string>("the language to display translations for")}
                 onChange={setLng}
                 options={keys}
                 value={lng}
               />
-              {t<string>('{{done}}/{{total}}, {{progress}}% done', { replace: progressDisplay(modProgress) })}
+              {t<string>("{{done}}/{{total}}, {{progress}}% done", { replace: progressDisplay(modProgress) })}
             </div>
-            <Progress
-              color='auto'
-              total={modProgress[1]}
-              value={modProgress[0]}
-            />
+            <Progress color="auto" total={modProgress[1]} value={modProgress[0]} />
           </Columar.Column>
           <Columar.Column>
             <div>
               <Dropdown
                 isFull
-                label={t<string>('the module to display strings for')}
+                label={t<string>("the module to display strings for")}
                 onChange={setRecord}
                 options={modules}
                 value={record}
               />
-              {t<string>('{{done}}/{{total}}, {{progress}}% done', { replace: progressDisplay(allProgress[record]) })}
+              {t<string>("{{done}}/{{total}}, {{progress}}% done", { replace: progressDisplay(allProgress[record]) })}
             </div>
-            <Progress
-              color='auto'
-              total={allProgress[record]?.[1]}
-              value={allProgress[record]?.[0]}
-            />
+            <Progress color="auto" total={allProgress[record]?.[1]} value={allProgress[record]?.[0]} />
           </Columar.Column>
         </Columar>
       </header>
-      <div className='toggleWrapper'>
+      <div className="toggleWrapper">
         <Toggle
           label={
             withEmpty
-              ? t<string>('include all empty strings in the generated file')
-              : t<string>('do not include empty strings in the generated file')
+              ? t<string>("include all empty strings in the generated file")
+              : t<string>("do not include empty strings in the generated file")
           }
           onChange={toggleWithEmpty}
           value={withEmpty}
         />
       </div>
       <Button.Group>
+        <Button icon="sync" label={t<string>("Apply to UI")} onClick={_doApply} />
         <Button
-          icon='sync'
-          label={t<string>('Apply to UI')}
-          onClick={_doApply}
-        />
-        <Button
-          icon='download'
-          label={t<string>('Generate {{lng}}/translation.json', { replace: { lng } })}
+          icon="download"
+          label={t<string>("Generate {{lng}}/translation.json", { replace: { lng } })}
           onClick={_onDownload}
         />
       </Button.Group>
-      {record && strings && Object.keys(english[record]).map((key, index) =>
-        <StringInput
-          key={index}
-          onChange={_setString}
-          original={english[record][key]}
-          tkey={key}
-          tval={strings[key]}
-        />
-      )}
+      {record &&
+        strings &&
+        Object.keys(english[record]).map((key, index) => (
+          <StringInput
+            key={index}
+            onChange={_setString}
+            original={english[record][key]}
+            tkey={key}
+            tval={strings[key]}
+          />
+        ))}
     </main>
   );
 }

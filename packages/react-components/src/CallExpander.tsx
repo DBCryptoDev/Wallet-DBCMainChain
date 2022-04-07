@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Call } from '@polkadot/types/interfaces';
+import type { Call } from "@polkadot/types/interfaces";
 
-import React from 'react';
+import React from "react";
 
-import CallDisplay from './Call';
-import Expander from './Expander';
+import CallDisplay from "./Call";
+import Expander from "./Expander";
 
 interface Props {
   children?: React.ReactNode;
@@ -16,20 +16,20 @@ interface Props {
   withHash?: boolean;
 }
 
-function CallExpander ({ children, className = '', labelHash, value, withHash }: Props): React.ReactElement<Props> {
+function CallExpander({ children, className = "", labelHash, value, withHash }: Props): React.ReactElement<Props> {
   const { meta, method, section } = value.registry.findMetaCall(value.callIndex);
 
   return (
     <div className={`ui--CallExpander ${className}`}>
       <Expander
-        summaryHead={<div>{section}.{method}</div>}
+        summaryHead={
+          <div>
+            {section}.{method}
+          </div>
+        }
         summaryMeta={meta}
       >
-        <CallDisplay
-          labelHash={labelHash}
-          value={value}
-          withHash={withHash}
-        />
+        <CallDisplay labelHash={labelHash} value={value} withHash={withHash} />
         {children}
       </Expander>
     </div>

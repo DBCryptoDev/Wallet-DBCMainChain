@@ -1,47 +1,40 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Group } from './types';
+import type { Group } from "./types";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { Icon } from '@polkadot/react-components';
+import { Icon } from "@polkadot/react-components";
 
-import Item from './Item';
+import Item from "./Item";
 
 interface Props extends Group {
   className?: string;
   isActive: boolean;
 }
 
-const SHA_COL = 'rgba(34, 36, 38, 0.12)';
-const SHA_OFF = '5px';
+const SHA_COL = "rgba(34, 36, 38, 0.12)";
+const SHA_OFF = "5px";
 
-function Grouping ({ className = '', isActive, name, routes }: Props): React.ReactElement<Props> {
+function Grouping({ className = "", isActive, name, routes }: Props): React.ReactElement<Props> {
   if (routes.length === 1) {
-    return (
-      <Item
-        className={isActive ? 'isActive' : ''}
-        isToplevel
-        route={routes[0]}
-      />
-    );
+    return <Item className={isActive ? "isActive" : ""} isToplevel route={routes[0]} />;
   }
 
   return (
-    <li className={`${className} ${isActive ? 'isActive' : ''}`}>
-      <div className={`groupHdr ${!isActive ? 'highlight--color-contrast' : ''}`}>
+    <li className={`${className} ${isActive ? "isActive" : ""}`}>
+      <div className={`groupHdr ${!isActive ? "highlight--color-contrast" : ""}`}>
         <span>{name}</span>
-        <Icon icon='caret-down' />
+        <Icon icon="caret-down" />
       </div>
-      <ul className='groupMenu'>
-        {routes.map((route): React.ReactNode => (
-          <Item
-            key={route.name}
-            route={route}
-          />
-        ))}
+      <ul className="groupMenu">
+        {routes.map(
+          (route): React.ReactNode => (
+            <Item key={route.name} route={route} />
+          )
+        )}
       </ul>
     </li>
   );
@@ -72,7 +65,8 @@ export default React.memo(styled(Grouping)`
 
   .groupMenu {
     border-radius: 0.25rem;
-    box-shadow: 0 ${SHA_OFF} ${SHA_OFF} -${SHA_OFF} ${SHA_COL}, ${SHA_OFF} 0 ${SHA_OFF} -${SHA_OFF} ${SHA_COL}, -${SHA_OFF} 0 ${SHA_OFF} -${SHA_OFF} ${SHA_COL};
+    box-shadow: 0 ${SHA_OFF} ${SHA_OFF} -${SHA_OFF} ${SHA_COL}, ${SHA_OFF} 0 ${SHA_OFF} -${SHA_OFF} ${SHA_COL},
+      -${SHA_OFF} 0 ${SHA_OFF} -${SHA_OFF} ${SHA_COL};
     display: none;
     margin: 0;
     overflow: hidden;
@@ -91,7 +85,7 @@ export default React.memo(styled(Grouping)`
 
     &::before {
       bottom: 0;
-      content: ' ';
+      content: " ";
       left: 0;
       position: absolute;
       right: 0;

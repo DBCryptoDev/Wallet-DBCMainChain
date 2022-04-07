@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/react-query authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Dropdown, Input, InputAddress, Modal, TxButton } from '@polkadot/react-components';
-import { useApi } from '@polkadot/react-hooks';
+import { Dropdown, Input, InputAddress, Modal, TxButton } from "@polkadot/react-components";
+import { useApi } from "@polkadot/react-hooks";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 interface Props {
   address: string;
@@ -15,15 +15,15 @@ interface Props {
 }
 
 const JUDGEMENT_ENUM = [
-  { text: 'Unknown', value: 0 },
-  { text: 'Fee paid', value: 1 },
-  { text: 'Reasonable', value: 2 },
-  { text: 'Known good', value: 3 },
-  { text: 'Out of date', value: 4 },
-  { text: 'Low quality', value: 5 }
+  { text: "Unknown", value: 0 },
+  { text: "Fee paid", value: 1 },
+  { text: "Reasonable", value: 2 },
+  { text: "Known good", value: 3 },
+  { text: "Out of date", value: 4 },
+  { text: "Low quality", value: 5 },
 ];
 
-function RegistrarJudgement ({ address, registrars, toggleJudgement }: Props): React.ReactElement<Props> {
+function RegistrarJudgement({ address, registrars, toggleJudgement }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const [addresses] = useState(() => registrars.map(({ address }) => address));
@@ -35,33 +35,25 @@ function RegistrarJudgement ({ address, registrars, toggleJudgement }: Props): R
   useEffect((): void => {
     const registrar = registrars.find(({ address }) => judgementAccountId === address);
 
-    setRegistrarIndex(
-      registrar
-        ? registrar.index
-        : -1
-    );
+    setRegistrarIndex(registrar ? registrar.index : -1);
   }, [judgementAccountId, registrars]);
 
   return (
-    <Modal
-      header={t<string>('Provide judgement')}
-      onClose={toggleJudgement}
-      size='small'
-    >
+    <Modal header={t<string>("Provide judgement")} onClose={toggleJudgement} size="small">
       <Modal.Content>
         <InputAddress
           filter={addresses}
-          label={t<string>('registrar account')}
+          label={t<string>("registrar account")}
           onChange={setJudgementAccountId}
-          type='account'
+          type="account"
         />
         <Input
           isDisabled
-          label={t<string>('registrar index')}
-          value={registrarIndex === -1 ? t<string>('invalid/unknown registrar account') : registrarIndex.toString()}
+          label={t<string>("registrar index")}
+          value={registrarIndex === -1 ? t<string>("invalid/unknown registrar account") : registrarIndex.toString()}
         />
         <Dropdown
-          label={t<string>('judgement')}
+          label={t<string>("judgement")}
           onChange={setJudgementEnum}
           options={JUDGEMENT_ENUM}
           value={judgementEnum}
@@ -70,9 +62,9 @@ function RegistrarJudgement ({ address, registrars, toggleJudgement }: Props): R
       <Modal.Actions onCancel={toggleJudgement}>
         <TxButton
           accountId={judgementAccountId}
-          icon='check'
+          icon="check"
           isDisabled={registrarIndex === -1}
-          label={t<string>('Judge')}
+          label={t<string>("Judge")}
           onStart={toggleJudgement}
           params={[registrarIndex, address, judgementEnum]}
           tx={api.tx.identity.provideJudgement}

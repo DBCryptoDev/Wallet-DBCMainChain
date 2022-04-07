@@ -1,8 +1,8 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface Props {
   children?: React.ReactNode;
@@ -14,19 +14,13 @@ interface Props {
   subtitle: React.ReactNode;
 }
 
-function AvatarItem ({ children, className = '', icon, isBig, subtitle, title }: Props): React.ReactElement<Props> {
+function AvatarItem({ children, className = "", icon, isBig, subtitle, title }: Props): React.ReactElement<Props> {
   return (
-    <div className={['ui--AvatarItem', className, isBig && 'big'].join(' ')}>
-      <div className='ui--AvatarItem-icon'>
-        {icon}
-      </div>
-      <div className='ui--AvatarItem-details'>
-        <div className='ui--AvatarItem-title'>
-          {title}
-        </div>
-        <div className='ui--AvatarItem-subtitle'>
-          {subtitle}
-        </div>
+    <div className={["ui--AvatarItem", className, isBig && "big"].join(" ")}>
+      <div className="ui--AvatarItem-icon">{icon}</div>
+      <div className="ui--AvatarItem-details">
+        <div className="ui--AvatarItem-title">{title}</div>
+        <div className="ui--AvatarItem-subtitle">{subtitle}</div>
       </div>
       {children}
     </div>

@@ -1,15 +1,15 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import styled from "styled-components";
 
-import { Button } from '@polkadot/react-components';
+import { Button } from "@polkadot/react-components";
 
 interface Props {
   className?: string;
   onChange: (index: number) => void;
-  options: { isDisabled?: boolean, text: string, value: number }[];
+  options: { isDisabled?: boolean; text: string; value: number }[];
   value: number;
 }
 
@@ -21,17 +21,14 @@ interface ToggleProps {
   text: string;
 }
 
-function ToggleIndex ({ index, isDisabled, isSelected, onChange, text }: ToggleProps): React.ReactElement<ToggleProps> {
-  const _onClick = useCallback(
-    (): void => {
-      !isDisabled && onChange(index);
-    },
-    [isDisabled, index, onChange]
-  );
+function ToggleIndex({ index, isDisabled, isSelected, onChange, text }: ToggleProps): React.ReactElement<ToggleProps> {
+  const _onClick = useCallback((): void => {
+    !isDisabled && onChange(index);
+  }, [isDisabled, index, onChange]);
 
   return (
     <Button
-      icon={isSelected ? 'check' : 'circle'}
+      icon={isSelected ? "check" : "circle"}
       isBasic
       isDisabled={isDisabled}
       isSelected={isSelected}
@@ -44,23 +41,25 @@ function ToggleIndex ({ index, isDisabled, isSelected, onChange, text }: ToggleP
 
 const ToggleIndexMemo = React.memo(ToggleIndex);
 
-function ToggleGroup ({ className = '', onChange, options, value }: Props): React.ReactElement<Props> | null {
+function ToggleGroup({ className = "", onChange, options, value }: Props): React.ReactElement<Props> | null {
   if (!options.length || !options[0].value) {
     return null;
   }
 
   return (
     <div className={`ui--ToggleGroup ${className}`}>
-      {options.map(({ isDisabled, text }, index): React.ReactNode => (
-        <ToggleIndexMemo
-          index={index}
-          isDisabled={isDisabled}
-          isSelected={value === index}
-          key={index}
-          onChange={onChange}
-          text={text}
-        />
-      ))}
+      {options.map(
+        ({ isDisabled, text }, index): React.ReactNode => (
+          <ToggleIndexMemo
+            index={index}
+            isDisabled={isDisabled}
+            isSelected={value === index}
+            key={index}
+            onChange={onChange}
+            text={text}
+          />
+        )
+      )}
     </div>
   );
 }

@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/app-calendar authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { EntryInfo } from './types';
+import type { EntryInfo } from "./types";
 
-import React, { useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useMemo } from "react";
+import styled from "styled-components";
 
 interface Props {
   className?: string;
@@ -18,31 +18,35 @@ interface Props {
 
 const DAY_TO_MS = 24 * 60 * 60 * 1000;
 
-function MonthDay ({ className = '', dateMonth, day, isCurrent, isDisabled, scheduled, setDay }: Props): React.ReactElement<Props> {
-  const hasEvents = useMemo(
-    (): boolean => {
-      const start = dateMonth.getTime() + ((day - 1) * DAY_TO_MS);
-      const end = start + DAY_TO_MS;
+function MonthDay({
+  className = "",
+  dateMonth,
+  day,
+  isCurrent,
+  isDisabled,
+  scheduled,
+  setDay,
+}: Props): React.ReactElement<Props> {
+  const hasEvents = useMemo((): boolean => {
+    const start = dateMonth.getTime() + (day - 1) * DAY_TO_MS;
+    const end = start + DAY_TO_MS;
 
-      return scheduled.some(({ dateTime }) => dateTime >= start && dateTime < end);
-    },
-    [dateMonth, day, scheduled]
-  );
+    return scheduled.some(({ dateTime }) => dateTime >= start && dateTime < end);
+  }, [dateMonth, day, scheduled]);
 
-  const _onClick = useCallback(
-    (): void => {
-      !isDisabled && setDay(day);
-    },
-    [day, isDisabled, setDay]
-  );
+  const _onClick = useCallback((): void => {
+    !isDisabled && setDay(day);
+  }, [day, isDisabled, setDay]);
 
   return (
     <div
-      className={`day${isDisabled ? ' isDisabled' : (isCurrent ? ' highlight--bg-light highlight--color isSelected' : '')} ${className}`}
+      className={`day${
+        isDisabled ? " isDisabled" : isCurrent ? " highlight--bg-light highlight--color isSelected" : ""
+      } ${className}`}
       onClick={_onClick}
     >
       {day}
-      {hasEvents && <div className='eventIndicator highlight--border' />}
+      {hasEvents && <div className="eventIndicator highlight--border" />}
     </div>
   );
 }

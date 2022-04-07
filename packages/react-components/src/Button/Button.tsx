@@ -1,23 +1,45 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ButtonProps } from './types';
+import type { ButtonProps } from "./types";
 
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import styled from "styled-components";
 
-import Icon from '../Icon';
-import Spinner from '../Spinner';
+import Icon from "../Icon";
+import Spinner from "../Spinner";
 
-function Button ({ children, className = '', dataTestId = '', icon, isBasic, isBusy, isCircular, isDisabled, isFull, isIcon, isSelected, isToplevel, label, onClick, onMouseEnter, onMouseLeave, tabIndex, withoutLink }: ButtonProps): React.ReactElement<ButtonProps> {
-  const _onClick = useCallback(
-    () => !(isBusy || isDisabled) && onClick && onClick(),
-    [isBusy, isDisabled, onClick]
-  );
+function Button({
+  children,
+  className = "",
+  dataTestId = "",
+  icon,
+  isBasic,
+  isBusy,
+  isCircular,
+  isDisabled,
+  isFull,
+  isIcon,
+  isSelected,
+  isToplevel,
+  label,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  tabIndex,
+  withoutLink,
+}: ButtonProps): React.ReactElement<ButtonProps> {
+  const _onClick = useCallback(() => !(isBusy || isDisabled) && onClick && onClick(), [isBusy, isDisabled, onClick]);
 
   return (
     <button
-      className={`ui--Button${label ? ' hasLabel' : ''}${isBasic ? ' isBasic' : ''}${isCircular ? ' isCircular' : ''}${isFull ? ' isFull' : ''}${isIcon ? ' isIcon' : ''}${(isBusy || isDisabled) ? ' isDisabled' : ''}${isBusy ? ' isBusy' : ''}${!onClick ? ' isReadOnly' : ''}${isSelected ? ' isSelected' : ''}${isToplevel ? ' isToplevel' : ''}${withoutLink ? ' withoutLink' : ''} ${className}`}
+      className={`ui--Button${label ? " hasLabel" : ""}${isBasic ? " isBasic" : ""}${isCircular ? " isCircular" : ""}${
+        isFull ? " isFull" : ""
+      }${isIcon ? " isIcon" : ""}${isBusy || isDisabled ? " isDisabled" : ""}${isBusy ? " isBusy" : ""}${
+        !onClick ? " isReadOnly" : ""
+      }${isSelected ? " isSelected" : ""}${isToplevel ? " isToplevel" : ""}${
+        withoutLink ? " withoutLink" : ""
+      } ${className}`}
       data-testid={dataTestId}
       onClick={_onClick}
       onMouseEnter={onMouseEnter}
@@ -27,10 +49,7 @@ function Button ({ children, className = '', dataTestId = '', icon, isBasic, isB
       <Icon icon={icon} />
       {label}
       {children}
-      <Spinner
-        className='ui--Button-spinner'
-        variant='cover'
-      />
+      <Spinner className="ui--Button-spinner" variant="cover" />
     </button>
   );
 }
@@ -62,7 +81,7 @@ export default React.memo(styled(Button)`
   }
 
   &:focus {
-    outline:0;
+    outline: 0;
   }
 
   &.hasLabel {
@@ -81,7 +100,8 @@ export default React.memo(styled(Button)`
     border-radius: 10rem;
   }
 
-  &.isDisabled, &.isReadOnly {
+  &.isDisabled,
+  &.isReadOnly {
     background: none;
     box-shadow: none;
     cursor: not-allowed;

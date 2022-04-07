@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-api authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SubmittableExtrinsicFunction } from '@polkadot/api/promise/types';
-import type { InjectedExtension } from '@polkadot/extension-inject/types';
+import type { SubmittableExtrinsicFunction } from "@polkadot/api/promise/types";
+import type { InjectedExtension } from "@polkadot/extension-inject/types";
 
-import { ApiPromise } from '@polkadot/api/promise';
+import { ApiPromise } from "@polkadot/api/promise";
 
 // helpers for HOC props
 export type OmitProps<T, K> = Pick<T, Exclude<keyof T, K>>;
@@ -62,4 +62,4 @@ export interface BaseProps<T> extends BareProps, CallProps, ChangeProps {
 
 export type Formatter = (value?: any) => string;
 
-export type Environment = 'web' | 'app';
+export type Environment = "web" | "app";

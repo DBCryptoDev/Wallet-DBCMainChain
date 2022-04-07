@@ -1,41 +1,41 @@
 // Copyright 2017-2021 @polkadot/test-support authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Keyring } from '@polkadot/keyring';
-import { KeyringPair } from '@polkadot/keyring/types';
+import { Keyring } from "@polkadot/keyring";
+import { KeyringPair } from "@polkadot/keyring/types";
 
-export function aliceSigner (): KeyringPair {
-  const keyring = new Keyring({ type: 'sr25519' });
+export function aliceSigner(): KeyringPair {
+  const keyring = new Keyring({ type: "sr25519" });
 
-  return keyring.addFromUri('//Alice');
+  return keyring.addFromUri("//Alice");
 }
 
-export function bobSigner (): KeyringPair {
-  const keyring = new Keyring({ type: 'sr25519' });
+export function bobSigner(): KeyringPair {
+  const keyring = new Keyring({ type: "sr25519" });
 
-  return keyring.addFromUri('//Bob');
+  return keyring.addFromUri("//Bob");
 }
 
-export function charlieSigner (): KeyringPair {
-  const keyring = new Keyring({ type: 'sr25519' });
+export function charlieSigner(): KeyringPair {
+  const keyring = new Keyring({ type: "sr25519" });
 
-  return keyring.addFromUri('//Charlie');
+  return keyring.addFromUri("//Charlie");
 }
 
-export function daveSigner (): KeyringPair {
-  const keyring = new Keyring({ type: 'sr25519' });
+export function daveSigner(): KeyringPair {
+  const keyring = new Keyring({ type: "sr25519" });
 
-  return keyring.addFromUri('//Dave');
+  return keyring.addFromUri("//Dave");
 }
 
-export function eveSigner (): KeyringPair {
-  const keyring = new Keyring({ type: 'sr25519' });
+export function eveSigner(): KeyringPair {
+  const keyring = new Keyring({ type: "sr25519" });
 
-  return keyring.addFromUri('//Eve');
+  return keyring.addFromUri("//Eve");
 }
 
-export function ferdieSigner (): KeyringPair {
-  const keyring = new Keyring({ type: 'sr25519' });
+export function ferdieSigner(): KeyringPair {
+  const keyring = new Keyring({ type: "sr25519" });
 
-  return keyring.addFromUri('//Ferdie');
+  return keyring.addFromUri("//Ferdie");
 }

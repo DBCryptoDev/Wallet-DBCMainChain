@@ -1,28 +1,24 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface Props {
   className?: string;
   value: string;
 }
 
-function Digits ({ className = '', value }: Props): React.ReactElement<Props> {
+function Digits({ className = "", value }: Props): React.ReactElement<Props> {
   return (
     <div className={className}>
-      {value.split(',').map((parts, index) => (
-        <div
-          className='group'
-          key={index}
-        >
-          {index !== 0 ? ',' : ''}
-          {parts.split('').map((d, index) => (
-            <div
-              className='digit'
-              key={index}
-            >{d}</div>
+      {value.split(",").map((parts, index) => (
+        <div className="group" key={index}>
+          {index !== 0 ? "," : ""}
+          {parts.split("").map((d, index) => (
+            <div className="digit" key={index}>
+              {d}
+            </div>
           ))}
         </div>
       ))}

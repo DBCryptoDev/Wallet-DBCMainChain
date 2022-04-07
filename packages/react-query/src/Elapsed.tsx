@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/react-query authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import BN from 'bn.js';
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import BN from "bn.js";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 
-import { bnToBn } from '@polkadot/util';
+import { bnToBn } from "@polkadot/util";
 
 type Ticker = (now: number) => void;
 
@@ -21,7 +21,7 @@ const tickers = new Map<number, Ticker>();
 let lastNow = Date.now();
 let lastId = 0;
 
-function tick (): void {
+function tick(): void {
   lastNow = Date.now();
 
   for (const ticker of tickers.values()) {
@@ -31,39 +31,39 @@ function tick (): void {
   setTimeout(tick, TICK_TIMEOUT);
 }
 
-function formatValue (value: number, type = 's', withDecimal = false): React.ReactNode {
-  const [pre, post] = value.toFixed(1).split('.');
-  const before = pre.split('').map((d, index) => (
-    <div
-      className='digit'
-      key={index}
-    >{d}</div>
+function formatValue(value: number, type = "s", withDecimal = false): React.ReactNode {
+  const [pre, post] = value.toFixed(1).split(".");
+  const before = pre.split("").map((d, index) => (
+    <div className="digit" key={index}>
+      {d}
+    </div>
   ));
 
-  return withDecimal
-    ? <>{before}.<div className='digit'>{post}</div> {type}</>
-    : <>{before} s</>;
+  return withDecimal ? (
+    <>
+      {before}.<div className="digit">{post}</div> {type}
+    </>
+  ) : (
+    <>{before} s</>
+  );
 }
 
-function getDisplayValue (now = 0, value: BN | Date | number = 0): React.ReactNode {
-  const tsValue = (
-    value && (value as Date).getTime
-      ? (value as Date).getTime()
-      : bnToBn(value as number).toNumber()
-  ) || 0;
-  let display = formatValue(0, 's', true);
+function getDisplayValue(now = 0, value: BN | Date | number = 0): React.ReactNode {
+  const tsValue =
+    (value && (value as Date).getTime ? (value as Date).getTime() : bnToBn(value as number).toNumber()) || 0;
+  let display = formatValue(0, "s", true);
 
   if (now && tsValue) {
     const elapsed = Math.max(Math.abs(now - tsValue), 0) / 1000;
 
     if (elapsed < 15) {
-      display = formatValue(elapsed, 's', true);
+      display = formatValue(elapsed, "s", true);
     } else if (elapsed < 60) {
       display = formatValue(elapsed);
     } else if (elapsed < 3600) {
-      display = formatValue(elapsed, 'min');
+      display = formatValue(elapsed, "min");
     } else {
-      display = formatValue(elapsed / 3600, 'hr');
+      display = formatValue(elapsed / 3600, "hr");
     }
   }
 
@@ -72,10 +72,10 @@ function getDisplayValue (now = 0, value: BN | Date | number = 0): React.ReactNo
 
 tick();
 
-function Elapsed ({ children, className = '', value }: Props): React.ReactElement<Props> {
+function Elapsed({ children, className = "", value }: Props): React.ReactElement<Props> {
   const [now, setNow] = useState(lastNow);
 
-  useEffect((): () => void => {
+  useEffect((): (() => void) => {
     const id = lastId++;
 
     tickers.set(id, setNow);
@@ -87,7 +87,8 @@ function Elapsed ({ children, className = '', value }: Props): React.ReactElemen
 
   return (
     <div className={`ui--Elapsed ${className}`}>
-      {getDisplayValue(now, value)}{children}
+      {getDisplayValue(now, value)}
+      {children}
     </div>
   );
 }

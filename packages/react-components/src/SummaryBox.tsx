@@ -1,8 +1,8 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface Props {
   children?: React.ReactNode;
@@ -10,12 +10,8 @@ interface Props {
   isSmall?: boolean;
 }
 
-function SummaryBox ({ children, className = '', isSmall }: Props): React.ReactElement<Props> {
-  return (
-    <div className={`${className}${isSmall ? ' isSmall' : ''}`}>
-      {children}
-    </div>
-  );
+function SummaryBox({ children, className = "", isSmall }: Props): React.ReactElement<Props> {
+  return <div className={`${className}${isSmall ? " isSmall" : ""}`}>{children}</div>;
 }
 
 export default React.memo(styled(SummaryBox)`

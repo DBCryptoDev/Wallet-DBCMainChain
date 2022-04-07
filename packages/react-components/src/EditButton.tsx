@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { IconName } from '@fortawesome/fontawesome-svg-core';
+import type { IconName } from "@fortawesome/fontawesome-svg-core";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { colorLink } from './styles/theme';
-import Icon from './Icon';
+import { colorLink } from "./styles/theme";
+import Icon from "./Icon";
 
 interface Props {
   children?: React.ReactNode;
@@ -16,18 +16,12 @@ interface Props {
   onClick: () => void;
 }
 
-function EditButton ({ children, className, icon = 'edit', onClick }: Props): React.ReactElement<Props> {
+function EditButton({ children, className, icon = "edit", onClick }: Props): React.ReactElement<Props> {
   return (
-    <div
-      className={className}
-      onClick={onClick}
-    >
+    <div className={className} onClick={onClick}>
       {children}
-      <span className='editSpan'>
-        <Icon
-          className='icon-button'
-          icon={icon}
-        />
+      <span className="editSpan">
+        <Icon className="icon-button" icon={icon} />
       </span>
     </div>
   );

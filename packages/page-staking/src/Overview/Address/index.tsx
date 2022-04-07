@@ -1,25 +1,25 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveAccountInfo, DeriveHeartbeatAuthor } from '@polkadot/api-derive/types';
-import type { Option } from '@polkadot/types';
-import type { SlashingSpans, ValidatorPrefs , EraIndex} from '@polkadot/types/interfaces';
-import type { NominatedBy as NominatedByType, ValidatorInfo } from '../../types';
-import type { NominatorValue } from './types';
+import type { DeriveAccountInfo, DeriveHeartbeatAuthor } from "@polkadot/api-derive/types";
+import type { Option } from "@polkadot/types";
+import type { SlashingSpans, ValidatorPrefs, EraIndex } from "@polkadot/types/interfaces";
+import type { NominatedBy as NominatedByType, ValidatorInfo } from "../../types";
+import type { NominatorValue } from "./types";
 
-import BN from 'bn.js';
-import React, { useCallback, useMemo } from 'react';
+import BN from "bn.js";
+import React, { useCallback, useMemo } from "react";
 
-import { ApiPromise } from '@polkadot/api';
-import { AddressSmall, Icon, LinkExternal } from '@polkadot/react-components';
-import { checkVisibility } from '@polkadot/react-components/util';
-import { useApi, useCall } from '@polkadot/react-hooks';
-import { FormatBalance } from '@polkadot/react-query';
+import { ApiPromise } from "@polkadot/api";
+import { AddressSmall, Icon, LinkExternal } from "@polkadot/react-components";
+import { checkVisibility } from "@polkadot/react-components/util";
+import { useApi, useCall } from "@polkadot/react-hooks";
+import { FormatBalance } from "@polkadot/react-query";
 
-import Favorite from './Favorite';
-import NominatedBy from './NominatedBy';
-import StakeOther from './StakeOther';
-import Status from './Status';
+import Favorite from "./Favorite";
+import NominatedBy from "./NominatedBy";
+import StakeOther from "./StakeOther";
+import Status from "./Status";
 
 interface Props {
   address: string;
@@ -46,7 +46,7 @@ interface StakingState {
   stakeOwn?: BN;
 }
 
-function expandInfo ({ exposure, validatorPrefs }: ValidatorInfo): StakingState {
+function expandInfo({ exposure, validatorPrefs }: ValidatorInfo): StakingState {
   let nominators: NominatorValue[] = [];
   let stakeTotal: BN | undefined;
   let stakeOther: BN | undefined;
@@ -66,53 +66,67 @@ function expandInfo ({ exposure, validatorPrefs }: ValidatorInfo): StakingState 
     nominators,
     stakeOther,
     stakeOwn,
-    stakeTotal
+    stakeTotal,
   };
 }
 
 const transformSlashes = {
-  transform: (opt: Option<SlashingSpans>) => opt.unwrapOr(null)
+  transform: (opt: Option<SlashingSpans>) => opt.unwrapOr(null),
 };
 
-function useAddressCalls (api: ApiPromise, address: string, isMain?: boolean) {
+function useAddressCalls(api: ApiPromise, address: string, isMain?: boolean) {
   const params = useMemo(() => [address], [address]);
   const accountInfo = useCall<DeriveAccountInfo>(api.derive.accounts.info, params);
-  const slashingSpans = useCall<SlashingSpans | null>(!isMain && api.query.staking.slashingSpans, params, transformSlashes);
+  const slashingSpans = useCall<SlashingSpans | null>(
+    !isMain && api.query.staking.slashingSpans,
+    params,
+    transformSlashes
+  );
 
   return { accountInfo, slashingSpans };
 }
 
-function getCommission (api: ApiPromise, address: string) {
+function getCommission(api: ApiPromise, address: string) {
   const currentEra = useCall<Option<EraIndex>>(api.query.staking?.currentEra);
-  const params1 = useMemo(() => [ currentEra?.toHuman(), address ], [ currentEra?.toHuman(), address ]);
+  const params1 = useMemo(() => [currentEra?.toHuman(), address], [currentEra?.toHuman(), address]);
   const commission = useCall<ValidatorPrefs>(api.query.staking?.erasValidatorPrefs, params1);
   return (commission as ValidatorPrefs)?.commission?.unwrap()?.toHuman();
 }
 
-function Address ({ address, className = '', filterName, hasQueries, isElected, isFavorite, isMain, lastBlock, nominatedBy, points, recentlyOnline, toggleFavorite, validatorInfo, withIdentity }: Props): React.ReactElement<Props> | null {
+function Address({
+  address,
+  className = "",
+  filterName,
+  hasQueries,
+  isElected,
+  isFavorite,
+  isMain,
+  lastBlock,
+  nominatedBy,
+  points,
+  recentlyOnline,
+  toggleFavorite,
+  validatorInfo,
+  withIdentity,
+}: Props): React.ReactElement<Props> | null {
   const { api } = useApi();
   const { accountInfo, slashingSpans } = useAddressCalls(api, address, isMain);
 
   const { nominators, stakeOther, stakeOwn } = useMemo(
-    () => validatorInfo
-      ? expandInfo(validatorInfo)
-      : { nominators: [] },
+    () => (validatorInfo ? expandInfo(validatorInfo) : { nominators: [] }),
     [validatorInfo]
   );
 
   const commission1 = getCommission(api, address);
 
   const isVisible = useMemo(
-    () => accountInfo ? checkVisibility(api, address, accountInfo, filterName, withIdentity) : true,
+    () => (accountInfo ? checkVisibility(api, address, accountInfo, filterName, withIdentity) : true),
     [api, accountInfo, address, filterName, withIdentity]
   );
 
-  const _onQueryStats = useCallback(
-    (): void => {
-      window.location.hash = `/staking/query/${address}`;
-    },
-    [address]
-  );
+  const _onQueryStats = useCallback((): void => {
+    window.location.hash = `/staking/query/${address}`;
+  }, [address]);
 
   if (!isVisible) {
     return null;
@@ -120,12 +134,8 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
 
   return (
     <tr className={className}>
-      <td className='badge together'>
-        <Favorite
-          address={address}
-          isFavorite={isFavorite}
-          toggleFavorite={toggleFavorite}
-        />
+      <td className="badge together">
+        <Favorite address={address} isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
         <Status
           isElected={isElected}
           isMain={isMain}
@@ -134,58 +144,25 @@ function Address ({ address, className = '', filterName, hasQueries, isElected, 
           onlineMessage={recentlyOnline?.hasMessage}
         />
       </td>
-      <td className='address'>
+      <td className="address">
         <AddressSmall value={address} />
       </td>
-      {isMain
-        ? (
-          <StakeOther
-            nominators={nominators}
-            stakeOther={stakeOther}
-          />
-        )
-        : (
-          <NominatedBy
-            nominators={nominatedBy}
-            slashingSpans={slashingSpans}
-          />
-        )
-      }
-      {isMain && (
-        <td className='number media--1100'>
-          {stakeOwn?.gtn(0) && (
-            <FormatBalance value={stakeOwn} />
-          )}
-        </td>
+      {isMain ? (
+        <StakeOther nominators={nominators} stakeOther={stakeOther} />
+      ) : (
+        <NominatedBy nominators={nominatedBy} slashingSpans={slashingSpans} />
       )}
-      <td className='number'>
-        {commission1}
-      </td>
+      {isMain && <td className="number media--1100">{stakeOwn?.gtn(0) && <FormatBalance value={stakeOwn} />}</td>}
+      <td className="number">{commission1}</td>
       {isMain && (
         <>
-          <td className='number'>
-            {points}
-          </td>
-          <td className='number'>
-            {lastBlock}
-          </td>
+          <td className="number">{points}</td>
+          <td className="number">{lastBlock}</td>
         </>
       )}
-      <td>
-        {hasQueries && (
-          <Icon
-            className='highlight--color'
-            icon='chart-line'
-            onClick={_onQueryStats}
-          />
-        )}
-      </td>
-      <td className='links media--1200'>
-        <LinkExternal
-          data={address}
-          isLogo
-          type={isMain ? 'validator' : 'intention'}
-        />
+      <td>{hasQueries && <Icon className="highlight--color" icon="chart-line" onClick={_onQueryStats} />}</td>
+      <td className="links media--1200">
+        <LinkExternal data={address} isLogo type={isMain ? "validator" : "intention"} />
       </td>
     </tr>
   );

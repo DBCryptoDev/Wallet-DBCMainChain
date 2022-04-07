@@ -1,27 +1,27 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { StakerState } from '@polkadot/react-hooks/types';
-import type { UnappliedSlash } from '@polkadot/types/interfaces';
-import type { Slash, SlashEra } from './types';
+import type { StakerState } from "@polkadot/react-hooks/types";
+import type { UnappliedSlash } from "@polkadot/types/interfaces";
+import type { Slash, SlashEra } from "./types";
 
-import BN from 'bn.js';
-import React, { useMemo, useState } from 'react';
+import BN from "bn.js";
+import React, { useMemo, useState } from "react";
 
-import { getSlashProposalThreshold } from '@polkadot/apps-config';
-import { Table, ToggleGroup } from '@polkadot/react-components';
-import { useAccounts, useApi, useMembers } from '@polkadot/react-hooks';
-import { formatNumber } from '@polkadot/util';
+import { getSlashProposalThreshold } from "@polkadot/apps-config";
+import { Table, ToggleGroup } from "@polkadot/react-components";
+import { useAccounts, useApi, useMembers } from "@polkadot/react-hooks";
+import { formatNumber } from "@polkadot/util";
 
-import { useTranslation } from '../translate';
-import Era from './Era';
+import { useTranslation } from "../translate";
+import Era from "./Era";
 
 interface Props {
   ownStashes?: StakerState[];
   slashes: [BN, UnappliedSlash[]][];
 }
 
-function calcSlashEras (slashes: [BN, UnappliedSlash[]][], ownStashes: StakerState[]): SlashEra[] {
+function calcSlashEras(slashes: [BN, UnappliedSlash[]][], ownStashes: StakerState[]): SlashEra[] {
   const slashEras: SlashEra[] = [];
 
   slashes
@@ -51,7 +51,7 @@ function calcSlashEras (slashes: [BN, UnappliedSlash[]][], ownStashes: StakerSta
           reporters: [],
           slashes: [],
           total: new BN(0),
-          validators: []
+          validators: [],
         };
         slashEras.push(slashEra);
       }
@@ -86,23 +86,21 @@ function calcSlashEras (slashes: [BN, UnappliedSlash[]][], ownStashes: StakerSta
   return slashEras.sort((a, b) => b.era.cmp(a.era));
 }
 
-function Slashes ({ ownStashes = [], slashes }: Props): React.ReactElement<Props> | null {
+function Slashes({ ownStashes = [], slashes }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const { allAccounts } = useAccounts();
   const { members } = useMembers();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const rows = useMemo(
-    () => calcSlashEras(slashes, ownStashes),
-    [ownStashes, slashes]
-  );
+  const rows = useMemo(() => calcSlashEras(slashes, ownStashes), [ownStashes, slashes]);
 
   const eraOpts = useMemo(
-    () => rows.map(({ era }) => ({
-      text: t<string>('era {{era}}', { replace: { era: formatNumber(era) } }),
-      value: era.toString()
-    })),
+    () =>
+      rows.map(({ era }) => ({
+        text: t<string>("era {{era}}", { replace: { era: formatNumber(era) } }),
+        value: era.toString(),
+      })),
     [rows, t]
   );
 
@@ -112,25 +110,14 @@ function Slashes ({ ownStashes = [], slashes }: Props): React.ReactElement<Props
   );
 
   if (!rows.length) {
-    return (
-      <Table
-        empty={t<string>('There are no unapplied/pending slashes')}
-        header={[[t('unapplied'), 'start']]}
-      />
-    );
+    return <Table empty={t<string>("There are no unapplied/pending slashes")} header={[[t("unapplied"), "start"]]} />;
   }
 
   const councilThreshold = Math.ceil((members.length || 0) * getSlashProposalThreshold(api));
 
   return (
     <Era
-      buttons={
-        <ToggleGroup
-          onChange={setSelectedIndex}
-          options={eraOpts}
-          value={selectedIndex}
-        />
-      }
+      buttons={<ToggleGroup onChange={setSelectedIndex} options={eraOpts} value={selectedIndex} />}
       councilId={councilId}
       councilThreshold={councilThreshold}
       key={rows[selectedIndex].era.toString()}

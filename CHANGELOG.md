@@ -30,7 +30,6 @@ Changes:
 - Cater for new Rococo chain reset/deployment
 - Ensure treasury does not depend on council or tips
 
-
 ## 0.85.1 Mar 22, 2021
 
 Contributed:
@@ -50,7 +49,6 @@ Changes:
 - Display call hash on signer modal
 - Cleanup Modal layouts & de-dupe tags
 - Cleanup global tabs displays (optimize elements)
-
 
 ## 0.84.1 Mar 15, 2021
 
@@ -85,7 +83,6 @@ Changes:
 - Add correct keys for account menu (rendering warnings)
 - Add additional errors on invalid keypair retrieval
 
-
 ## 0.83.1 Mar 8, 2021
 
 Contributed:
@@ -109,7 +106,6 @@ Changes:
 - Swap code-generation to ESM modules
 - Adjust funding warnings with explicit free balance mention
 
-
 ## 0.82.1 Mar 1, 2021
 
 Contributed:
@@ -132,7 +128,6 @@ Changes:
 - Adjust block links display on a per-contract view
 - Adjust display of disabled items on popup menus (dark-mode driven)
 - Align bounty row display with the rest of the UI
-
 
 ## 0.81.1 Feb 22, 2021
 
@@ -163,7 +158,6 @@ Changes:
 - Adjust table displays with bottom-borders
 - Adjust Governance proxy checks to include tips
 - Reworks digits formatting for explorer blocks
-
 
 ## 0.80.1 Feb 15, 2021
 
@@ -196,7 +190,6 @@ Changes:
 - Consistent sorting for all RPC nodes (live & testing)
 - Update Rococo genesis after reset
 - Split test parachains into own section on network selector
-
 
 ## 0.79.1 Feb 8, 2021
 
@@ -238,7 +231,6 @@ Changes:
 - Adjust popup menu dividers to ignore empty sections
 - Don't re-initialize useState, use callbacks for init as applicable
 - Cleanup TypeScript `as any` usages
-
 
 ## 0.78.1 Feb 1, 2021
 
@@ -284,7 +276,6 @@ Changes:
 - Bump Edgeware definitions
 - Bump Rococo definitions
 
-
 ## 0.77.1 Jan 25, 2021
 
 Contributed:
@@ -314,7 +305,6 @@ Changes:
 - Allow for display of multiple balance instances
 - Adjust PolkaBTC definitions to indicate balance instances
 - Display extrinsic signatures (with type) on explorer
-
 
 ## 0.76.1 Jan 18, 2021
 
@@ -351,7 +341,6 @@ Changes:
 - check for availability of `query.council` on council app
 - Use latest `@polkadot.networks` with `hasLedgerSupport` flag
 
-
 ## 0.75.1 Jan 11, 2021
 
 Contributed:
@@ -385,7 +374,6 @@ Changes:
 - Update Electron CSP to cater for local nodes
 - Rework endpoint configuration for better ease of config
 
-
 ## 0.74.1 Jan 4, 2021
 
 Contributed:
@@ -415,7 +403,6 @@ Changes:
 - Remove generic asset support (to be replaced with asset)
 - Swap to webpack-dev-server for development environment
 
-
 ## 0.73.1 Dec 28, 2020
 
 Contributed:
@@ -435,7 +422,6 @@ Changes:
 - Adjust calendar rows for dark theme
 - Update Frontier types (now included in API)
 - Webpack dev environment cleanups
-
 
 ## 0.72.1 Dec 21, 2020
 
@@ -468,7 +454,6 @@ Changes:
 - Remove unused TxModal components
 - Swap to Webpack 5
 
-
 ## 0.71.2 Dec 14, 2020
 
 Contributed:
@@ -495,7 +480,6 @@ Changes:
 - Split endpoint definitions into folder (dev/prod/test)
 - Adjust Tooltip formatting with consistency between balances/locks
 
-
 ## 0.70.1 Dec 7, 2020
 
 Contributed:
@@ -520,7 +504,6 @@ Changes:
 - Remove sparsely-used classes utility (inconsistent use)
 - Swap to using TypeScript 4.1.2
 - Adjust dark theme to work with help overlays
-
 
 ## 0.69.1 Nov 30, 2020
 
@@ -552,7 +535,6 @@ Changes:
 - Adjust most type imports via `import type { ... }`
 - Move all chain-specific config to `apps-config` (thresholds & inflation)
 
-
 ## 0.68.1 Nov 23, 2020
 
 Changes:
@@ -568,7 +550,6 @@ Changes:
 - Expand notes on colors/logos with actual RPC endpoints
 - Publish `@polkadot/apps-config` (with reworked import/export)
 - Bump Ledger libs to latest version (as per `@polkadot/ledger`)
-
 
 ## 0.67.1 Nov 16, 2020
 
@@ -591,7 +572,6 @@ Changes:
 - Allow contracts to specify salt parameter on deployments
 - Update contracts banner to reflect released Solang 0.1.5+ support
 
-
 ## 0.66.1 Nov 9, 2020
 
 Contributed:
@@ -610,7 +590,6 @@ Changes:
 - Add support for Ethereum icons (for Ethereum-compatible chains)
 - Bump to major `@polkadot/{keyring, util, util-crypto}` release
 
-
 ## 0.65.1 Nov 2, 2020
 
 Contributed:
@@ -627,7 +606,6 @@ Changes:
 - Adjust council motion parsing (allow for some non-parseable)
 - Adjust for use of new `api-contracts` (including call errors)
 - Allow for selection of payment destination on initial bonding
-
 
 ## 0.64.1 Oct 26, 2020
 
@@ -655,7 +633,6 @@ Changes:
 - Adjust JS bundles to have a better parallel throughput
 - Adjust checks for Aura for unbonding, displaying on era
 
-
 ## 0.63.1 Oct 19, 2020
 
 Contributed:
@@ -675,7 +652,6 @@ Changes:
 - Use RPC for rent projection (to project eviction as available)
 - Metadata QR now aligns decimals with UI defaults (shared with react-api values)
 - Add endpoint for Canvas testnet (& setup types for node)
-
 
 ## 0.62.1 Oct 13, 2020
 
@@ -698,7 +674,6 @@ Changes:
 - Update i18n to remove left navbar references
 - Support seconding multiple times from a single account
 
-
 ## 0.61.1 Oct 5, 2020
 
 Contributed:
@@ -719,7 +694,6 @@ Changes:
 - Add RoboHash icon theme
 - Adjust logging in InputAddress transforms (don't log already-handled errors)
 - Remove unmaintained packages (e.g. page-dashboard)
-
 
 ## 0.60.1 Sep 28, 2020
 
@@ -749,7 +723,6 @@ Changes:
 - Adjust button hover highlights for consistency
 - `@polkadot/api` 2.0.1
 - `@polkadot/util` 3.5.1
-
 
 ## 0.59.1 Sep 21, 2020
 
@@ -782,7 +755,6 @@ Changes:
 - Only hide settings extension update (not QR) when in dev mode
 - Adjust expander tables with caret at end (including Table reworks)
 
-
 ## 0.58.1 Sep 14, 2020
 
 Contributed:
@@ -814,7 +786,6 @@ Changes:
 - Allow IPFS to add QR addresses to storage (no accounts allowed)
 - Adjust Expander rendering with consistent up/down right caret
 
-
 ## 0.57.1 Sep 7, 2020
 
 Contributed:
@@ -844,7 +815,6 @@ Changes:
 - Adjust Table UI, crisper table layouts
 - Update WASM uploads to use `isWasm` from utilities
 - Adjust i18n strings, allowing countdown translations
-
 
 ## 0.56.1 Aug 31, 2020
 
@@ -881,7 +851,6 @@ Changes:
 - Add a legend on the staking overview pages
 - `@polkadot/api`1.31.2
 - `@polkadot/util` 3.4.1
-
 
 ## 0.55.1 Aug 24, 2020
 
@@ -924,7 +893,6 @@ Changes:
 - Split addressbook into own app (with top nav)
 - Aplit RPC app into own app (top nav, toolbox remainder now named sign/verify)
 
-
 ## 0.54.1 Aug 17, 2020
 
 Contributed:
@@ -960,7 +928,6 @@ Changes:
 - Adjust alignment of units (time & symbol) in formatters
 - Do not fail on non-available RPCs for node info retrieval (& hide empty)
 
-
 ## 0.53.1 Aug 10, 2020
 
 Contributed:
@@ -968,7 +935,7 @@ Contributed:
 - ko i18n first-round support (Thanks to https://github.com/hskang9)
 - Update to latest Centrifuge types (Thanks to https://github.com/mikiquantum)
 - Add icon on Electron app under Linux (Thanks to https://github.com/EthWorks)
-- Re-bonding adjusts based on unbonding  redeemable (Thanks to https://github.com/Tbaut)
+- Re-bonding adjusts based on unbonding redeemable (Thanks to https://github.com/Tbaut)
 - Adjust council voting balance to include reserved (Thanks to https://github.com/Tbaut)
 - Add tip link to Polkassembly (Thanks to https://github.com/Tbaut)
 - Show existing proxies across all accounts (Thanks to https://github.com/Tbaut)
@@ -991,7 +958,6 @@ Changes:
 - Add Rococo testnet chain support
 - Add IPNS support for Rococo
 - Adjust threshold calculations where members are not (yet) available
-
 
 ## 0.52.1 Aug 3, 2020
 
@@ -1018,7 +984,6 @@ Changes:
 - Adjust era filters on staking payouts, default to day intervals
 - Convert custom URL inputs to punycode (UTF8 detection)
 
-
 ## 0.51.1 Jul 27, 2020
 
 Contributed:
@@ -1044,7 +1009,6 @@ Changes:
 - Adjust council slashing params to cater for current generation
 - Fixed for keyboard locale detection
 - Don't allow display in an iframe
-
 
 ## 0.50.1 Jul 20, 2020
 
@@ -1075,7 +1039,6 @@ Changes:
 - Remove unmaintained page-123code (& references)
 - Don't display finalized blocks when grandpa is not available
 
-
 ## 0.49.1 Jul 13, 2020
 
 Contributed:
@@ -1103,7 +1066,6 @@ Changes:
 - Adjust type injection to override on-connect API defaults
 - Adjust attestation display with no-balance filters
 
-
 ## 0.48.1 Jul 6, 2020
 
 Contributed:
@@ -1124,7 +1086,6 @@ Changes:
 - Add withdraw action to staking menu (as available)
 - Fix InputAddress component with state change warnings
 - Bump to latest API and utilities
-
 
 ## 0.47.1 Jul 1, 2020
 
@@ -1153,7 +1114,6 @@ Changes:
 - Correct handling of recursive param structures in extrinsics
 - Swap icons to use font-awesome directly, including official components
 - Additional small UI cleanups and fixes
-
 
 ## 0.46.1 Jun 22, 2020
 
@@ -1190,7 +1150,6 @@ Changes:
 - `@polkadot/api` 1.20.1
 - `@polkadot/util` 2.15.1
 
-
 ## 0.45.2 Jun 16, 2020
 
 Contributed:
@@ -1219,7 +1178,6 @@ Changes:
 - `@polkadot/api` 1.19.1
 - `@polkadot/util` 2.14.1
 
-
 ## 0.44.1 Jun 10, 2020
 
 Contributed:
@@ -1247,7 +1205,6 @@ Changes:
 - `@polkadot/api` 1.18.1
 - `@polkadot/util` 2.13.1
 
-
 ## 0.43.1 May 26, 2020
 
 Contributed:
@@ -1264,7 +1221,6 @@ Changes:
 - Adjust checks for on-click validator (immediate isActive)
 - `@polkadot/api` 1.16.1
 - `@polkadot/util` 2.11.1
-
 
 ## 0.42.1 May 22, 2020
 
@@ -1318,7 +1274,6 @@ Changes:
 - Allow for tabes with aliasses (on renames) & redirects
 - Align types and calls with latest substrate
 
-
 ## 0.41.1 Apr 20, 2020
 
 Contributed:
@@ -1344,8 +1299,7 @@ Changes:
 - Optimize Transfers, no unneeded useEffect
 - Cleanups, remove unused components with no references (dropped in earlier refactoring)
 - More components to functional, specific focus on TxModal extends
-- Bumps to all @polkadot/* packages for latest support everywhere
-
+- Bumps to all @polkadot/\* packages for latest support everywhere
 
 ## 0.40.1 Apr 9, 2020
 
@@ -1386,7 +1340,6 @@ Changes:
 - Cleanup all voting lock, consistent display
 - ... loads of other under-the-hood improvements and cleanups
 
-
 ## 0.39.1 Jan 31, 2020
 
 - **Breaking** Drop support for V1 Substrate chains
@@ -1414,7 +1367,6 @@ Changes:
 - Adjust balance display formats
 - Update to latest libraries (incl. util 2.0 & api 1.0)
 
-
 ## 0.38.1
 
 Contributed:
@@ -1431,7 +1383,6 @@ Changes:
 - Add pre-image support to democracy proposals (including imminent)
 - Improved staking page rendering (background)
 - Update to latest libraries
-
 
 ## 0.37.1
 
@@ -1461,7 +1412,6 @@ Changes:
 - Account locks are applied on a genesis range (e.g. CC2 & CC3 allow availability)
 - ... lots of smaller enhancements & bug fixes
 
-
 ## 0.36.1
 
 Changes:
@@ -1486,7 +1436,6 @@ Changes:
 - Make the network selection clickable on network name (via bounty)
 - ... and a number of cleanups all around
 
-
 ## 0.35.1
 
 Changes:
@@ -1502,7 +1451,6 @@ Changes:
 - Fix account derivation with `///password`
 - Lots of component & maintainability cleanups
 
-
 ## 0.34.1
 
 Changes:
@@ -1512,8 +1460,7 @@ Changes:
 - Lots of UI updated to support both Substrate 1.x & 2.x chains
 - Add of claims app for Kusama (and Polkadot)
 - Basic Council, Parachains & Treasury apps
-- Moved ui-* packages to react-*
-
+- Moved ui-_ packages to react-_
 
 ## 0.33.1
 
@@ -1524,7 +1471,7 @@ Changes:
 - Rework Account & Address layouts with cards
 - Transfer can happen from any point (via Transfer modal)
 - Use new api.derive functions
-- Introduce multi support (most via api.derive.*)
+- Introduce multi support (most via api.derive.\*)
 - Update all account and address modals
 - Add seconding of proposals
 - Staking updates, including un-bonding & withdrawals
@@ -1535,7 +1482,6 @@ Changes:
 - Latest @polkadot/util & @polkadot/api
 - A large number of optimizations and smaller fixes
 
-
 ## 0.32.1
 
 Changes:
@@ -1543,14 +1489,12 @@ Changes:
 - Support for Substrate 1.0 release & metadata v4
 - @polkadot/api 0.77.1
 
-
 ## 0.31.1
 
 Changes:
 
 - Cleanups, fixes and features around the poc-4 staking module
 - Number of UI enhancements
-
 
 ## 0.30.1
 
@@ -1561,20 +1505,17 @@ Changes:
 - Cleanup of all UI summary headers
 - Emberic Elem support (replaces Dried Danta)
 
-
 ## 0.29.1
 
 Changes:
 
 - @polkadot/util & @polkadot/api 0.75.1
 
-
 ## 0.28.1
 
 Changes:
 
 - Support for substrate 1.0-rc
-
 
 ## 0.27.1
 
@@ -1584,7 +1525,6 @@ Changes:
 - Swap default keyring accounts (on creation) to sr25519
 - New faster crypto algorithms
 - Misc. bug fixes all around
-
 
 ## 0.26.1
 
@@ -1596,34 +1536,29 @@ Changes:
 - New mobile-friendly sidebar
 - Fix issues with nominating (old non-bonds interface)
 
-
 ## 0.25.1
 
 Changes:
 
 - Swap to publishing -beta.x on merge (non-breaking testing)
 
-
- ## 0.24.1
-
-Changes:
-
- Storage now handles Option type properly
-
-
- ## 0.23.1
+## 0.24.1
 
 Changes:
 
- JavaScript console introduced
+Storage now handles Option type properly
 
+## 0.23.1
+
+Changes:
+
+JavaScript console introduced
 
 ## 0.22.1
 
 Changes:
 
 - Use new Compact<Index> transaction format - this requires the latest binaries from either Polkadot or Substrate
-
 
 ## 0.21.1
 

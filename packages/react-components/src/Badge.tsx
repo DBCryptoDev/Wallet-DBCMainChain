@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { IconName } from '@fortawesome/fontawesome-svg-core';
+import type { IconName } from "@fortawesome/fontawesome-svg-core";
 
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
-import Icon from './Icon';
-import Tooltip from './Tooltip';
+import Icon from "./Icon";
+import Tooltip from "./Tooltip";
 
 interface Props {
   className?: string;
-  color: 'blue' | 'gray' | 'green' | 'highlight' | 'normal' | 'orange' | 'purple' | 'red' | 'transparent' | 'white';
+  color: "blue" | "gray" | "green" | "highlight" | "normal" | "orange" | "purple" | "red" | "transparent" | "white";
   hover?: React.ReactNode;
   icon?: IconName;
   info?: React.ReactNode;
@@ -21,26 +21,29 @@ interface Props {
 
 let badgeId = 0;
 
-function Badge ({ className = '', color = 'normal', hover, icon, info, isSmall, onClick }: Props): React.ReactElement<Props> | null {
+function Badge({
+  className = "",
+  color = "normal",
+  hover,
+  icon,
+  info,
+  isSmall,
+  onClick,
+}: Props): React.ReactElement<Props> | null {
   const [trigger] = useState(() => `badge-hover-${Date.now()}-${badgeId++}`);
-  const extraProps = hover
-    ? { 'data-for': trigger, 'data-tip': true }
-    : {};
-  const isHighlight = color === 'highlight';
+  const extraProps = hover ? { "data-for": trigger, "data-tip": true } : {};
+  const isHighlight = color === "highlight";
 
   return (
     <div
       {...extraProps}
-      className={`ui--Badge${hover ? ' isTooltip' : ''}${isSmall ? ' isSmall' : ''}${onClick ? ' isClickable' : ''}${isHighlight ? ' highlight--bg' : ''} ${color}Color ${className}`}
+      className={`ui--Badge${hover ? " isTooltip" : ""}${isSmall ? " isSmall" : ""}${onClick ? " isClickable" : ""}${
+        isHighlight ? " highlight--bg" : ""
+      } ${color}Color ${className}`}
       onClick={onClick}
     >
-      <div className={isHighlight ? 'highlight--color-contrast' : ''}>{info || (icon && <Icon icon={icon} />)}</div>
-      {hover && (
-        <Tooltip
-          text={hover}
-          trigger={trigger}
-        />
-      )}
+      <div className={isHighlight ? "highlight--color-contrast" : ""}>{info || (icon && <Icon icon={icon} />)}</div>
+      {hover && <Tooltip text={hover} trigger={trigger} />}
     </div>
   );
 }

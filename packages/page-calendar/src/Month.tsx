@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/app-calendar authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DateState, EntryInfo } from './types';
+import type { DateState, EntryInfo } from "./types";
 
-import React, { useMemo, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useMemo, useRef } from "react";
+import styled from "styled-components";
 
-import { Button } from '@polkadot/react-components';
+import { Button } from "@polkadot/react-components";
 
-import { DAYS, MONTHS } from './constants';
-import MonthDay from './MonthDay';
-import { useTranslation } from './translate';
+import { DAYS, MONTHS } from "./constants";
+import MonthDay from "./MonthDay";
+import { useTranslation } from "./translate";
 
 interface Props {
   className?: string;
@@ -24,7 +24,17 @@ interface Props {
   state: DateState;
 }
 
-function Month ({ className, hasNextMonth, lastDay, now, scheduled, setDay, setNextMonth, setPrevMonth, state: { dateMonth, dateSelected, days, startClass } }: Props): React.ReactElement<Props> {
+function Month({
+  className,
+  hasNextMonth,
+  lastDay,
+  now,
+  scheduled,
+  setDay,
+  setNextMonth,
+  setPrevMonth,
+  state: { dateMonth, dateSelected, days, startClass },
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   const dayOfWeekRef = useRef(DAYS.map((d) => t(d)));
@@ -36,7 +46,7 @@ function Month ({ className, hasNextMonth, lastDay, now, scheduled, setDay, setN
       dateMonth.getMonth() === dateSelected.getMonth(),
       now.getFullYear() === dateMonth.getFullYear(),
       now.getMonth() === dateMonth.getMonth(),
-      now.getMonth() > dateMonth.getMonth()
+      now.getMonth() > dateMonth.getMonth(),
     ],
     [dateMonth, dateSelected, now]
   );
@@ -44,38 +54,39 @@ function Month ({ className, hasNextMonth, lastDay, now, scheduled, setDay, setN
   return (
     <div className={className}>
       <h1>
-        <div>{monthRef.current[dateMonth.getMonth()]} {dateMonth.getFullYear()}</div>
+        <div>
+          {monthRef.current[dateMonth.getMonth()]} {dateMonth.getFullYear()}
+        </div>
         <Button.Group>
-          <Button
-            icon='chevron-left'
-            isDisabled={isNowYear && (isOlderMonth || isNowMonth)}
-            onClick={setPrevMonth}
-          />
-          <Button
-            icon='chevron-right'
-            isDisabled={!hasNextMonth}
-            onClick={setNextMonth}
-          />
+          <Button icon="chevron-left" isDisabled={isNowYear && (isOlderMonth || isNowMonth)} onClick={setPrevMonth} />
+          <Button icon="chevron-right" isDisabled={!hasNextMonth} onClick={setNextMonth} />
         </Button.Group>
       </h1>
       <div className={`calendar ${startClass}`}>
-        <div className='dayOfWeek'>
-          {dayOfWeekRef.current.map((day): React.ReactNode => (
-            <div key={day}>{t(day)}</div>
-          ))}
+        <div className="dayOfWeek">
+          {dayOfWeekRef.current.map(
+            (day): React.ReactNode => (
+              <div key={day}>{t(day)}</div>
+            )
+          )}
         </div>
-        <div className='dateGrid'>
-          {days.map((day): React.ReactNode => (
-            <MonthDay
-              dateMonth={dateMonth}
-              day={day}
-              isCurrent={isCurrYear && isCurrMonth && day === dateSelected.getDate()}
-              isDisabled={(isNowYear && (isOlderMonth || (isNowMonth && now.getDate() > day))) || (!hasNextMonth && day > lastDay)}
-              key={day}
-              scheduled={scheduled}
-              setDay={setDay}
-            />
-          ))}
+        <div className="dateGrid">
+          {days.map(
+            (day): React.ReactNode => (
+              <MonthDay
+                dateMonth={dateMonth}
+                day={day}
+                isCurrent={isCurrYear && isCurrMonth && day === dateSelected.getDate()}
+                isDisabled={
+                  (isNowYear && (isOlderMonth || (isNowMonth && now.getDate() > day))) ||
+                  (!hasNextMonth && day > lastDay)
+                }
+                key={day}
+                scheduled={scheduled}
+                setDay={setDay}
+              />
+            )
+          )}
         </div>
       </div>
     </div>
@@ -99,13 +110,27 @@ export default React.memo(styled(Month)`
       margin-top: 0.5em;
     }
 
-    &.startSun .dateGrid .day:first-child { grid-column: 1 }
-    &.startMon .dateGrid .day:first-child { grid-column: 2 }
-    &.startTue .dateGrid .day:first-child { grid-column: 3 }
-    &.startWed .dateGrid .day:first-child { grid-column: 4 }
-    &.startThu .dateGrid .day:first-child { grid-column: 5 }
-    &.startFri .dateGrid .day:first-child { grid-column: 6 }
-    &.startSat .dateGrid .day:first-child { grid-column: 7 }
+    &.startSun .dateGrid .day:first-child {
+      grid-column: 1;
+    }
+    &.startMon .dateGrid .day:first-child {
+      grid-column: 2;
+    }
+    &.startTue .dateGrid .day:first-child {
+      grid-column: 3;
+    }
+    &.startWed .dateGrid .day:first-child {
+      grid-column: 4;
+    }
+    &.startThu .dateGrid .day:first-child {
+      grid-column: 5;
+    }
+    &.startFri .dateGrid .day:first-child {
+      grid-column: 6;
+    }
+    &.startSat .dateGrid .day:first-child {
+      grid-column: 7;
+    }
 
     .dayOfWeek {
       > * {

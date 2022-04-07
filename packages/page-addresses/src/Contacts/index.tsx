@@ -1,95 +1,80 @@
 // Copyright 2017-2021 @polkadot/app-addresses authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ComponentProps as Props } from '../types';
+import type { ComponentProps as Props } from "../types";
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import styled from "styled-components";
 
-import { Button, Input, Table } from '@polkadot/react-components';
-import { useAddresses, useFavorites, useLoadingDelay, useToggle } from '@polkadot/react-hooks';
+import { Button, Input, Table } from "@polkadot/react-components";
+import { useAddresses, useFavorites, useLoadingDelay, useToggle } from "@polkadot/react-hooks";
 
-import CreateModal from '../modals/Create';
-import { useTranslation } from '../translate';
-import Address from './Address';
+import CreateModal from "../modals/Create";
+import { useTranslation } from "../translate";
+import Address from "./Address";
 
 type SortedAddress = { address: string; isFavorite: boolean };
 
-const STORE_FAVS = 'accounts:favorites';
+const STORE_FAVS = "accounts:favorites";
 
-function Overview ({ className = '', onStatusChange }: Props): React.ReactElement<Props> {
+function Overview({ className = "", onStatusChange }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { allAddresses } = useAddresses();
   const [isCreateOpen, toggleCreate] = useToggle(false);
   const [favorites, toggleFavorite] = useFavorites(STORE_FAVS);
   const [sortedAddresses, setSortedAddresses] = useState<SortedAddress[] | undefined>();
-  const [filterOn, setFilter] = useState<string>('');
+  const [filterOn, setFilter] = useState<string>("");
   const isLoading = useLoadingDelay();
 
   const headerRef = useRef([
-    [t('contacts'), 'start', 2],
-    [t('tags'), 'start'],
-    [t('transactions'), 'media--1500'],
-    [t('balances'), 'expand'],
+    [t("contacts"), "start", 2],
+    [t("tags"), "start"],
+    [t("transactions"), "media--1500"],
+    [t("balances"), "expand"],
     [],
-    [undefined, 'media--1400']
+    [undefined, "media--1400"],
   ]);
 
   useEffect((): void => {
     setSortedAddresses(
       allAddresses
         .map((address): SortedAddress => ({ address, isFavorite: favorites.includes(address) }))
-        .sort((a, b): number =>
-          a.isFavorite === b.isFavorite
-            ? 0
-            : b.isFavorite
-              ? 1
-              : -1
-        )
+        .sort((a, b): number => (a.isFavorite === b.isFavorite ? 0 : b.isFavorite ? 1 : -1))
     );
   }, [allAddresses, favorites]);
 
-  const filter = useMemo(() => (
-    <div className='filter--tags'>
-      <Input
-        autoFocus
-        isFull
-        label={t<string>('filter by name or tags')}
-        onChange={setFilter}
-        value={filterOn}
-      />
-    </div>
-  ), [filterOn, t]);
+  const filter = useMemo(
+    () => (
+      <div className="filter--tags">
+        <Input autoFocus isFull label={t<string>("filter by name or tags")} onChange={setFilter} value={filterOn} />
+      </div>
+    ),
+    [filterOn, t]
+  );
 
   return (
     <div className={className}>
       <Button.Group>
-        <Button
-          icon='plus'
-          label={t<string>('Add contact')}
-          onClick={toggleCreate}
-        />
+        <Button icon="plus" label={t<string>("Add contact")} onClick={toggleCreate} />
       </Button.Group>
-      {isCreateOpen && (
-        <CreateModal
-          onClose={toggleCreate}
-          onStatusChange={onStatusChange}
-        />
-      )}
+      {isCreateOpen && <CreateModal onClose={toggleCreate} onStatusChange={onStatusChange} />}
       <Table
-        empty={!isLoading && sortedAddresses && t<string>('no addresses saved yet, add any existing address')}
+        empty={!isLoading && sortedAddresses && t<string>("no addresses saved yet, add any existing address")}
         filter={filter}
         header={headerRef.current}
       >
-        {!isLoading && sortedAddresses?.map(({ address, isFavorite }): React.ReactNode => (
-          <Address
-            address={address}
-            filter={filterOn}
-            isFavorite={isFavorite}
-            key={address}
-            toggleFavorite={toggleFavorite}
-          />
-        ))}
+        {!isLoading &&
+          sortedAddresses?.map(
+            ({ address, isFavorite }): React.ReactNode => (
+              <Address
+                address={address}
+                filter={filterOn}
+                isFavorite={isFavorite}
+                key={address}
+                toggleFavorite={toggleFavorite}
+              />
+            )
+          )}
       </Table>
     </div>
   );

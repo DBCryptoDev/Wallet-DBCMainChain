@@ -1,8 +1,8 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Divider as SUIDivider, Menu as SUIMenu } from 'semantic-ui-react';
-import styled from 'styled-components';
+import { Divider as SUIDivider, Menu as SUIMenu } from "semantic-ui-react";
+import styled from "styled-components";
 
 type MenuDef = typeof SUIMenu & {
   Divider: typeof SUIDivider;
@@ -17,7 +17,7 @@ export default styled(Menu)`
     display: none;
   }
 
-  .item+.ui.divider {
+  .item + .ui.divider {
     display: block;
   }
 `;

@@ -1,42 +1,32 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import ReactMd from 'react-markdown';
-import styled from 'styled-components';
+import React from "react";
+import ReactMd from "react-markdown";
+import styled from "styled-components";
 
-import { useToggle } from '@polkadot/react-hooks';
+import { useToggle } from "@polkadot/react-hooks";
 
-import Icon from './Icon';
+import Icon from "./Icon";
 
 interface Props {
   className?: string;
   md: string;
 }
 
-function HelpOverlay ({ className = '', md }: Props): React.ReactElement<Props> {
+function HelpOverlay({ className = "", md }: Props): React.ReactElement<Props> {
   const [isVisible, toggleVisible] = useToggle();
 
   return (
     <div className={`ui--HelpOverlay ${className}`}>
-      <div className='help-button'>
-        <Icon
-          icon='question-circle'
-          onClick={toggleVisible}
-        />
+      <div className="help-button">
+        <Icon icon="question-circle" onClick={toggleVisible} />
       </div>
-      <div className={`help-slideout ${isVisible ? 'open' : 'closed'}`}>
-        <div className='help-button'>
-          <Icon
-            icon='times'
-            onClick={toggleVisible}
-          />
+      <div className={`help-slideout ${isVisible ? "open" : "closed"}`}>
+        <div className="help-button">
+          <Icon icon="times" onClick={toggleVisible} />
         </div>
-        <ReactMd
-          className='help-content'
-          escapeHtml={false}
-          source={md}
-        />
+        <ReactMd className="help-content" escapeHtml={false} source={md} />
       </div>
     </div>
   );
@@ -66,7 +56,7 @@ export default React.memo(styled(HelpOverlay)`
     position: fixed;
     right: -50rem;
     top: 0;
-    transition-duration: .5s;
+    transition-duration: 0.5s;
     transition-property: all;
     z-index: 225; /* 5 more than menubar */
 

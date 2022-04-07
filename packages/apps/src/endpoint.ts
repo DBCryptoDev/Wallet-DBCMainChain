@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ApiPromise } from '@polkadot/api';
-import { isFunction } from '@polkadot/util';
+import { ApiPromise } from "@polkadot/api";
+import { isFunction } from "@polkadot/util";
 
-function hasEndpoint (api: ApiPromise, endpoint: string): boolean {
-  const [area, section, method] = endpoint.split('.');
+function hasEndpoint(api: ApiPromise, endpoint: string): boolean {
+  const [area, section, method] = endpoint.split(".");
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -15,7 +15,7 @@ function hasEndpoint (api: ApiPromise, endpoint: string): boolean {
   }
 }
 
-export function findMissingApis (api: ApiPromise, needsApi?: (string | string[])[]): (string | string[])[] {
+export function findMissingApis(api: ApiPromise, needsApi?: (string | string[])[]): (string | string[])[] {
   if (!needsApi) {
     return [];
   }

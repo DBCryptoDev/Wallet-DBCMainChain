@@ -10,13 +10,13 @@
 // The Cats/"set4" were created by David Revoy, used under CC-BY-4.0 https://www.peppercarrot.com/en/article391/cat-avatar-generator
 // The avatars used in "set5" were created by Pablo Stanley, for https://avataaars.com/ They are "Free for personal and commercial use. 😇"
 
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useMemo } from "react";
+import styled from "styled-components";
 
-import { blake2AsU8a } from '@polkadot/util-crypto';
+import { blake2AsU8a } from "@polkadot/util-crypto";
 
-import backgrounds from './backgrounds';
-import sets from './sets';
+import backgrounds from "./backgrounds";
+import sets from "./sets";
 
 interface Props {
   className?: string;
@@ -29,13 +29,13 @@ interface HashRef {
   index: number;
 }
 
-function getIndex <T> (list: T[], hash: HashRef): T {
+function getIndex<T>(list: T[], hash: HashRef): T {
   let value = 0;
 
   // grab 48 bits worth of data (last increment before max int)
   // (6 also doesn't divide into 32, so we have a rolling window)
   for (let i = 0; i < 6; i++) {
-    value = (value * 256) + hash.hash[hash.index];
+    value = value * 256 + hash.hash[hash.index];
     hash.index++;
 
     if (hash.index === 32) {
@@ -46,10 +46,10 @@ function getIndex <T> (list: T[], hash: HashRef): T {
   return list[value % list.length];
 }
 
-function createInfo (value: string): string[] {
+function createInfo(value: string): string[] {
   const hash = {
     hash: blake2AsU8a(value),
-    index: 0
+    index: 0,
   };
   const result = [getIndex(backgrounds, hash) as string];
 
@@ -60,27 +60,15 @@ function createInfo (value: string): string[] {
   return result;
 }
 
-function RoboHash ({ className, publicKey, size }: Props): React.ReactElement<Props> | null {
-  const info = useMemo(
-    () => createInfo(publicKey),
-    [publicKey]
-  );
-  const style = useMemo(
-    () => ({ height: `${size}px`, width: `${size}px` }),
-    [size]
-  );
+function RoboHash({ className, publicKey, size }: Props): React.ReactElement<Props> | null {
+  const info = useMemo(() => createInfo(publicKey), [publicKey]);
+  const style = useMemo(() => ({ height: `${size}px`, width: `${size}px` }), [size]);
 
   return (
-    <div
-      className={className}
-      style={style}
-    >
-      {info.map((src, index) =>
-        <img
-          key={index}
-          src={src}
-        />
-      )}
+    <div className={className} style={style}>
+      {info.map((src, index) => (
+        <img key={index} src={src} />
+      ))}
     </div>
   );
 }

@@ -1,22 +1,18 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import media from './media';
+import media from "./media";
 
 interface Props {
   children: React.ReactNode;
   className?: string;
 }
 
-function FilterOverlay ({ children, className }: Props): React.ReactElement<Props> {
-  return (
-    <div className={className}>
-      {children}
-    </div>
-  );
+function FilterOverlay({ children, className }: Props): React.ReactElement<Props> {
+  return <div className={className}>{children}</div>;
 }
 
 export default React.memo(styled(FilterOverlay)`

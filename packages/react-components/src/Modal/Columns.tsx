@@ -1,18 +1,16 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ColumnsProps } from './types';
+import type { ColumnsProps } from "./types";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-function Columns ({ children, className = '', hint }: ColumnsProps): React.ReactElement<ColumnsProps> {
+function Columns({ children, className = "", hint }: ColumnsProps): React.ReactElement<ColumnsProps> {
   return (
     <div className={`ui--Modal-Columns ${className}`}>
       <div>{children}</div>
-      {hint && (
-        <div>{hint}</div>
-      )}
+      {hint && <div>{hint}</div>}
     </div>
   );
 }
@@ -22,7 +20,7 @@ export default React.memo(styled(Columns)`
   display: flex;
   justify-content: space-between;
 
-  &+& {
+  & + & {
     margin-top: 0.25rem;
   }
 

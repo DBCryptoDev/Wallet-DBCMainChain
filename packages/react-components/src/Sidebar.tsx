@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import Button from './Button';
+import Button from "./Button";
 
 interface Props {
   button?: React.ReactNode;
@@ -12,30 +12,27 @@ interface Props {
   className?: string;
   offset?: number | string;
   onClose: () => void;
-  position: 'left' | 'right';
+  position: "left" | "right";
 }
 
-function Sidebar ({ button, children, className = '', onClose }: Props): React.ReactElement<Props> {
+function Sidebar({ button, children, className = "", onClose }: Props): React.ReactElement<Props> {
   return (
     <div className={`ui--Sidebar ${className}`}>
-      <Button.Group className='ui--Sidebar-buttons'>
+      <Button.Group className="ui--Sidebar-buttons">
         {button}
-        <Button
-          icon='times'
-          isBasic
-          isCircular
-          onClick={onClose}
-        />
+        <Button icon="times" isBasic isCircular onClick={onClose} />
       </Button.Group>
       {children}
     </div>
   );
 }
 
-export default React.memo(styled(Sidebar)(({ offset = 0, position }: Props) => `
+export default React.memo(
+  styled(Sidebar)(
+    ({ offset = 0, position }: Props) => `
   background: var(--bg-page);
   bottom: 0;
-  box-shadow: ${position === 'right' ? '-6px' : '6px'} 0px 20px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: ${position === "right" ? "-6px" : "6px"} 0px 20px 0px rgba(0, 0, 0, 0.3);
   margin-left: -0.125rem;
   max-width: 24rem;
   min-width: 24rem;
@@ -52,4 +49,6 @@ export default React.memo(styled(Sidebar)(({ offset = 0, position }: Props) => `
     right: 0.5rem;
     top: 0.5rem;
   }
-`));
+`
+  )
+);

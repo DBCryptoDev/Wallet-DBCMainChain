@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TypeDef } from '@polkadot/types/types';
-import type { RawParam, RawParamOnChange, RawParamOnEnter, RawParamOnEscape, Size } from '../types';
+import type { TypeDef } from "@polkadot/types/types";
+import type { RawParam, RawParamOnChange, RawParamOnEnter, RawParamOnEscape, Size } from "../types";
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import { CopyButton, Input } from '@polkadot/react-components';
-import { compactAddLength, hexToU8a, isAscii, isHex, isU8a, stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
-import { decodeAddress } from '@polkadot/util-crypto';
+import { CopyButton, Input } from "@polkadot/react-components";
+import { compactAddLength, hexToU8a, isAscii, isHex, isU8a, stringToU8a, u8aToHex, u8aToString } from "@polkadot/util";
+import { decodeAddress } from "@polkadot/util-crypto";
 
-import { useTranslation } from '../translate';
-import Bare from './Bare';
+import { useTranslation } from "../translate";
+import Bare from "./Bare";
 
 interface Props {
   asHex?: boolean;
@@ -34,13 +34,12 @@ interface Props {
   withLength?: boolean;
 }
 
-const defaultValidate = (): boolean =>
-  true;
+const defaultValidate = (): boolean => true;
 
-function convertInput (value: string): [boolean, Uint8Array] {
-  if (value === '0x') {
+function convertInput(value: string): [boolean, Uint8Array] {
+  if (value === "0x") {
     return [true, new Uint8Array([])];
-  } else if (value.startsWith('0x')) {
+  } else if (value.startsWith("0x")) {
     try {
       return [true, hexToU8a(value)];
     } catch (error) {
@@ -55,20 +54,35 @@ function convertInput (value: string): [boolean, Uint8Array] {
     // we continue
   }
 
-  return isAscii(value)
-    ? [true, stringToU8a(value)]
-    : [value === '0x', new Uint8Array([])];
+  return isAscii(value) ? [true, stringToU8a(value)] : [value === "0x", new Uint8Array([])];
 }
 
-function BaseBytes ({ asHex, children, className = '', defaultValue: { value }, isDisabled, isError, label, length = -1, onChange, onEnter, onEscape, size = 'full', validate = defaultValidate, withCopy, withLabel, withLength }: Props): React.ReactElement<Props> {
+function BaseBytes({
+  asHex,
+  children,
+  className = "",
+  defaultValue: { value },
+  isDisabled,
+  isError,
+  label,
+  length = -1,
+  onChange,
+  onEnter,
+  onEscape,
+  size = "full",
+  validate = defaultValidate,
+  withCopy,
+  withLabel,
+  withLength,
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [defaultValue] = useState(
     value
       ? isDisabled && isU8a(value) && isAscii(value)
         ? u8aToString(value)
         : isHex(value)
-          ? value
-          : u8aToHex(value as Uint8Array, isDisabled ? 256 : -1)
+        ? value
+        : u8aToHex(value as Uint8Array, isDisabled ? 256 : -1)
       : undefined
   );
   const [isValid, setIsValid] = useState(false);
@@ -77,22 +91,17 @@ function BaseBytes ({ asHex, children, className = '', defaultValue: { value }, 
     (hex: string): void => {
       let [isValid, value] = convertInput(hex);
 
-      isValid = isValid && validate(value) && (
-        length !== -1
-          ? value.length === length
-          : value.length !== 0
-      );
+      isValid = isValid && validate(value) && (length !== -1 ? value.length === length : value.length !== 0);
 
       if (withLength && isValid) {
         value = compactAddLength(value);
       }
 
-      onChange && onChange({
-        isValid,
-        value: asHex
-          ? u8aToHex(value)
-          : value
-      });
+      onChange &&
+        onChange({
+          isValid,
+          value: asHex ? u8aToHex(value) : value,
+        });
 
       setIsValid(isValid);
     },
@@ -111,15 +120,13 @@ function BaseBytes ({ asHex, children, className = '', defaultValue: { value }, 
         onChange={_onChange}
         onEnter={onEnter}
         onEscape={onEscape}
-        placeholder={t<string>('0x prefixed hex, e.g. 0x1234 or ascii data')}
-        type='text'
+        placeholder={t<string>("0x prefixed hex, e.g. 0x1234 or ascii data")}
+        type="text"
         withEllipsis
         withLabel={withLabel}
       >
         {children}
-        {withCopy && (
-          <CopyButton value={defaultValue} />
-        )}
+        {withCopy && <CopyButton value={defaultValue} />}
       </Input>
     </Bare>
   );

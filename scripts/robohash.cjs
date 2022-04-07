@@ -1,26 +1,26 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const HEADER = `// Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // Automatically generated, do not edit`;
-const PATH = 'packages/react-components/src/IdentityIcon/RoboHash';
+const PATH = "packages/react-components/src/IdentityIcon/RoboHash";
 
-function getCounter (index) {
+function getCounter(index) {
   return `000${index}`.slice(-3);
 }
 
-function getFiles (dir) {
+function getFiles(dir) {
   return fs
     .readdirSync(dir)
-    .filter((entry) => !['.', '..', 'index.ts'].includes(entry))
+    .filter((entry) => ![".", "..", "index.ts"].includes(entry))
     .map((entry) => {
-      if (entry.includes('#')) {
-        const newName = entry.replace(/#/g, '-');
+      if (entry.includes("#")) {
+        const newName = entry.replace(/#/g, "-");
 
         fs.renameSync(path.join(dir, entry), path.join(dir, newName));
 
@@ -30,14 +30,12 @@ function getFiles (dir) {
       return entry;
     })
     .sort((a, b) => {
-      return (a.includes('-') && b.includes('-'))
-        ? a.split('-')[1].localeCompare(b.split('-')[1])
-        : 0;
+      return a.includes("-") && b.includes("-") ? a.split("-")[1].localeCompare(b.split("-")[1]) : 0;
     });
 }
 
-function extractBg () {
-  const root = path.join(__dirname, '..', PATH, 'backgrounds');
+function extractBg() {
+  const root = path.join(__dirname, "..", PATH, "backgrounds");
   const files = [];
 
   getFiles(root).forEach((sub) => {
@@ -45,13 +43,16 @@ function extractBg () {
   });
 
   const imports = files.map((file, index) => `import b${getCounter(index)} from '${file}';`);
-  const list = `const backgrounds: any[] = [${files.map((_, index) => `b${getCounter(index)}`).join(', ')}];`;
+  const list = `const backgrounds: any[] = [${files.map((_, index) => `b${getCounter(index)}`).join(", ")}];`;
 
-  fs.writeFileSync(path.join(root, 'index.ts'), `${HEADER}\n\n${imports.join('\n')}\n\n${list}\n\nexport default backgrounds;\n`);
+  fs.writeFileSync(
+    path.join(root, "index.ts"),
+    `${HEADER}\n\n${imports.join("\n")}\n\n${list}\n\nexport default backgrounds;\n`
+  );
 }
 
-function extractSets () {
-  const root = path.join(__dirname, '..', PATH, 'sets');
+function extractSets() {
+  const root = path.join(__dirname, "..", PATH, "sets");
   const sets = getFiles(root).map((sub) =>
     getFiles(path.join(root, sub)).map((dir) =>
       getFiles(path.join(root, sub, dir)).map((entry) => `./${sub}/${dir}/${entry}`)
@@ -59,10 +60,10 @@ function extractSets () {
   );
 
   const imports = [];
-  let list = 'const sets: any[][][] = [';
+  let list = "const sets: any[][][] = [";
 
   sets.forEach((areas, sindex) => {
-    list = `${list}${sindex ? ',' : ''}\n  [`;
+    list = `${list}${sindex ? "," : ""}\n  [`;
 
     areas.forEach((files, aindex) => {
       const indexes = files.map((file, findex) => {
@@ -73,7 +74,7 @@ function extractSets () {
         return index;
       });
 
-      list = `${list}${aindex ? ',' : ''}\n    [${indexes.join(', ')}]`;
+      list = `${list}${aindex ? "," : ""}\n    [${indexes.join(", ")}]`;
     });
 
     list = `${list}\n  ]`;
@@ -81,7 +82,10 @@ function extractSets () {
 
   list = `${list}\n];`;
 
-  fs.writeFileSync(path.join(root, 'index.ts'), `${HEADER}\n\n${imports.join('\n')}\n\n${list}\n\nexport default sets;\n`);
+  fs.writeFileSync(
+    path.join(root, "index.ts"),
+    `${HEADER}\n\n${imports.join("\n")}\n\n${list}\n\nexport default sets;\n`
+  );
 }
 
 extractBg();

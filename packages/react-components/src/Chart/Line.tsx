@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { LineProps } from './types';
+import type { LineProps } from "./types";
 
-import BN from 'bn.js';
-import ChartJs from 'chart.js';
-import React, { useMemo } from 'react';
-import * as Chart from 'react-chartjs-2';
+import BN from "bn.js";
+import ChartJs from "chart.js";
+import React, { useMemo } from "react";
+import * as Chart from "react-chartjs-2";
 
 interface State {
   chartData: ChartJs.ChartData;
@@ -27,7 +27,7 @@ interface Config {
   datasets: Dataset[];
 }
 
-const COLORS = ['#ff8c00', '#008c8c', '#8c008c'];
+const COLORS = ["#ff8c00", "#008c8c", "#8c008c"];
 
 const alphaColor = (hexColor: string): string =>
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -36,41 +36,51 @@ const alphaColor = (hexColor: string): string =>
 const chartOptions = {
   // no need for the legend, expect the labels contain everything
   legend: {
-    display: false
+    display: false,
   },
   scales: {
-    xAxes: [{
-      ticks: {
-        beginAtZero: true
-      }
-    }]
-  }
+    xAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+        },
+      },
+    ],
+  },
 };
 
-function calculateOptions (colors: (string | undefined)[] = [], legends: string[], labels: string[], values: (number | BN)[][]): State {
-  const chartData = values.reduce((chartData, values, index): Config => {
-    const color = colors[index] || alphaColor(COLORS[index]);
-    const data = values.map((value): number => BN.isBN(value) ? value.toNumber() : value);
+function calculateOptions(
+  colors: (string | undefined)[] = [],
+  legends: string[],
+  labels: string[],
+  values: (number | BN)[][]
+): State {
+  const chartData = values.reduce(
+    (chartData, values, index): Config => {
+      const color = colors[index] || alphaColor(COLORS[index]);
+      const data = values.map((value): number => (BN.isBN(value) ? value.toNumber() : value));
 
-    chartData.datasets.push({
-      backgroundColor: color,
-      borderColor: color,
-      data,
-      fill: false,
-      hoverBackgroundColor: color,
-      label: legends[index]
-    });
+      chartData.datasets.push({
+        backgroundColor: color,
+        borderColor: color,
+        data,
+        fill: false,
+        hoverBackgroundColor: color,
+        label: legends[index],
+      });
 
-    return chartData;
-  }, { datasets: [] as Dataset[], labels });
+      return chartData;
+    },
+    { datasets: [] as Dataset[], labels }
+  );
 
   return {
     chartData,
-    chartOptions
+    chartOptions,
   };
 }
 
-function LineChart ({ className, colors, labels, legends, values }: LineProps): React.ReactElement<LineProps> | null {
+function LineChart({ className, colors, labels, legends, values }: LineProps): React.ReactElement<LineProps> | null {
   const { chartData, chartOptions } = useMemo(
     () => calculateOptions(colors, legends, labels, values),
     [colors, labels, legends, values]
@@ -78,10 +88,7 @@ function LineChart ({ className, colors, labels, legends, values }: LineProps): 
 
   return (
     <div className={className}>
-      <Chart.Line
-        data={chartData}
-        options={chartOptions}
-      />
+      <Chart.Line data={chartData} options={chartOptions} />
     </div>
   );
 }

@@ -1,9 +1,22 @@
 // Copyright 2017-2021 @polkadot/app-calendar authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type BN from 'bn.js';
+import type BN from "bn.js";
 
-export type EntryType = 'councilElection' | 'councilMotion' | 'democracyDispatch' | 'democracyLaunch' | 'referendumDispatch' | 'referendumVote' | 'scheduler' | 'societyChallenge' | 'societyRotate'| 'stakingEpoch' | 'stakingEra' | 'stakingSlash' | 'treasurySpend';
+export type EntryType =
+  | "councilElection"
+  | "councilMotion"
+  | "democracyDispatch"
+  | "democracyLaunch"
+  | "referendumDispatch"
+  | "referendumVote"
+  | "scheduler"
+  | "societyChallenge"
+  | "societyRotate"
+  | "stakingEpoch"
+  | "stakingEra"
+  | "stakingSlash"
+  | "treasurySpend";
 
 export interface EntryInfo {
   blockNumber: BN;

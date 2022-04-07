@@ -1,15 +1,15 @@
 // Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Compact, Option } from '@polkadot/types';
-import type { ProposalIndex, TreasuryProposal } from '@polkadot/types/interfaces';
-import type { TypeDef } from '@polkadot/types/types';
+import type { Compact, Option } from "@polkadot/types";
+import type { ProposalIndex, TreasuryProposal } from "@polkadot/types/interfaces";
+import type { TypeDef } from "@polkadot/types/types";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { useApi, useCall } from '@polkadot/react-hooks';
-import Params from '@polkadot/react-params';
-import { getTypeDef } from '@polkadot/types/create';
+import { useApi, useCall } from "@polkadot/react-hooks";
+import Params from "@polkadot/react-params";
+import { getTypeDef } from "@polkadot/types/create";
 
 interface Props {
   className?: string;
@@ -32,26 +32,31 @@ interface ParamState {
 }
 
 const transformProposal = {
-  transform: (optProp: Option<TreasuryProposal>) => optProp.unwrapOr(null)
+  transform: (optProp: Option<TreasuryProposal>) => optProp.unwrapOr(null),
 };
 
-function TreasuryCell ({ className = '', value }: Props): React.ReactElement<Props> | null {
+function TreasuryCell({ className = "", value }: Props): React.ReactElement<Props> | null {
   const { api } = useApi();
   const [proposalId] = useState(value.unwrap());
   const proposal = useCall<TreasuryProposal | null>(api.query.treasury.proposals, [proposalId], transformProposal);
   const [{ params, values }, setExtracted] = useState<ParamState>({ params: [], values: [] });
 
   useEffect((): void => {
-    proposal && setExtracted({
-      params: [{
-        name: 'proposal',
-        type: getTypeDef('TreasuryProposal')
-      }],
-      values: [{
-        isValid: true,
-        value: proposal
-      }]
-    });
+    proposal &&
+      setExtracted({
+        params: [
+          {
+            name: "proposal",
+            type: getTypeDef("TreasuryProposal"),
+          },
+        ],
+        values: [
+          {
+            isValid: true,
+            value: proposal,
+          },
+        ],
+      });
   }, [proposal]);
 
   if (!proposal) {
@@ -60,11 +65,7 @@ function TreasuryCell ({ className = '', value }: Props): React.ReactElement<Pro
 
   return (
     <div className={className}>
-      <Params
-        isDisabled
-        params={params}
-        values={values}
-      />
+      <Params isDisabled params={params} values={values} />
     </div>
   );
 }

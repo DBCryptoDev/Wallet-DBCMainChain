@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ItemRoute } from './types';
+import type { ItemRoute } from "./types";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { Badge, Icon } from '@polkadot/react-components';
-import { useToggle } from '@polkadot/react-hooks';
+import { Badge, Icon } from "@polkadot/react-components";
+import { useToggle } from "@polkadot/react-hooks";
 
 interface Props {
   className?: string;
@@ -18,30 +18,32 @@ interface Props {
 
 const DUMMY_COUNTER = () => 0;
 
-function Item ({ className = '', isLink, isToplevel, route: { Modal, href, icon, name, text, useCounter = DUMMY_COUNTER } }: Props): React.ReactElement<Props> {
+function Item({
+  className = "",
+  isLink,
+  isToplevel,
+  route: { Modal, href, icon, name, text, useCounter = DUMMY_COUNTER },
+}: Props): React.ReactElement<Props> {
   const [isModalVisible, toggleModal] = useToggle();
   const count = useCounter();
 
   return (
-    <li className={`ui--MenuItem ${className}${count ? ' withCounter' : ''} ${isLink ? 'isLink' : ''} ${isToplevel ? 'topLevel  highlight--color-contrast' : ''}`}>
+    <li
+      className={`ui--MenuItem ${className}${count ? " withCounter" : ""} ${isLink ? "isLink" : ""} ${
+        isToplevel ? "topLevel  highlight--color-contrast" : ""
+      }`}
+    >
       <a
-        href={Modal ? undefined : (href || `#/${name}`)}
+        href={Modal ? undefined : href || `#/${name}`}
         onClick={Modal ? toggleModal : undefined}
-        rel='noopener noreferrer'
-        target={href ? '_blank' : undefined}
+        rel="noopener noreferrer"
+        target={href ? "_blank" : undefined}
       >
         <Icon icon={icon} />
         {text}
-        {!!count && (
-          <Badge
-            color={'white'}
-            info={count}
-          />
-        )}
+        {!!count && <Badge color={"white"} info={count} />}
       </a>
-      {Modal && isModalVisible && (
-        <Modal onClose={toggleModal} />
-      )}
+      {Modal && isModalVisible && <Modal onClose={toggleModal} />}
     </li>
   );
 }

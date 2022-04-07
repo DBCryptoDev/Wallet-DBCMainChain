@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/app-treasury authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SubmittableExtrinsic } from '@polkadot/api/types';
+import type { SubmittableExtrinsic } from "@polkadot/api/types";
 
-import BN from 'bn.js';
-import React, { useCallback, useMemo, useState } from 'react';
+import BN from "bn.js";
+import React, { useCallback, useMemo, useState } from "react";
 
-import { Button, TxButton } from '@polkadot/react-components';
-import { useAccounts, useApi } from '@polkadot/react-hooks';
+import { Button, TxButton } from "@polkadot/react-components";
+import { useAccounts, useApi } from "@polkadot/react-hooks";
 
-import { useTranslation } from '../translate';
-import TipCreate from './TipCreate';
-import Tips from './Tips';
+import { useTranslation } from "../translate";
+import TipCreate from "./TipCreate";
+import Tips from "./Tips";
 
 interface Props {
   className?: string;
@@ -22,10 +22,10 @@ interface Props {
 
 interface QuickTipsState {
   quickTips: Record<string, BN | null>;
-  quickTx: SubmittableExtrinsic<'promise'> | null;
+  quickTx: SubmittableExtrinsic<"promise"> | null;
 }
 
-function TipsEntry ({ className, hashes, isMember, members }: Props): React.ReactElement<Props> {
+function TipsEntry({ className, hashes, isMember, members }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { allAccounts } = useAccounts();
   const { api } = useApi();
@@ -37,23 +37,19 @@ function TipsEntry ({ className, hashes, isMember, members }: Props): React.Reac
   );
 
   const _selectTip = useCallback(
-    (hash: string, isSelected: boolean, value: BN) => setQuickTips(({ quickTips }): QuickTipsState => {
-      quickTips[hash] = isSelected ? value : null;
+    (hash: string, isSelected: boolean, value: BN) =>
+      setQuickTips(({ quickTips }): QuickTipsState => {
+        quickTips[hash] = isSelected ? value : null;
 
-      const available = Object
-        .entries(quickTips)
-        .map(([hash, value]) => value && (api.tx.tips || api.tx.treasury).tip(hash, value))
-        .filter((value): value is SubmittableExtrinsic<'promise'> => !!value);
+        const available = Object.entries(quickTips)
+          .map(([hash, value]) => value && (api.tx.tips || api.tx.treasury).tip(hash, value))
+          .filter((value): value is SubmittableExtrinsic<"promise"> => !!value);
 
-      return {
-        quickTips,
-        quickTx: available.length
-          ? available.length === 1
-            ? available[0]
-            : api.tx.utility.batch(available)
-          : null
-      };
-    }),
+        return {
+          quickTips,
+          quickTx: available.length ? (available.length === 1 ? available[0] : api.tx.utility.batch(available)) : null,
+        };
+      }),
     [api]
   );
 
@@ -64,18 +60,12 @@ function TipsEntry ({ className, hashes, isMember, members }: Props): React.Reac
         <TxButton
           accountId={defaultId}
           extrinsic={quickTx}
-          icon='fighter-jet'
+          icon="fighter-jet"
           isDisabled={!isMember || !quickTx}
-          label={t<string>('Median tip selected')}
+          label={t<string>("Median tip selected")}
         />
       </Button.Group>
-      <Tips
-        defaultId={defaultId}
-        hashes={hashes}
-        isMember={isMember}
-        members={members}
-        onSelectTip={_selectTip}
-      />
+      <Tips defaultId={defaultId} hashes={hashes} isMember={isMember} members={members} onSelectTip={_selectTip} />
     </div>
   );
 }

@@ -1,13 +1,19 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveAccountInfo } from '@polkadot/api-derive/types';
+import type { DeriveAccountInfo } from "@polkadot/api-derive/types";
 
-import { ApiPromise } from '@polkadot/api';
-import { keyring } from '@polkadot/ui-keyring';
-import { isFunction } from '@polkadot/util';
+import { ApiPromise } from "@polkadot/api";
+import { keyring } from "@polkadot/ui-keyring";
+import { isFunction } from "@polkadot/util";
 
-export default function checkVisibility (api: ApiPromise, address: string, accountInfo: DeriveAccountInfo, filterName = '', onlyNamed = false): boolean {
+export default function checkVisibility(
+  api: ApiPromise,
+  address: string,
+  accountInfo: DeriveAccountInfo,
+  filterName = "",
+  onlyNamed = false
+): boolean {
   let isVisible = false;
   const filterLower = filterName.toLowerCase();
 
@@ -29,9 +35,7 @@ export default function checkVisibility (api: ApiPromise, address: string, accou
     if (!isVisible) {
       const account = keyring.getAddress(address);
 
-      isVisible = account?.meta?.name
-        ? account.meta.name.toLowerCase().includes(filterLower)
-        : false;
+      isVisible = account?.meta?.name ? account.meta.name.toLowerCase().includes(filterLower) : false;
     }
   } else {
     isVisible = true;

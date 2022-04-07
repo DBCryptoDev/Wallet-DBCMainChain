@@ -1,24 +1,25 @@
 # 优化版本
 
 ## 安装
+
 ```bash
 $ yarn
 ```
 
 ## 编译
+
 请在项目根目录执行
+
 ```bash
 $ npm run build:www
 ```
 
 ## 说明
-- 代码压缩：会进行gzip及brotli压缩；请安装 brotli ，安装方法自行根据平台搜索
-- 图片压缩：请使用`node scripts/tinypng.js` 进行压缩，目前图片文件都已压缩完成如果后续有更新请跑命令即可，需要在填tinypng的秘钥，具体参照https://tinypng.com/developers
-- 部署注意：需要server服务(开启方法参照各个server服务)开启gzip和brotli压缩，浏览器只有在https下面brotli压缩才会生效
-- cdn：目前react、react-dom已走cdn加速，会加速资源加载
 
-
-
+- 代码压缩：会进行 gzip 及 brotli 压缩；请安装 brotli ，安装方法自行根据平台搜索
+- 图片压缩：请使用`node scripts/tinypng.js` 进行压缩，目前图片文件都已压缩完成如果后续有更新请跑命令即可，需要在填 tinypng 的秘钥，具体参照https://tinypng.com/developers
+- 部署注意：需要 server 服务(开启方法参照各个 server 服务)开启 gzip 和 brotli 压缩，浏览器只有在 https 下面 brotli 压缩才会生效
+- cdn：目前 react、react-dom 已走 cdn 加速，会加速资源加载
 
 [![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=flat-square)](https://polkadot.js.org)
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
@@ -109,12 +110,14 @@ curl -s https://polkadot.js.org/apps/ipfs/pin.json | jq -jr .IpfsHash | xargs -0
 ```
 
 I suggest to run the script once. The output should be similar to (the CID/Hash will very likely be different though):
+
 ```
 $ /usr/local/bin/polkadotjs-ipfs-pin.sh
 pinned QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW recursively
 ```
 
 Now that you know the CID (hash), you can check whether the data is already pinned or not:
+
 ```
 $ ipfs pin ls | grep QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW
 QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW recursive
@@ -122,6 +125,7 @@ QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW recursive
 
 Now that we know it works, we can automate that with a cron task. Run `crontab -e`.
 If you see only comments, append the following to the file and save:
+
 ```
 SHELL=/bin/bash
 HOME=/
@@ -129,18 +133,21 @@ HOME=/
 ```
 
 Now our script will run every hours at minute '0' (8:00, 9:00, etc...). To check, we can unpin temporarily:
+
 ```
 $ ipfs pin rm QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW
 unpinned QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW
 ```
 
 Now asking for the CID confirms that is it not there.
+
 ```
 $ ipfs pin ls QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW
 Error: path 'QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW' is not pinned
 ```
 
 Wait until the your cron task runs and try again:
+
 ```
 $ ipfs pin ls QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW
 QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW recursive
@@ -149,11 +156,13 @@ QmNYAbzaE8kRAf68YiN3ZuUxgdwroeav3JhicsHsG5b2oW recursive
 Tada! This is now automatic and you may forget it.
 
 If you are curious and want to know how many people seed the UI on IPFS, here is the magic command (it may take a while to return the answer as ipfs will search for about 1 minute):
+
 ```
 ipfs dht findprovs QmTejwB7mJPBHBoqubjzHSgSxfLMcjnZA3LFefqoQc87VJ | wc -l
 ```
 
 If you are current about the content of what you just pinned, you may use the following command:
+
 ```
 $ ipfs ls QmTejwB7mJPBHBoqubjzHSgSxfLMcjnZA3LFefqoQc87VJ
 QmPJGyqVCcXm238noz7TZDByyGa35qqc8g6sfyXF3KDXZ3 38078   favicon.ico
@@ -180,8 +189,9 @@ The desktop app uses the [Electron](https://www.electronjs.org/) framework. It p
 being different account storage.
 
 The accounts are stored in the following directories:
-* Mac: `~/Library/Application Support/polkadot-apps/polkadot-accounts`
-* Linux: `~/.config/polkadot-apps/polkadot-accounts` (or `$XDG_CONFIG_HOME/polkadot-apps/polkadot-accounts` if `$XDG_CONFIG_HOME` is defined)
-* Windows: `%APPDATA%\polkadot-apps\polkadot-accounts`
+
+- Mac: `~/Library/Application Support/polkadot-apps/polkadot-accounts`
+- Linux: `~/.config/polkadot-apps/polkadot-accounts` (or `$XDG_CONFIG_HOME/polkadot-apps/polkadot-accounts` if `$XDG_CONFIG_HOME` is defined)
+- Windows: `%APPDATA%\polkadot-apps\polkadot-accounts`
 
 For more details on the desktop app, head over to [Electron package README](https://github.com/polkadot-js/apps/blob/master/packages/apps-electron/README.md).

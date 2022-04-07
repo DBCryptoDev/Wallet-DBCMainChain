@@ -1,24 +1,22 @@
 // Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Registry, TypeDef } from '@polkadot/types/types';
-import type { ParamDef } from '../types';
+import type { Registry, TypeDef } from "@polkadot/types/types";
+import type { ParamDef } from "../types";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { getTypeDef } from '@polkadot/types/create';
+import { getTypeDef } from "@polkadot/types/create";
 
-function expandDef (registry: Registry, td: TypeDef): TypeDef {
+function expandDef(registry: Registry, td: TypeDef): TypeDef {
   try {
-    return getTypeDef(
-      registry.createType(td.type as 'u32').toRawType()
-    );
+    return getTypeDef(registry.createType(td.type as "u32").toRawType());
   } catch (e) {
     return td;
   }
 }
 
-export default function useParamDefs (registry: Registry, type: TypeDef): ParamDef[] {
+export default function useParamDefs(registry: Registry, type: TypeDef): ParamDef[] {
   const [params, setParams] = useState<ParamDef[]>([]);
 
   useEffect((): void => {
@@ -29,11 +27,13 @@ export default function useParamDefs (registry: Registry, type: TypeDef): ParamD
     }
 
     setParams(
-      (Array.isArray(typeDef.sub) ? typeDef.sub : [typeDef.sub]).map((td): ParamDef => ({
-        length: typeDef.length,
-        name: td.name,
-        type: td // expandDef(td)
-      }))
+      (Array.isArray(typeDef.sub) ? typeDef.sub : [typeDef.sub]).map(
+        (td): ParamDef => ({
+          length: typeDef.length,
+          name: td.name,
+          type: td, // expandDef(td)
+        })
+      )
     );
   }, [registry, type]);
 

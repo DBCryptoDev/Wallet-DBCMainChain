@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeProps } from '../types';
+import type { ThemeProps } from "../types";
 
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
-import cssComponents from './components';
-import cssForm from './form';
-import cssMedia from './media';
-import cssRx from './rx';
-import cssSemantic from './semantic';
-import cssTheme from './theme';
+import cssComponents from "./components";
+import cssForm from "./form";
+import cssMedia from "./media";
+import cssRx from "./rx";
+import cssSemantic from "./semantic";
+import cssTheme from "./theme";
 
 interface Props {
   uiHighlight?: string;
@@ -21,39 +21,36 @@ const FACTORS = [0.2126, 0.7152, 0.0722];
 const PARTS = [0, 2, 4];
 const VERY_DARK = 16;
 
-const defaultHighlight = '#f19135'; // '#f19135'; // #999
+const defaultHighlight = "#f19135"; // '#f19135'; // #999
 
-function getHighlight (uiHighlight: string | undefined): string {
-  return (uiHighlight || defaultHighlight);
+function getHighlight(uiHighlight: string | undefined): string {
+  return uiHighlight || defaultHighlight;
 }
 
-function countBrightness (uiHighlight: string | undefined): number {
-  const hc = getHighlight(uiHighlight).replace('#', '').toLowerCase();
+function countBrightness(uiHighlight: string | undefined): number {
+  const hc = getHighlight(uiHighlight).replace("#", "").toLowerCase();
 
-  return PARTS.reduce((b, p, index) => b + (parseInt(hc.substr(p, 2), 16) * FACTORS[index]), 0);
+  return PARTS.reduce((b, p, index) => b + parseInt(hc.substr(p, 2), 16) * FACTORS[index], 0);
 }
 
-function getContrast (uiHighlight: string | undefined): string {
+function getContrast(uiHighlight: string | undefined): string {
   const brightness = countBrightness(uiHighlight);
 
-  return brightness > BRIGHTNESS
-    ? 'rgba(45, 43, 41, 0.875)'
-    : 'rgba(255, 253, 251, 0.875)';
+  return brightness > BRIGHTNESS ? "rgba(45, 43, 41, 0.875)" : "rgba(255, 253, 251, 0.875)";
 }
 
-function getMenuHoverContrast (uiHighlight: string | undefined): string {
+function getMenuHoverContrast(uiHighlight: string | undefined): string {
   const brightness = countBrightness(uiHighlight);
 
   if (brightness < VERY_DARK) {
-    return 'rgba(255, 255, 255, 0.15)';
+    return "rgba(255, 255, 255, 0.15)";
   }
 
-  return brightness < BRIGHTNESS
-    ? 'rgba(0, 0, 0, 0.15)'
-    : 'rgba(255, 255, 255, 0.15)';
+  return brightness < BRIGHTNESS ? "rgba(0, 0, 0, 0.15)" : "rgba(255, 255, 255, 0.15)";
 }
 
-export default createGlobalStyle<Props & ThemeProps>(({ theme, uiHighlight }: Props & ThemeProps) => `
+export default createGlobalStyle<Props & ThemeProps>(
+  ({ theme, uiHighlight }: Props & ThemeProps) => `
   .highlight--all {
     background: ${getHighlight(uiHighlight)} !important;
     border-color: ${getHighlight(uiHighlight)} !important;
@@ -83,18 +80,18 @@ export default createGlobalStyle<Props & ThemeProps>(({ theme, uiHighlight }: Pr
 
   .ui--MenuItem {
     & .ui--Badge {
-      color: ${countBrightness(uiHighlight) < BRIGHTNESS ? '#fff' : '#424242'};
+      color: ${countBrightness(uiHighlight) < BRIGHTNESS ? "#fff" : "#424242"};
     }
 
     &:hover:not(.isActive) .ui--Badge {
-      background: ${countBrightness(uiHighlight) < BRIGHTNESS ? 'rgba(255, 255, 255, 0.8)' : '#4D4D4D'};
-      color: ${countBrightness(uiHighlight) > BRIGHTNESS ? '#fff' : '#424242'};
+      background: ${countBrightness(uiHighlight) < BRIGHTNESS ? "rgba(255, 255, 255, 0.8)" : "#4D4D4D"};
+      color: ${countBrightness(uiHighlight) > BRIGHTNESS ? "#fff" : "#424242"};
     }
   }
 
   .ui--Tab .ui--Badge {
     background: ${getHighlight(uiHighlight)};
-    color: ${countBrightness(uiHighlight) < BRIGHTNESS ? '#fff' : '#424242'};
+    color: ${countBrightness(uiHighlight) < BRIGHTNESS ? "#fff" : "#424242"};
   }
 
   .highlight--bg-faint,
@@ -459,4 +456,5 @@ export default createGlobalStyle<Props & ThemeProps>(({ theme, uiHighlight }: Pr
   ${cssMedia}
   ${cssRx}
   ${cssComponents(theme)}
-`);
+`
+);

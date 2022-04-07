@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DefinitionRpcExt } from '@polkadot/types/types';
-import type { DropdownOptions } from '../util/types';
+import type { DefinitionRpcExt } from "@polkadot/types/types";
+import type { DropdownOptions } from "../util/types";
 
-import React from 'react';
+import React from "react";
 
-import Dropdown from '../Dropdown';
+import Dropdown from "../Dropdown";
 
 interface Props {
   className?: string;
@@ -17,7 +17,14 @@ interface Props {
   value: DefinitionRpcExt;
 }
 
-function SelectSection ({ className = '', defaultValue, isError, onChange, options, value }: Props): React.ReactElement<Props> {
+function SelectSection({
+  className = "",
+  defaultValue,
+  isError,
+  onChange,
+  options,
+  value,
+}: Props): React.ReactElement<Props> {
   return (
     <Dropdown
       className={`ui--DropdownLinked-Sections ${className}`}

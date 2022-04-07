@@ -1,26 +1,26 @@
 // Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveReferendumExt } from '@polkadot/api-derive/types';
+import type { DeriveReferendumExt } from "@polkadot/api-derive/types";
 
-import React from 'react';
+import React from "react";
 
-import { Button } from '@polkadot/react-components';
-import { useApi, useCall, useToggle } from '@polkadot/react-hooks';
+import { Button } from "@polkadot/react-components";
+import { useApi, useCall, useToggle } from "@polkadot/react-hooks";
 
-import { useTranslation } from '../translate';
-import Externals from './Externals';
-import PreImage from './PreImage';
-import Proposals from './Proposals';
-import Propose from './Propose';
-import Referendums from './Referendums';
-import Summary from './Summary';
+import { useTranslation } from "../translate";
+import Externals from "./Externals";
+import PreImage from "./PreImage";
+import Proposals from "./Proposals";
+import Propose from "./Propose";
+import Referendums from "./Referendums";
+import Summary from "./Summary";
 
 interface Props {
   className?: string;
 }
 
-function Overview ({ className }: Props): React.ReactElement<Props> {
+function Overview({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const [isPreimageOpen, togglePreimage] = useToggle();
@@ -31,23 +31,11 @@ function Overview ({ className }: Props): React.ReactElement<Props> {
     <div className={className}>
       <Summary referendumCount={referendums?.length} />
       <Button.Group>
-        <Button
-          icon='plus'
-          label={t<string>('Submit preimage')}
-          onClick={togglePreimage}
-        />
-        <Button
-          icon='plus'
-          label={t<string>('Submit proposal')}
-          onClick={togglePropose}
-        />
+        <Button icon="plus" label={t<string>("Submit preimage")} onClick={togglePreimage} />
+        <Button icon="plus" label={t<string>("Submit proposal")} onClick={togglePropose} />
       </Button.Group>
-      {isPreimageOpen && (
-        <PreImage onClose={togglePreimage} />
-      )}
-      {isProposeOpen && (
-        <Propose onClose={togglePropose} />
-      )}
+      {isPreimageOpen && <PreImage onClose={togglePreimage} />}
+      {isProposeOpen && <Propose onClose={togglePropose} />}
       <Referendums referendums={referendums} />
       <Proposals />
       <Externals />

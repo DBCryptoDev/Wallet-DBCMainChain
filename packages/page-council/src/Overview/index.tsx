@@ -1,19 +1,19 @@
 // Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveCouncilVotes, DeriveElectionsInfo } from '@polkadot/api-derive/types';
-import type { AccountId } from '@polkadot/types/interfaces';
+import type { DeriveCouncilVotes, DeriveElectionsInfo } from "@polkadot/api-derive/types";
+import type { AccountId } from "@polkadot/types/interfaces";
 
-import React from 'react';
+import React from "react";
 
-import { Button } from '@polkadot/react-components';
-import { useApi, useBestNumber, useCall } from '@polkadot/react-hooks';
+import { Button } from "@polkadot/react-components";
+import { useApi, useBestNumber, useCall } from "@polkadot/react-hooks";
 
-import Candidates from './Candidates';
-import Members from './Members';
-import SubmitCandidacy from './SubmitCandidacy';
-import Summary from './Summary';
-import Vote from './Vote';
+import Candidates from "./Candidates";
+import Members from "./Members";
+import SubmitCandidacy from "./SubmitCandidacy";
+import Summary from "./Summary";
+import Vote from "./Vote";
 
 interface Props {
   className?: string;
@@ -35,10 +35,10 @@ const transformVotes = {
 
       return result;
     }, {});
-  }
+  },
 };
 
-function Overview ({ className = '', prime }: Props): React.ReactElement<Props> {
+function Overview({ className = "", prime }: Props): React.ReactElement<Props> {
   const { api } = useApi();
   const bestNumber = useBestNumber();
   const electionsInfo = useCall<DeriveElectionsInfo>(api.derive.elections.info);
@@ -46,23 +46,13 @@ function Overview ({ className = '', prime }: Props): React.ReactElement<Props> 
 
   return (
     <div className={className}>
-      <Summary
-        bestNumber={bestNumber}
-        electionsInfo={electionsInfo}
-      />
+      <Summary bestNumber={bestNumber} electionsInfo={electionsInfo} />
       <Button.Group>
         <Vote electionsInfo={electionsInfo} />
         <SubmitCandidacy electionsInfo={electionsInfo} />
       </Button.Group>
-      <Members
-        allVotes={allVotes}
-        electionsInfo={electionsInfo}
-        prime={prime}
-      />
-      <Candidates
-        allVotes={allVotes}
-        electionsInfo={electionsInfo}
-      />
+      <Members allVotes={allVotes} electionsInfo={electionsInfo} prime={prime} />
+      <Candidates allVotes={allVotes} electionsInfo={electionsInfo} />
     </div>
   );
 }

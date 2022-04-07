@@ -1,28 +1,28 @@
 // Copyright 2017-2021 @polkadot/app-js authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ApiPromise } from '@polkadot/api';
-import type { KeyringInstance } from '@polkadot/keyring/types';
-import type { ApiProps } from '@polkadot/react-api/types';
-import type { AppProps as Props } from '@polkadot/react-components/types';
-import type { Log, LogType, Snippet } from './types';
+import type { ApiPromise } from "@polkadot/api";
+import type { KeyringInstance } from "@polkadot/keyring/types";
+import type { ApiProps } from "@polkadot/react-api/types";
+import type { AppProps as Props } from "@polkadot/react-components/types";
+import type { Log, LogType, Snippet } from "./types";
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 
-import { Button, Dropdown, Editor, Tabs } from '@polkadot/react-components';
-import { useApi, useToggle } from '@polkadot/react-hooks';
-import * as types from '@polkadot/types';
-import uiKeyring from '@polkadot/ui-keyring';
-import * as util from '@polkadot/util';
-import * as hashing from '@polkadot/util-crypto';
+import { Button, Dropdown, Editor, Tabs } from "@polkadot/react-components";
+import { useApi, useToggle } from "@polkadot/react-hooks";
+import * as types from "@polkadot/types";
+import uiKeyring from "@polkadot/ui-keyring";
+import * as util from "@polkadot/util";
+import * as hashing from "@polkadot/util-crypto";
 
-import makeWrapper from './snippets/wrapping';
-import ActionButtons from './ActionButtons';
-import { CUSTOM_LABEL, STORE_EXAMPLES, STORE_SELECTED } from './constants';
-import Output from './Output';
-import allSnippets from './snippets';
-import { useTranslation } from './translate';
+import makeWrapper from "./snippets/wrapping";
+import ActionButtons from "./ActionButtons";
+import { CUSTOM_LABEL, STORE_EXAMPLES, STORE_SELECTED } from "./constants";
+import Output from "./Output";
+import allSnippets from "./snippets";
+import { useTranslation } from "./translate";
 
 interface Injected {
   api: ApiPromise;
@@ -38,46 +38,60 @@ interface Injected {
   [name: string]: any;
 }
 
-const ALLOWED_GLOBALS = ['atob', 'btoa'];
-const DEFAULT_NULL = { Atomics: null, Bluetooth: null, Clipboard: null, Document: null, Function: null, Location: null, ServiceWorker: null, SharedWorker: null, USB: null, global: null, window: null };
+const ALLOWED_GLOBALS = ["atob", "btoa"];
+const DEFAULT_NULL = {
+  Atomics: null,
+  Bluetooth: null,
+  Clipboard: null,
+  Document: null,
+  Function: null,
+  Location: null,
+  ServiceWorker: null,
+  SharedWorker: null,
+  USB: null,
+  global: null,
+  window: null,
+};
 
 const snippets = JSON.parse(JSON.stringify(allSnippets)) as Snippet[];
 let hasSnippetWrappers = false;
 
-function setupInjected ({ api, isDevelopment }: ApiProps, setIsRunning: (isRunning: boolean) => void, hookConsole: (type: LogType, args: any[]) => void): Injected {
+function setupInjected(
+  { api, isDevelopment }: ApiProps,
+  setIsRunning: (isRunning: boolean) => void,
+  hookConsole: (type: LogType, args: any[]) => void
+): Injected {
   return {
-    ...Object
-      .keys(window)
-      .filter((key) => !key.includes('-') && !ALLOWED_GLOBALS.includes(key))
-      .reduce((result: Record<string, null>, key): Record<string, null> => {
-        result[key] = null;
+    ...Object.keys(window)
+      .filter((key) => !key.includes("-") && !ALLOWED_GLOBALS.includes(key))
+      .reduce(
+        (result: Record<string, null>, key): Record<string, null> => {
+          result[key] = null;
 
-        return result;
-      }, { ...DEFAULT_NULL }),
+          return result;
+        },
+        { ...DEFAULT_NULL }
+      ),
     api: api.clone(),
     console: {
-      error: (...args: any[]) => hookConsole('error', args),
-      log: (...args: any[]) => hookConsole('log', args)
+      error: (...args: any[]) => hookConsole("error", args),
+      log: (...args: any[]) => hookConsole("log", args),
     },
     hashing,
-    keyring: isDevelopment
-      ? uiKeyring.keyring
-      : null,
+    keyring: isDevelopment ? uiKeyring.keyring : null,
     setIsRunning,
     types,
-    uiKeyring: isDevelopment
-      ? uiKeyring
-      : null,
-    util
+    uiKeyring: isDevelopment ? uiKeyring : null,
+    util,
   };
 }
 
 // FIXME This... ladies & gentlemen, is a mess that should be untangled
-function Playground ({ basePath, className = '' }: Props): React.ReactElement<Props> {
+function Playground({ basePath, className = "" }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const apiProps = useApi();
   const injectedRef = useRef<Injected | null>(null);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [isCustomExample, setIsCustomExample] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [isWarnOpen, toggleWarnOpen] = useToggle(true);
@@ -89,9 +103,9 @@ function Playground ({ basePath, className = '' }: Props): React.ReactElement<Pr
   const tabsRef = useRef([
     {
       isRoot: true,
-      name: 'playground',
-      text: t<string>('Console')
-    }
+      name: "playground",
+      text: t<string>("Console"),
+    },
   ]);
 
   // initialize all options
@@ -107,27 +121,24 @@ function Playground ({ basePath, className = '' }: Props): React.ReactElement<Pr
 
     const localData = {
       examples: localStorage.getItem(STORE_EXAMPLES),
-      selectedValue: localStorage.getItem(STORE_SELECTED)
+      selectedValue: localStorage.getItem(STORE_SELECTED),
     };
-    const customExamples = localData.examples ? JSON.parse(localData.examples) as Snippet[] : [];
+    const customExamples = localData.examples ? (JSON.parse(localData.examples) as Snippet[]) : [];
     const options: Snippet[] = [...customExamples, ...snippets];
     const selected = options.find((option): boolean => option.value === localData.selectedValue);
 
     setCustomExamples(customExamples);
-    setIsCustomExample((selected && selected.type === 'custom') || false);
+    setIsCustomExample((selected && selected.type === "custom") || false);
     setOptions(options);
     setSelected(selected || snippets[0]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect((): void => {
     setCode(selected.code);
   }, [selected]);
 
-  const _clearConsole = useCallback(
-    (): void => setLogs([]),
-    []
-  );
+  const _clearConsole = useCallback((): void => setLogs([]), []);
 
   const _hookConsole = useCallback(
     (type: LogType, args: any[]): void => {
@@ -137,43 +148,41 @@ function Playground ({ basePath, className = '' }: Props): React.ReactElement<Pr
     [logs]
   );
 
-  const _stopJs = useCallback(
-    (): void => {
-      if (injectedRef.current) {
-        injectedRef.current.api.disconnect().catch(console.error);
-        injectedRef.current = null;
-      }
+  const _stopJs = useCallback((): void => {
+    if (injectedRef.current) {
+      injectedRef.current.api.disconnect().catch(console.error);
+      injectedRef.current = null;
+    }
 
-      setIsRunning(false);
-    },
-    []
-  );
+    setIsRunning(false);
+  }, []);
 
-  const _runJs = useCallback(
-    async (): Promise<void> => {
-      setIsRunning(true);
-      _clearConsole();
+  const _runJs = useCallback(async (): Promise<void> => {
+    setIsRunning(true);
+    _clearConsole();
 
-      injectedRef.current = setupInjected(apiProps, setIsRunning, _hookConsole);
+    injectedRef.current = setupInjected(apiProps, setIsRunning, _hookConsole);
 
-      await injectedRef.current.api.isReady;
+    await injectedRef.current.api.isReady;
 
-      try {
-        // squash into a single line so exceptions (with line numbers) maps to the
-        // same line/origin as we have in the editor view
-        // TODO: Make the console.error here actually return the full stack
-        const exec = `(async ({${Object.keys(injectedRef.current).sort().join(',')}}) => { try { ${code} \n } catch (error) { console.error(error); setIsRunning(false); } })(injected);`;
+    try {
+      // squash into a single line so exceptions (with line numbers) maps to the
+      // same line/origin as we have in the editor view
+      // TODO: Make the console.error here actually return the full stack
+      const exec = `(async ({${Object.keys(injectedRef.current)
+        .sort()
+        .join(
+          ","
+        )}}) => { try { ${code} \n } catch (error) { console.error(error); setIsRunning(false); } })(injected);`;
 
-        // eslint-disable-next-line no-new-func,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-implied-eval
-        new Function('injected', exec).bind({}, injectedRef.current)();
-      } catch (error) {
-        injectedRef.current.console.error(error);
-      }
+      // eslint-disable-next-line no-new-func,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-implied-eval
+      new Function("injected", exec).bind({}, injectedRef.current)();
+    } catch (error) {
+      injectedRef.current.console.error(error);
+    }
 
-      setIsRunning(false);
-    },
-    [_clearConsole, _hookConsole, apiProps, code]
-  );
+    setIsRunning(false);
+  }, [_clearConsole, _hookConsole, apiProps, code]);
 
   const _selectExample = useCallback(
     (value: string): void => {
@@ -186,7 +195,7 @@ function Playground ({ basePath, className = '' }: Props): React.ReactElement<Pr
           localStorage.setItem(STORE_SELECTED, value);
 
           _clearConsole();
-          setIsCustomExample(option.type === 'custom');
+          setIsCustomExample(option.type === "custom");
           setSelected(option);
         }
       }
@@ -194,19 +203,16 @@ function Playground ({ basePath, className = '' }: Props): React.ReactElement<Pr
     [_clearConsole, _stopJs, options]
   );
 
-  const _removeSnippet = useCallback(
-    (): void => {
-      const filtered = customExamples.filter((value): boolean => value.value !== selected.value);
-      const nextOptions = [...filtered, ...snippets];
+  const _removeSnippet = useCallback((): void => {
+    const filtered = customExamples.filter((value): boolean => value.value !== selected.value);
+    const nextOptions = [...filtered, ...snippets];
 
-      setCustomExamples(filtered);
-      setIsCustomExample(nextOptions[0].type === 'custom');
-      setOptions(nextOptions);
-      _selectExample(nextOptions[0].value);
-      localStorage.setItem(STORE_EXAMPLES, JSON.stringify(filtered));
-    },
-    [_selectExample, customExamples, selected.value]
-  );
+    setCustomExamples(filtered);
+    setIsCustomExample(nextOptions[0].type === "custom");
+    setOptions(nextOptions);
+    _selectExample(nextOptions[0].value);
+    localStorage.setItem(STORE_EXAMPLES, JSON.stringify(filtered));
+  }, [_selectExample, customExamples, selected.value]);
 
   const _saveSnippet = useCallback(
     (snippetName: string): void => {
@@ -216,8 +222,8 @@ function Playground ({ basePath, className = '' }: Props): React.ReactElement<Pr
         code,
         label: CUSTOM_LABEL,
         text: snippetName,
-        type: 'custom',
-        value: `custom-${Date.now()}`
+        type: "custom",
+        value: `custom-${Date.now()}`,
       };
       const options = [snapshot, ...customExamples, ...snippets];
 
@@ -230,26 +236,23 @@ function Playground ({ basePath, className = '' }: Props): React.ReactElement<Pr
     [code, customExamples]
   );
 
-  const snippetName = selected.type === 'custom' ? selected.text : undefined;
+  const snippetName = selected.type === "custom" ? selected.text : undefined;
 
   return (
     <main className={`js--App ${className}`}>
-      <Tabs
-        basePath={basePath}
-        items={tabsRef.current}
-      />
-      <section className='js--Selection'>
+      <Tabs basePath={basePath} items={tabsRef.current} />
+      <section className="js--Selection">
         <Dropdown
-          className='js--Dropdown'
+          className="js--Dropdown"
           isFull
-          label={t<string>('Select example')}
+          label={t<string>("Select example")}
           onChange={_selectExample}
           options={options}
           value={selected.value}
         />
       </section>
-      <section className='js--Content'>
-        <article className='container js--Editor'>
+      <section className="js--Content">
+        <article className="container js--Editor">
           <ActionButtons
             isCustomExample={isCustomExample}
             isRunning={isRunning}
@@ -259,34 +262,24 @@ function Playground ({ basePath, className = '' }: Props): React.ReactElement<Pr
             snippetName={snippetName}
             stopJs={_stopJs}
           />
-          <Editor
-            code={code}
-            onEdit={setCode}
-          />
+          <Editor code={code} onEdit={setCode} />
         </article>
-        <Output
-          className='js--Output'
-          logs={logs}
-        >
-          <Button
-            className='action-button'
-            icon='eraser'
-            onClick={_clearConsole}
-          />
+        <Output className="js--Output" logs={logs}>
+          <Button className="action-button" icon="eraser" onClick={_clearConsole} />
         </Output>
       </section>
       {isWarnOpen && (
-        <div className='warnOverlay'>
-          <article className='warning centered'>
-            <p>{t('This is a developer tool that allows you to execute selected snippets in a limited context.')}</p>
-            <p>{t('Never execute JS snippets from untrusted sources.')}</p>
-            <p>{t('Unless you are a developer with insight into what the specific script does to your environment (based on reading the code being executed) generally the advice would be to not use this environment.')}</p>
+        <div className="warnOverlay">
+          <article className="warning centered">
+            <p>{t("This is a developer tool that allows you to execute selected snippets in a limited context.")}</p>
+            <p>{t("Never execute JS snippets from untrusted sources.")}</p>
+            <p>
+              {t(
+                "Unless you are a developer with insight into what the specific script does to your environment (based on reading the code being executed) generally the advice would be to not use this environment."
+              )}
+            </p>
             <Button.Group>
-              <Button
-                icon='times'
-                label={t('Close')}
-                onClick={toggleWarnOpen}
-              />
+              <Button icon="times" label={t("Close")} onClick={toggleWarnOpen} />
             </Button.Group>
           </article>
         </div>
@@ -381,7 +374,7 @@ export default React.memo(styled(Playground)`
 
     &::after {
       bottom: 0;
-      content: '↔';
+      content: "↔";
       cursor: col-resize;
       font-size: 20px;
       height: 20px;

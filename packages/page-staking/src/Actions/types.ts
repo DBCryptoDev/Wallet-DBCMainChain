@@ -1,9 +1,9 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AccountId, Balance, UnappliedSlashOther } from '@polkadot/types/interfaces';
+import type { AccountId, Balance, UnappliedSlashOther } from "@polkadot/types/interfaces";
 
-import BN from 'bn.js';
+import BN from "bn.js";
 
 export interface AmountValidateState {
   error: string | null;
@@ -23,4 +23,4 @@ export interface Slash {
   slashes: Unapplied[];
 }
 
-export type DestinationType = 'Staked' | 'Stash' | 'Controller' | 'Account';
+export type DestinationType = "Staked" | "Stash" | "Controller" | "Account";

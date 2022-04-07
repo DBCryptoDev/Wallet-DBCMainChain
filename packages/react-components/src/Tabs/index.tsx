@@ -1,15 +1,15 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SectionType, TabItem } from './types';
+import type { SectionType, TabItem } from "./types";
 
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 
-import CurrentSection from './CurrentSection';
-import Tab from './Tab';
-import TabsSectionDelimiter from './TabsSectionDelimiter';
+import CurrentSection from "./CurrentSection";
+import Tab from "./Tab";
+import TabsSectionDelimiter from "./TabsSectionDelimiter";
 
 export const SectionContext = React.createContext<SectionType>({});
 
@@ -20,7 +20,7 @@ interface Props {
   items: TabItem[];
 }
 
-function Tabs ({ basePath, className = '', hidden, items }: Props): React.ReactElement<Props> {
+function Tabs({ basePath, className = "", hidden, items }: Props): React.ReactElement<Props> {
   const location = useLocation();
   const { icon, text } = React.useContext(SectionContext);
 
@@ -28,42 +28,31 @@ function Tabs ({ basePath, className = '', hidden, items }: Props): React.ReactE
   useEffect((): void => {
     if (location.pathname !== basePath) {
       // Has the form /staking/query/<something>
-      const [,, section] = location.pathname.split('/');
+      const [, , section] = location.pathname.split("/");
       const alias = items.find(({ alias }) => alias === section);
 
       if (alias) {
-        window.location.hash = alias.isRoot
-          ? basePath
-          : `${basePath}/${alias.name}`;
-      } else if (hidden && (hidden.includes(section) || !items.some(({ isRoot, name }) => !isRoot && name === section))) {
+        window.location.hash = alias.isRoot ? basePath : `${basePath}/${alias.name}`;
+      } else if (
+        hidden &&
+        (hidden.includes(section) || !items.some(({ isRoot, name }) => !isRoot && name === section))
+      ) {
         window.location.hash = basePath;
       }
     }
   }, [basePath, hidden, items, location]);
 
-  const filtered = hidden
-    ? items.filter(({ name }) => !hidden.includes(name))
-    : items;
+  const filtered = hidden ? items.filter(({ name }) => !hidden.includes(name)) : items;
 
   return (
     <header className={`ui--Tabs ${className}`}>
-      <div className='tabs-container'>
-        {text && icon && (
-          <CurrentSection
-            icon={icon}
-            text={text}
-          />
-        )}
+      <div className="tabs-container">
+        {text && icon && <CurrentSection icon={icon} text={text} />}
         <TabsSectionDelimiter />
-        <ul className='ui--TabsList'>
+        <ul className="ui--TabsList">
           {filtered.map((tab, index) => (
             <li key={index}>
-              <Tab
-                {...tab}
-                basePath={basePath}
-                index={index}
-                key={tab.name}
-              />
+              <Tab {...tab} basePath={basePath} index={index} key={tab.name} />
             </li>
           ))}
         </ul>

@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/app-js authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Snippet } from '@polkadot/app-js/types';
+import type { Snippet } from "@polkadot/app-js/types";
 
 const label = {
-  children: 'Storage',
-  color: 'blue',
-  size: 'tiny'
+  children: "Storage",
+  color: "blue",
+  size: "tiny",
 };
 
 export const storageGetInfo: Snippet = {
@@ -37,8 +37,8 @@ if (validators && validators.length > 0) {
 }
 `,
   label,
-  text: 'Get chain state information',
-  value: 'storageGetInfo'
+  text: "Get chain state information",
+  value: "storageGetInfo",
 };
 
 export const storageSystemEvents: Snippet = {
@@ -60,8 +60,8 @@ api.query.system.events((events) => {
   });
 });`,
   label,
-  text: 'Listen to system events',
-  value: 'storageSystemEvents'
+  text: "Listen to system events",
+  value: "storageSystemEvents",
 };
 
 export const storageListenToBalanceChange: Snippet = {
@@ -86,8 +86,8 @@ api.query.system.account(ALICE, ([, { free }]) => {
   }
 });`,
   label,
-  text: 'Listen to balance changes',
-  value: 'storageListenToBalanceChange'
+  text: "Listen to balance changes",
+  value: "storageListenToBalanceChange",
 };
 
 export const storageListenToMultipleBalancesChange: Snippet = {
@@ -103,8 +103,8 @@ api.query.system.account.multi([ALICE, BOB], (info) => {
   console.log('Change detected, new balances: ', info)
 });`,
   label,
-  text: 'Listen to multiple balances changes',
-  value: 'storageListenToMultipleBalancesChange'
+  text: "Listen to multiple balances changes",
+  value: "storageListenToMultipleBalancesChange",
 };
 
 export const storageRetrieveInfoOnQueryKeys: Snippet = {
@@ -134,8 +134,8 @@ const currSize = await api.query.system.account.size(ALICE);
 
 console.log('Alice account entry has a value hash of', currHash, 'with a size of', currSize);`,
   label,
-  text: 'Retrieve historic query data',
-  value: 'storageRetrieveInfoOnQueryKeys'
+  text: "Retrieve historic query data",
+  value: "storageRetrieveInfoOnQueryKeys",
 };
 
 export const storageKeys: Snippet = {
@@ -159,6 +159,6 @@ console.log(api.query.staking.erasStakers.key(0, ALICE));
 console.log(api.query.staking.erasStakers.keyPrefix());
 `,
   label,
-  text: 'Get underlying storage key hex values',
-  value: 'storageKeys'
+  text: "Get underlying storage key hex values",
+  value: "storageKeys",
 };

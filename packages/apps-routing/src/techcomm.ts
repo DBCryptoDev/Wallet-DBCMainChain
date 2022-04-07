@@ -1,24 +1,22 @@
 // Copyright 2017-2021 @polkadot/apps-routing authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TFunction } from 'i18next';
-import type { Route } from './types';
+import type { TFunction } from "i18next";
+import type { Route } from "./types";
 
-import Component, { useCounter } from '@polkadot/app-tech-comm';
+import Component, { useCounter } from "@polkadot/app-tech-comm";
 
-export default function create (t: TFunction): Route {
+export default function create(t: TFunction): Route {
   return {
     Component,
     display: {
       needsAccounts: true,
-      needsApi: [
-        'query.technicalCommittee.members'
-      ]
+      needsApi: ["query.technicalCommittee.members"],
     },
-    group: 'governance',
-    icon: 'microchip',
-    name: 'techcomm',
-    text: t('nav.tech-comm', 'Tech. comm.', { ns: 'apps-routing' }),
-    useCounter
+    group: "governance",
+    icon: "microchip",
+    name: "techcomm",
+    text: t("nav.tech-comm", "Tech. comm.", { ns: "apps-routing" }),
+    useCounter,
   };
 }

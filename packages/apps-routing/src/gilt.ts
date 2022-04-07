@@ -1,22 +1,20 @@
 // Copyright 2017-2021 @polkadot/apps-routing authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TFunction } from 'i18next';
-import type { Route } from './types';
+import type { TFunction } from "i18next";
+import type { Route } from "./types";
 
-import Component from '@polkadot/app-gilt';
+import Component from "@polkadot/app-gilt";
 
-export default function create (t: TFunction): Route {
+export default function create(t: TFunction): Route {
   return {
     Component,
     display: {
-      needsApi: [
-        'tx.gilt.placeBid'
-      ]
+      needsApi: ["tx.gilt.placeBid"],
     },
-    group: 'network',
-    icon: 'leaf',
-    name: 'gilt',
-    text: t('nav.gilt', 'Gilt', { ns: 'apps-routing' })
+    group: "network",
+    icon: "leaf",
+    name: "gilt",
+    text: t("nav.gilt", "Gilt", { ns: "apps-routing" }),
   };
 }

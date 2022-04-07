@@ -1,15 +1,15 @@
 // Copyright 2017-2021 @polkadot/ui-settings authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TFunction } from 'i18next';
-import type { Option } from './types';
+import type { TFunction } from "i18next";
+import type { Option } from "./types";
 
-import known from '@polkadot/networks';
+import known from "@polkadot/networks";
 
 const networks = known.map(({ displayName, network, prefix }) => ({
   info: network,
   text: displayName,
-  value: prefix
+  value: prefix,
 }));
 
 // Definitions here are with the following values -
@@ -17,13 +17,13 @@ const networks = known.map(({ displayName, network, prefix }) => ({
 //   text: The text you wish to display in the dropdown
 //   value: The actual ss5Format value (as registered)
 
-export function createSs58 (t: TFunction): Option[] {
+export function createSs58(t: TFunction): Option[] {
   return [
     {
-      info: 'default',
-      text: t('ss58.default', 'Default for the connected node', { ns: 'apps-config' }),
-      value: -1
+      info: "default",
+      text: t("ss58.default", "Default for the connected node", { ns: "apps-config" }),
+      value: -1,
     },
-    ...networks
+    ...networks,
   ];
 }

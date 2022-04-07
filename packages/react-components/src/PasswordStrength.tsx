@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import strengthTester from 'owasp-password-strength-test';
-import React from 'react';
-import styled from 'styled-components';
+import strengthTester from "owasp-password-strength-test";
+import React from "react";
+import styled from "styled-components";
 
-import { useTranslation } from './translate';
+import { useTranslation } from "./translate";
 
 const MAX_STRENGTH = 7; // equal to number of password tests in owasp strength tester
 
@@ -13,7 +13,7 @@ strengthTester.config({
   allowPassphrases: true,
   maxLength: 128,
   minLength: 8,
-  minPhraseLength: 20
+  minPhraseLength: 20,
 });
 
 interface Props {
@@ -21,32 +21,26 @@ interface Props {
   value: string;
 }
 
-function calcStrength (password: string): number {
+function calcStrength(password: string): number {
   const testResult = strengthTester.test(password);
   const passedTests = Math.max(0, testResult.passedTests.length - testResult.failedTests.length);
 
   return testResult.isPassphrase ? MAX_STRENGTH : passedTests;
 }
 
-function PasswordStrength ({ className = '', value }: Props): React.ReactElement<Props> {
+function PasswordStrength({ className = "", value }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   const passwordStrength = calcStrength(value);
-  const style = { width: `${passwordStrength * 100 / MAX_STRENGTH}%` };
+  const style = { width: `${(passwordStrength * 100) / MAX_STRENGTH}%` };
 
   return (
-    <div
-      className={className}
-      style={{ display: (value ? 'flex' : 'none') }}
-    >
-      {t<string>('weak')}
-      <div className='ui--Strength-bar'>
-        <div
-          className='ui--Strength-bar-highlighted'
-          style={style}
-        />
+    <div className={className} style={{ display: value ? "flex" : "none" }}>
+      {t<string>("weak")}
+      <div className="ui--Strength-bar">
+        <div className="ui--Strength-bar-highlighted" style={style} />
       </div>
-      {t<string>('strong')}
+      {t<string>("strong")}
     </div>
   );
 }
@@ -64,9 +58,9 @@ export default React.memo(styled(PasswordStrength)`
     height: 0.6rem;
     width: 100%;
     margin: 0 10px;
-    border: 1px solid #DFDFDF;
+    border: 1px solid #dfdfdf;
     border-radius: 0.15rem;
-    background: #ECECEC;
+    background: #ececec;
   }
 
   .ui--Strength-bar-highlighted {
@@ -75,6 +69,6 @@ export default React.memo(styled(PasswordStrength)`
     height: 0.6rem;
     width: 100%;
     border-radius: 0.15rem;
-    background: linear-gradient(90.43deg, #FF8B00 0%, #FFBB50 112.75%);
+    background: linear-gradient(90.43deg, #ff8b00 0%, #ffbb50 112.75%);
   }
 `);

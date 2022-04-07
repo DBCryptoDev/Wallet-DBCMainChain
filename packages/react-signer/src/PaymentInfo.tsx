@@ -1,19 +1,19 @@
 // Copyright 2017-2021 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SubmittableExtrinsic } from '@polkadot/api/promise/types';
-import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
-import type { RuntimeDispatchInfo } from '@polkadot/types/interfaces';
+import type { SubmittableExtrinsic } from "@polkadot/api/promise/types";
+import type { DeriveBalancesAll } from "@polkadot/api-derive/types";
+import type { RuntimeDispatchInfo } from "@polkadot/types/interfaces";
 
-import BN from 'bn.js';
-import React, { useEffect, useState } from 'react';
-import { Trans } from 'react-i18next';
+import BN from "bn.js";
+import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 
-import { Expander, MarkWarning } from '@polkadot/react-components';
-import { useApi, useCall, useIsMountedRef } from '@polkadot/react-hooks';
-import { formatBalance, isFunction } from '@polkadot/util';
+import { Expander, MarkWarning } from "@polkadot/react-components";
+import { useApi, useCall, useIsMountedRef } from "@polkadot/react-hooks";
+import { formatBalance, isFunction } from "@polkadot/util";
 
-import { useTranslation } from './translate';
+import { useTranslation } from "./translate";
 
 interface Props {
   accountId?: string | null;
@@ -24,7 +24,7 @@ interface Props {
   tip?: BN;
 }
 
-function PaymentInfo ({ accountId, className = '', extrinsic }: Props): React.ReactElement<Props> | null {
+function PaymentInfo({ accountId, className = "", extrinsic }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const [dispatchInfo, setDispatchInfo] = useState<RuntimeDispatchInfo | null>(null);
@@ -32,7 +32,10 @@ function PaymentInfo ({ accountId, className = '', extrinsic }: Props): React.Re
   const mountedRef = useIsMountedRef();
 
   useEffect((): void => {
-    accountId && extrinsic && isFunction(extrinsic.paymentInfo) && isFunction(api.rpc.payment?.queryInfo) &&
+    accountId &&
+      extrinsic &&
+      isFunction(extrinsic.paymentInfo) &&
+      isFunction(api.rpc.payment?.queryInfo) &&
       setTimeout((): void => {
         try {
           extrinsic
@@ -54,14 +57,22 @@ function PaymentInfo ({ accountId, className = '', extrinsic }: Props): React.Re
       <Expander
         className={className}
         summary={
-          <Trans i18nKey='feesForSubmission'>
-            Fees of <span className='highlight'>{formatBalance(dispatchInfo.partialFee, { withSiFull: true })}</span> will be applied to the submission
+          <Trans i18nKey="feesForSubmission">
+            Fees of <span className="highlight">{formatBalance(dispatchInfo.partialFee, { withSiFull: true })}</span>{" "}
+            will be applied to the submission
           </Trans>
         }
       />
-      {api.consts.balances && !api.tx.balances?.transfer.is(extrinsic) && balances?.accountId.eq(accountId) && balances.availableBalance.sub(dispatchInfo.partialFee).lte(api.consts.balances.existentialDeposit) && (
-        <MarkWarning content={t<string>('The account does not have enough free funds (excluding locked/bonded/reserved) available to cover the transaction fees without dropping the balance below the account existential amount.')} />
-      )}
+      {api.consts.balances &&
+        !api.tx.balances?.transfer.is(extrinsic) &&
+        balances?.accountId.eq(accountId) &&
+        balances.availableBalance.sub(dispatchInfo.partialFee).lte(api.consts.balances.existentialDeposit) && (
+          <MarkWarning
+            content={t<string>(
+              "The account does not have enough free funds (excluding locked/bonded/reserved) available to cover the transaction fees without dropping the balance below the account existential amount."
+            )}
+          />
+        )}
     </>
   );
 }

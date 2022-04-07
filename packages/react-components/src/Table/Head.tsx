@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import Icon from '../Icon';
+import Icon from "../Icon";
 
 type HeaderDef = [React.ReactNode?, string?, number?, (() => void)?];
 
@@ -15,7 +15,7 @@ interface Props {
   isEmpty: boolean;
 }
 
-function Head ({ className = '', filter, header, isEmpty }: Props): React.ReactElement<Props> | null {
+function Head({ className = "", filter, header, isEmpty }: Props): React.ReactElement<Props> | null {
   if (!header?.length) {
     return null;
   }
@@ -23,34 +23,27 @@ function Head ({ className = '', filter, header, isEmpty }: Props): React.ReactE
   return (
     <thead className={className}>
       {filter && (
-        <tr className='filter'>
+        <tr className="filter">
           <th colSpan={100}>{filter}</th>
         </tr>
       )}
       <tr>
-        {header.filter((h): h is HeaderDef => !!h).map(([label, className = 'default', colSpan = 1, onClick], index) =>
-          <th
-            className={className}
-            colSpan={colSpan}
-            key={index}
-            onClick={onClick}
-          >
-            {index === 0
-              ? (
+        {header
+          .filter((h): h is HeaderDef => !!h)
+          .map(([label, className = "default", colSpan = 1, onClick], index) => (
+            <th className={className} colSpan={colSpan} key={index} onClick={onClick}>
+              {index === 0 ? (
                 <h1>
-                  <Icon
-                    className='highlight--color'
-                    icon='dot-circle'
-                  />
+                  <Icon className="highlight--color" icon="dot-circle" />
                   {label}
                 </h1>
-              )
-              : isEmpty
-                ? ''
-                : label
-            }
-          </th>
-        )}
+              ) : isEmpty ? (
+                ""
+              ) : (
+                label
+              )}
+            </th>
+          ))}
       </tr>
     </thead>
   );
@@ -68,7 +61,8 @@ export default React.memo(styled(Head)`
     vertical-align: middle;
     white-space: nowrap;
 
-    h1, h2 {
+    h1,
+    h2 {
       font-size: 1.75rem;
     }
 

@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/app-contracts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React from "react";
 
-import { Input } from '@polkadot/react-components';
+import { Input } from "@polkadot/react-components";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 interface Props {
   className?: string;
@@ -18,7 +18,15 @@ interface Props {
   value?: string;
 }
 
-function InputName ({ className, isBusy, isContract, isError, onChange, onEnter, value = '' }: Props): React.ReactElement<Props> {
+function InputName({
+  className,
+  isBusy,
+  isContract,
+  isError,
+  onChange,
+  onEnter,
+  value = "",
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   return (
@@ -26,16 +34,12 @@ function InputName ({ className, isBusy, isContract, isError, onChange, onEnter,
       className={className}
       help={t<string>(
         isContract
-          ? 'A name for the deployed contract to help users distinguish. Only used for display purposes.'
-          : 'A name for this WASM code to help users distinguish. Only used for display purposes.'
+          ? "A name for the deployed contract to help users distinguish. Only used for display purposes."
+          : "A name for this WASM code to help users distinguish. Only used for display purposes."
       )}
       isDisabled={isBusy}
       isError={isError}
-      label={t<string>(
-        isContract
-          ? 'contract name'
-          : 'code bundle name'
-      )}
+      label={t<string>(isContract ? "contract name" : "code bundle name")}
       onChange={onChange}
       onEnter={onEnter}
       value={value}

@@ -1,20 +1,20 @@
 // Copyright 2017-2021 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Hash } from '@polkadot/types/interfaces';
+import type { Hash } from "@polkadot/types/interfaces";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Spinner } from '@polkadot/react-components';
-import { useApi, useIsMountedRef } from '@polkadot/react-hooks';
+import { Spinner } from "@polkadot/react-components";
+import { useApi, useIsMountedRef } from "@polkadot/react-hooks";
 
-import BlockByHash from './ByHash';
+import BlockByHash from "./ByHash";
 
 interface Props {
   value: string;
 }
 
-function BlockByNumber ({ value }: Props): React.ReactElement<Props> | null {
+function BlockByNumber({ value }: Props): React.ReactElement<Props> | null {
   const { api } = useApi();
   const [getBlockHash, setState] = useState<Hash | null>(null);
   const mountedRef = useIsMountedRef();
@@ -35,12 +35,7 @@ function BlockByNumber ({ value }: Props): React.ReactElement<Props> | null {
     return <Spinner />;
   }
 
-  return (
-    <BlockByHash
-      error={error}
-      value={getBlockHash ? getBlockHash.toHex() : null}
-    />
-  );
+  return <BlockByHash error={error} value={getBlockHash ? getBlockHash.toHex() : null} />;
 }
 
 export default React.memo(BlockByNumber);

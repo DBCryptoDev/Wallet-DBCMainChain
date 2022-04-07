@@ -1,14 +1,14 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { createRef, useCallback, useState } from 'react';
-import Dropzone, { DropzoneRef } from 'react-dropzone';
-import styled from 'styled-components';
+import React, { createRef, useCallback, useState } from "react";
+import Dropzone, { DropzoneRef } from "react-dropzone";
+import styled from "styled-components";
 
-import { formatNumber, hexToU8a, isHex, u8aToString } from '@polkadot/util';
+import { formatNumber, hexToU8a, isHex, u8aToString } from "@polkadot/util";
 
-import Labelled from './Labelled';
-import { useTranslation } from './translate';
+import Labelled from "./Labelled";
+import { useTranslation } from "./translate";
 
 export interface InputFilePropsBase {
   className?: string;
@@ -35,12 +35,12 @@ interface FileState {
   size: number;
 }
 
-const BYTE_STR_0 = '0'.charCodeAt(0);
-const BYTE_STR_X = 'x'.charCodeAt(0);
-const STR_NL = '\n';
+const BYTE_STR_0 = "0".charCodeAt(0);
+const BYTE_STR_X = "x".charCodeAt(0);
+const STR_NL = "\n";
 const NOOP = (): void => undefined;
 
-function convertResult (result: ArrayBuffer): Uint8Array {
+function convertResult(result: ArrayBuffer): Uint8Array {
   const data = new Uint8Array(result);
 
   // this converts the input (if detected as hex), via the hex conversion route
@@ -59,7 +59,20 @@ function convertResult (result: ArrayBuffer): Uint8Array {
   return data;
 }
 
-function InputFile ({ accept, className = '', clearContent, help, isDisabled, isError = false, isFull, label, onChange, placeholder, withEllipsis, withLabel }: InputFileProps): React.ReactElement<InputFileProps> {
+function InputFile({
+  accept,
+  className = "",
+  clearContent,
+  help,
+  isDisabled,
+  isError = false,
+  isFull,
+  label,
+  onChange,
+  placeholder,
+  withEllipsis,
+  withLabel,
+}: InputFileProps): React.ReactElement<InputFileProps> {
   const { t } = useTranslation();
   const dropRef = createRef<DropzoneRef>();
   const [file, setFile] = useState<FileState | undefined>();
@@ -78,10 +91,11 @@ function InputFile ({ accept, className = '', clearContent, help, isDisabled, is
             const data = convertResult(target.result as ArrayBuffer);
 
             onChange && onChange(data, name);
-            dropRef && setFile({
-              name,
-              size: data.length
-            });
+            dropRef &&
+              setFile({
+                name,
+                size: data.length,
+              });
           }
         };
 
@@ -92,46 +106,33 @@ function InputFile ({ accept, className = '', clearContent, help, isDisabled, is
   );
 
   const dropZone = (
-    <Dropzone
-      accept={accept}
-      disabled={isDisabled}
-      multiple={false}
-      onDrop={_onDrop}
-      ref={dropRef}
-    >
+    <Dropzone accept={accept} disabled={isDisabled} multiple={false} onDrop={_onDrop} ref={dropRef}>
       {({ getInputProps, getRootProps }): JSX.Element => (
-        <div {...getRootProps({ className: `ui--InputFile${isError ? ' error' : ''} ${className}` })} >
+        <div {...getRootProps({ className: `ui--InputFile${isError ? " error" : ""} ${className}` })}>
           <input {...getInputProps()} />
-          <em className='label' >
-            {
-              !file || clearContent
-                ? placeholder || t<string>('click to select or drag and drop the file here')
-                : placeholder || t<string>('{{name}} ({{size}} bytes)', {
+          <em className="label">
+            {!file || clearContent
+              ? placeholder || t<string>("click to select or drag and drop the file here")
+              : placeholder ||
+                t<string>("{{name}} ({{size}} bytes)", {
                   replace: {
                     name: file.name,
-                    size: formatNumber(file.size)
-                  }
-                })
-            }
+                    size: formatNumber(file.size),
+                  },
+                })}
           </em>
         </div>
       )}
     </Dropzone>
   );
 
-  return label
-    ? (
-      <Labelled
-        help={help}
-        isFull={isFull}
-        label={label}
-        withEllipsis={withEllipsis}
-        withLabel={withLabel}
-      >
-        {dropZone}
-      </Labelled>
-    )
-    : dropZone;
+  return label ? (
+    <Labelled help={help} isFull={isFull} label={label} withEllipsis={withEllipsis} withLabel={withLabel}>
+      {dropZone}
+    </Labelled>
+  ) : (
+    dropZone
+  );
 }
 
 export default React.memo(styled(InputFile)`

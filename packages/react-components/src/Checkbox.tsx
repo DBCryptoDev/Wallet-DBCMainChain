@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import styled from "styled-components";
 
-import Icon from './Icon';
+import Icon from "./Icon";
 
 interface Props {
   className?: string;
@@ -14,23 +14,14 @@ interface Props {
   value?: boolean;
 }
 
-function Checkbox ({ className = '', isDisabled, label, onChange, value }: Props): React.ReactElement<Props> {
-  const _onClick = useCallback(
-    (): void => {
-      !isDisabled && onChange && onChange(!value);
-    },
-    [isDisabled, onChange, value]
-  );
+function Checkbox({ className = "", isDisabled, label, onChange, value }: Props): React.ReactElement<Props> {
+  const _onClick = useCallback((): void => {
+    !isDisabled && onChange && onChange(!value);
+  }, [isDisabled, onChange, value]);
 
   return (
-    <div
-      className={`ui--Checkbox${isDisabled ? ' isDisabled' : ''} ${className}`}
-      onClick={_onClick}
-    >
-      <Icon
-        color={value ? 'normal' : 'transparent'}
-        icon='check'
-      />
+    <div className={`ui--Checkbox${isDisabled ? " isDisabled" : ""} ${className}`} onClick={_onClick}>
+      <Icon color={value ? "normal" : "transparent"} icon="check" />
       {label && <label>{label}</label>}
     </div>
   );

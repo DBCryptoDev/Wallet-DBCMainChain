@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/app-calendar authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DateState } from './types';
+import type { DateState } from "./types";
 
-import { DAYS } from './constants';
+import { DAYS } from "./constants";
 
-export function newZeroDate (input: Date): Date {
+export function newZeroDate(input: Date): Date {
   const date = new Date(input);
 
   date.setHours(0);
@@ -16,7 +16,7 @@ export function newZeroDate (input: Date): Date {
   return date;
 }
 
-export function nextMonth (date: Date, firstDay = 1): Date {
+export function nextMonth(date: Date, firstDay = 1): Date {
   const currMonth = date.getMonth();
 
   return currMonth === 11
@@ -24,15 +24,13 @@ export function nextMonth (date: Date, firstDay = 1): Date {
     : new Date(date.getFullYear(), currMonth + 1, firstDay);
 }
 
-export function prevMonth (date: Date): Date {
+export function prevMonth(date: Date): Date {
   const currMonth = date.getMonth();
 
-  return currMonth === 0
-    ? new Date(date.getFullYear() - 1, 11, 1)
-    : new Date(date.getFullYear(), currMonth - 1, 1);
+  return currMonth === 0 ? new Date(date.getFullYear() - 1, 11, 1) : new Date(date.getFullYear(), currMonth - 1, 1);
 }
 
-export function getDateState (_dateMonth: Date, _dateSelected: Date): DateState {
+export function getDateState(_dateMonth: Date, _dateSelected: Date): DateState {
   const dateMonth = newZeroDate(_dateMonth);
 
   dateMonth.setDate(1);
@@ -51,14 +49,10 @@ export function getDateState (_dateMonth: Date, _dateSelected: Date): DateState 
     dateMonthNext,
     dateSelected,
     days,
-    startClass: `start${DAYS[dateMonth.getDay()]}`
+    startClass: `start${DAYS[dateMonth.getDay()]}`,
   };
 }
 
-export function dateCalendarFormat (date: Date): string {
-  return new Date(date)
-    .toISOString()
-    .split('.')[0]
-    .replaceAll('-', '')
-    .replaceAll(':', '') + 'Z';
+export function dateCalendarFormat(date: Date): string {
+  return new Date(date).toISOString().split(".")[0].replaceAll("-", "").replaceAll(":", "") + "Z";
 }

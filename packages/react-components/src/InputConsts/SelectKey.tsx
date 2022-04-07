@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DropdownOptions } from '../util/types';
-import type { ConstValueBase } from './types';
+import type { DropdownOptions } from "../util/types";
+import type { ConstValueBase } from "./types";
 
-import React from 'react';
+import React from "react";
 
-import Dropdown from '../Dropdown';
+import Dropdown from "../Dropdown";
 
 interface Props {
   className?: string;
@@ -16,19 +16,19 @@ interface Props {
   value: ConstValueBase;
 }
 
-function transform ({ value }: Props): (method: string) => ConstValueBase {
+function transform({ value }: Props): (method: string) => ConstValueBase {
   return (method: string): ConstValueBase => {
     const section = value.section;
 
     return {
       method,
-      section
+      section,
     };
   };
 }
 
-function SelectKey (props: Props): React.ReactElement<Props> | null {
-  const { className = '', isError, onChange, options, value } = props;
+function SelectKey(props: Props): React.ReactElement<Props> | null {
+  const { className = "", isError, onChange, options, value } = props;
 
   if (!options.length) {
     return null;

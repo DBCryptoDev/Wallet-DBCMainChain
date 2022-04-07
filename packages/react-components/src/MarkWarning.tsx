@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import Icon from './Icon';
+import Icon from "./Icon";
 
 interface Props {
   children?: React.ReactNode;
@@ -12,10 +12,12 @@ interface Props {
   content?: React.ReactNode;
 }
 
-function MarkWarning ({ children, className = '', content }: Props): React.ReactElement<Props> {
+function MarkWarning({ children, className = "", content }: Props): React.ReactElement<Props> {
   return (
     <article className={`mark warning ${className}`}>
-      <Icon icon='exclamation-triangle' />{content}{children}
+      <Icon icon="exclamation-triangle" />
+      {content}
+      {children}
     </article>
   );
 }

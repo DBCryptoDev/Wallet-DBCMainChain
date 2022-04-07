@@ -1,23 +1,23 @@
 // Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ActionStatus } from '@polkadot/react-components/Status/types';
-import type { KeypairType } from '@polkadot/util-crypto/types';
-import type { GeneratorMatch, GeneratorMatches, GeneratorResult } from '@polkadot/vanitygen/types';
+import type { ActionStatus } from "@polkadot/react-components/Status/types";
+import type { KeypairType } from "@polkadot/util-crypto/types";
+import type { GeneratorMatch, GeneratorMatches, GeneratorResult } from "@polkadot/vanitygen/types";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import styled from "styled-components";
 
-import { Button, Dropdown, Input, Table } from '@polkadot/react-components';
-import { useApi, useIsMountedRef } from '@polkadot/react-hooks';
-import { settings } from '@polkadot/ui-settings';
-import generator from '@polkadot/vanitygen/generator';
-import matchRegex from '@polkadot/vanitygen/regex';
-import generatorSort from '@polkadot/vanitygen/sort';
+import { Button, Dropdown, Input, Table } from "@polkadot/react-components";
+import { useApi, useIsMountedRef } from "@polkadot/react-hooks";
+import { settings } from "@polkadot/ui-settings";
+import generator from "@polkadot/vanitygen/generator";
+import matchRegex from "@polkadot/vanitygen/regex";
+import generatorSort from "@polkadot/vanitygen/sort";
 
-import CreateModal from '../modals/Create';
-import { useTranslation } from '../translate';
-import Match from './Match';
+import CreateModal from "../modals/Create";
+import { useTranslation } from "../translate";
+import Match from "./Match";
 
 interface Props {
   className?: string;
@@ -38,13 +38,13 @@ interface Results {
   startAt: number;
 }
 
-const DEFAULT_MATCH = 'Some';
+const DEFAULT_MATCH = "Some";
 const BOOL_OPTIONS = [
-  { text: 'No', value: false },
-  { text: 'Yes', value: true }
+  { text: "No", value: false },
+  { text: "Yes", value: true },
 ];
 
-function VanityApp ({ className = '', onStatusChange }: Props): React.ReactElement<Props> {
+function VanityApp({ className = "", onStatusChange }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { isEthereum } = useApi();
   const results = useRef<GeneratorResult[]>([]);
@@ -57,107 +57,94 @@ function VanityApp ({ className = '', onStatusChange }: Props): React.ReactEleme
     keyCount: -1,
     keyTime: 0,
     matches: [],
-    startAt: 0
+    startAt: 0,
   });
   const [{ isMatchValid, match }, setMatch] = useState<Match>({ isMatchValid: true, match: DEFAULT_MATCH });
-  const [type, setType] = useState<KeypairType>('ed25519');
+  const [type, setType] = useState<KeypairType>("ed25519");
   const [withCase, setWithCase] = useState(true);
 
-  const _clearSeed = useCallback(
-    () => setCreateSeed(null),
-    []
-  );
+  const _clearSeed = useCallback(() => setCreateSeed(null), []);
 
-  const _checkMatches = useCallback(
-    (): void => {
-      const checks = results.current;
+  const _checkMatches = useCallback((): void => {
+    const checks = results.current;
 
-      results.current = [];
+    results.current = [];
 
-      if (checks.length === 0 || !mountedRef.current) {
-        return;
-      }
+    if (checks.length === 0 || !mountedRef.current) {
+      return;
+    }
 
-      setResults(
-        ({ isRunning, keyCount, keyTime, matches, startAt }: Results): Results => {
-          let newKeyCount = keyCount;
-          let newKeyTime = keyTime;
-          const newMatches = checks.reduce((result, { elapsed, found }): GeneratorMatch[] => {
-            newKeyCount += found.length;
-            newKeyTime += elapsed;
+    setResults(({ isRunning, keyCount, keyTime, matches, startAt }: Results): Results => {
+      let newKeyCount = keyCount;
+      let newKeyTime = keyTime;
+      const newMatches = checks.reduce((result, { elapsed, found }): GeneratorMatch[] => {
+        newKeyCount += found.length;
+        newKeyTime += elapsed;
 
-            return result.concat(found);
-          }, matches);
+        return result.concat(found);
+      }, matches);
 
-          return {
-            elapsed: Date.now() - startAt,
-            isRunning,
-            keyCount: newKeyCount,
-            keyTime: newKeyTime,
-            matches: newMatches.sort(generatorSort).slice(0, 25),
-            startAt
-          };
+      return {
+        elapsed: Date.now() - startAt,
+        isRunning,
+        keyCount: newKeyCount,
+        keyTime: newKeyTime,
+        matches: newMatches.sort(generatorSort).slice(0, 25),
+        startAt,
+      };
+    });
+  }, [mountedRef]);
+
+  const _executeGeneration = useCallback((): void => {
+    if (!runningRef.current) {
+      return _checkMatches();
+    }
+
+    setTimeout((): void => {
+      if (mountedRef.current) {
+        if (results.current.length === 25) {
+          _checkMatches();
         }
-      );
-    },
-    [mountedRef]
-  );
 
-  const _executeGeneration = useCallback(
-    (): void => {
-      if (!runningRef.current) {
-        return _checkMatches();
+        results.current.push(generator({ match, runs: 10, type, withCase, withHex: true }));
+
+        _executeGeneration();
       }
-
-      setTimeout((): void => {
-        if (mountedRef.current) {
-          if (results.current.length === 25) {
-            _checkMatches();
-          }
-
-          results.current.push(
-            generator({ match, runs: 10, type, withCase, withHex: true })
-          );
-
-          _executeGeneration();
-        }
-      }, 0);
-    },
-    [_checkMatches, match, mountedRef, runningRef, type, withCase]
-  );
+    }, 0);
+  }, [_checkMatches, match, mountedRef, runningRef, type, withCase]);
 
   const _onChangeMatch = useCallback(
-    (match: string): void => setMatch({
-      isMatchValid:
-        matchRegex.test(match) &&
-        (match.length !== 0) &&
-        (match.length < 31),
-      match
-    }),
+    (match: string): void =>
+      setMatch({
+        isMatchValid: matchRegex.test(match) && match.length !== 0 && match.length < 31,
+        match,
+      }),
     []
   );
 
   const _onRemove = useCallback(
-    (address: string): void => setResults(
-      (results: Results): Results => ({
-        ...results,
-        matches: results.matches.filter((item) => item.address !== address)
-      })
-    ),
+    (address: string): void =>
+      setResults(
+        (results: Results): Results => ({
+          ...results,
+          matches: results.matches.filter((item) => item.address !== address),
+        })
+      ),
     []
   );
 
   const _toggleStart = useCallback(
-    (): void => setResults(
-      ({ elapsed, isRunning, keyCount, keyTime, matches, startAt }: Results): Results => ({
-        elapsed,
-        isRunning: !isRunning,
-        keyCount: isRunning ? keyCount : 0,
-        keyTime: isRunning ? keyTime : 0,
-        matches,
-        startAt: isRunning ? startAt : Date.now()
-      })
-    ),
+    (): void =>
+      setResults(
+        ({ elapsed, isRunning, keyCount, keyTime, matches, startAt }: Results): Results => ({
+          elapsed,
+          isRunning: !isRunning,
+          keyCount: isRunning ? keyCount : 0,
+          keyTime: isRunning ? keyTime : 0,
+          matches,
+          startAt: isRunning ? startAt : Date.now(),
+        })
+      ),
     []
   );
 
@@ -169,96 +156,90 @@ function VanityApp ({ className = '', onStatusChange }: Props): React.ReactEleme
     }
   }, [_executeGeneration, isRunning]);
 
-  const header = useMemo(() => [
-    [t('matches'), 'start', 2],
-    [t('Evaluated {{count}} keys in {{elapsed}}s ({{avg}} keys/s)', {
-      replace: {
-        avg: (keyCount / (elapsed / 1000)).toFixed(3),
-        count: keyCount,
-        elapsed: (elapsed / 1000).toFixed(2)
-      }
-    }), 'start'],
-    [t('secret'), 'start'],
-    []
-  ], [elapsed, keyCount, t]);
+  const header = useMemo(
+    () => [
+      [t("matches"), "start", 2],
+      [
+        t("Evaluated {{count}} keys in {{elapsed}}s ({{avg}} keys/s)", {
+          replace: {
+            avg: (keyCount / (elapsed / 1000)).toFixed(3),
+            count: keyCount,
+            elapsed: (elapsed / 1000).toFixed(2),
+          },
+        }),
+        "start",
+      ],
+      [t("secret"), "start"],
+      [],
+    ],
+    [elapsed, keyCount, t]
+  );
 
   return (
     <div className={className}>
-      <div className='ui--row'>
+      <div className="ui--row">
         <Input
           autoFocus
-          className='medium'
-          help={t<string>('Type here what you would like your address to contain. This tool will generate the keys and show the associated addresses that best match your search. You can use "?" as a wildcard for a character.')}
+          className="medium"
+          help={t<string>(
+            'Type here what you would like your address to contain. This tool will generate the keys and show the associated addresses that best match your search. You can use "?" as a wildcard for a character.'
+          )}
           isDisabled={isRunning}
           isError={!isMatchValid}
-          label={t<string>('Search for')}
+          label={t<string>("Search for")}
           onChange={_onChangeMatch}
           onEnter={_toggleStart}
           value={match}
         />
         <Dropdown
-          className='medium'
-          help={t<string>('Should the search be case sensitive, e.g if you select "no" your search for "Some" may return addresses containing "somE" or "sOme"...')}
+          className="medium"
+          help={t<string>(
+            'Should the search be case sensitive, e.g if you select "no" your search for "Some" may return addresses containing "somE" or "sOme"...'
+          )}
           isDisabled={isRunning}
-          label={t<string>('case sensitive')}
+          label={t<string>("case sensitive")}
           onChange={setWithCase}
           options={BOOL_OPTIONS}
           value={withCase}
         />
       </div>
-      <div className='ui--row'>
+      <div className="ui--row">
         <Dropdown
-          className='medium'
+          className="medium"
           defaultValue={type}
-          help={t<string>('Determines what cryptography will be used to create this account. Note that to validate on Polkadot, the session account must use "ed25519".')}
-          label={t<string>('keypair crypto type')}
+          help={t<string>(
+            'Determines what cryptography will be used to create this account. Note that to validate on Polkadot, the session account must use "ed25519".'
+          )}
+          label={t<string>("keypair crypto type")}
           onChange={setType}
           options={isEthereum ? settings.availableCryptosEth : settings.availableCryptos}
         />
       </div>
       <Button.Group>
         <Button
-          icon={
-            isRunning
-              ? 'stop'
-              : 'sign-in-alt'
-          }
+          icon={isRunning ? "stop" : "sign-in-alt"}
           isDisabled={!isMatchValid}
-          label={
-            isRunning
-              ? t<string>('Stop generation')
-              : t<string>('Start generation')
-          }
+          label={isRunning ? t<string>("Stop generation") : t<string>("Start generation")}
           onClick={_toggleStart}
         />
       </Button.Group>
       {matches.length !== 0 && (
         <>
-          <article className='warning centered'>{t<string>('Ensure that you utilized the "Save" functionality before using a generated address to receive funds. Without saving the address any funds and the associated seed any funds sent to it will be lost.')}</article>
-          <Table
-            className='vanity--App-matches'
-            empty={t<string>('No matches found')}
-            header={header}
-          >
-            {matches.map((match): React.ReactNode => (
-              <Match
-                {...match}
-                key={match.address}
-                onCreateToggle={setCreateSeed}
-                onRemove={_onRemove}
-              />
-            ))}
+          <article className="warning centered">
+            {t<string>(
+              'Ensure that you utilized the "Save" functionality before using a generated address to receive funds. Without saving the address any funds and the associated seed any funds sent to it will be lost.'
+            )}
+          </article>
+          <Table className="vanity--App-matches" empty={t<string>("No matches found")} header={header}>
+            {matches.map(
+              (match): React.ReactNode => (
+                <Match {...match} key={match.address} onCreateToggle={setCreateSeed} onRemove={_onRemove} />
+              )
+            )}
           </Table>
         </>
       )}
-      {createSeed && (
-        <CreateModal
-          onClose={_clearSeed}
-          onStatusChange={onStatusChange}
-          seed={createSeed}
-          type={type}
-        />
-      )}
+      {createSeed && <CreateModal onClose={_clearSeed} onStatusChange={onStatusChange} seed={createSeed} type={type} />}
     </div>
   );
 }

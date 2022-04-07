@@ -1,40 +1,47 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveStakingOverview } from '@polkadot/api-derive/types';
-import type { AppProps as Props, ThemeProps } from '@polkadot/react-components/types';
-import type { ElectionStatus } from '@polkadot/types/interfaces';
+import type { DeriveStakingOverview } from "@polkadot/api-derive/types";
+import type { AppProps as Props, ThemeProps } from "@polkadot/react-components/types";
+import type { ElectionStatus } from "@polkadot/types/interfaces";
 
-import React, { useCallback, useMemo, useState } from 'react';
-import { Route, Switch } from 'react-router';
-import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useCallback, useMemo, useState } from "react";
+import { Route, Switch } from "react-router";
+import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 
-import { HelpOverlay } from '@polkadot/react-components';
-import Tabs from '@polkadot/react-components/Tabs';
-import { useAccounts, useApi, useAvailableSlashes, useCall, useFavorites, useOwnStashInfos } from '@polkadot/react-hooks';
-import { isFunction } from '@polkadot/util';
+import { HelpOverlay } from "@polkadot/react-components";
+import Tabs from "@polkadot/react-components/Tabs";
+import {
+  useAccounts,
+  useApi,
+  useAvailableSlashes,
+  useCall,
+  useFavorites,
+  useOwnStashInfos,
+} from "@polkadot/react-hooks";
+import { isFunction } from "@polkadot/util";
 
-import basicMd from './md/basic.md';
-import Summary from './Overview/Summary';
-import Actions from './Actions';
-import ActionsBanner from './ActionsBanner';
-import { STORE_FAVS_BASE } from './constants';
-import Overview from './Overview';
-import Payouts from './Payouts';
-import Query from './Query';
-import Slashes from './Slashes';
-import Targets from './Targets';
-import { useTranslation } from './translate';
-import useSortedTargets from './useSortedTargets';
+import basicMd from "./md/basic.md";
+import Summary from "./Overview/Summary";
+import Actions from "./Actions";
+import ActionsBanner from "./ActionsBanner";
+import { STORE_FAVS_BASE } from "./constants";
+import Overview from "./Overview";
+import Payouts from "./Payouts";
+import Query from "./Query";
+import Slashes from "./Slashes";
+import Targets from "./Targets";
+import { useTranslation } from "./translate";
+import useSortedTargets from "./useSortedTargets";
 
-const HIDDEN_ACC = ['actions', 'payout'];
+const HIDDEN_ACC = ["actions", "payout"];
 
 const transformElection = {
-  transform: (status: ElectionStatus) => status.isOpen
+  transform: (status: ElectionStatus) => status.isOpen,
 };
 
-function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Props> {
+function StakingApp({ basePath, className = "" }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const { hasAccounts } = useAccounts();
@@ -48,7 +55,7 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
   const targets = useSortedTargets(favorites, withLedger);
 
   const hasQueries = useMemo(
-    () => hasAccounts && !!(api.query.imOnline?.authoredBlocks) && !!(api.query.staking.activeEra),
+    () => hasAccounts && !!api.query.imOnline?.authoredBlocks && !!api.query.staking.activeEra,
     [api, hasAccounts]
   );
 
@@ -57,78 +64,61 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
     [ownStashes]
   );
 
-  const toggleLedger = useCallback(
-    () => setWithLedger(true),
-    []
-  );
+  const toggleLedger = useCallback(() => setWithLedger(true), []);
 
-  const items = useMemo(() => [
-    {
-      isRoot: true,
-      name: 'overview',
-      text: t<string>('Overview')
-    },
-    {
-      name: 'actions',
-      text: t<string>('Account actions')
-    },
-    isFunction(api.query.staking.activeEra) && {
-      name: 'payout',
-      text: t<string>('Payouts')
-    },
-    {
-      alias: 'returns',
-      name: 'targets',
-      text: t<string>('Targets')
-    },
-    {
-      name: 'waiting',
-      text: t<string>('Waiting')
-    },
-    {
-      count: slashes.reduce((count, [, unapplied]) => count + unapplied.length, 0),
-      name: 'slashes',
-      text: t<string>('Slashes')
-    },
-    {
-      hasParams: true,
-      name: 'query',
-      text: t<string>('Validator stats')
-    }
-  ].filter((q): q is { name: string; text: string } => !!q), [api, slashes, t]);
+  const items = useMemo(
+    () =>
+      [
+        {
+          isRoot: true,
+          name: "overview",
+          text: t<string>("Overview"),
+        },
+        {
+          name: "actions",
+          text: t<string>("Account actions"),
+        },
+        isFunction(api.query.staking.activeEra) && {
+          name: "payout",
+          text: t<string>("Payouts"),
+        },
+        {
+          alias: "returns",
+          name: "targets",
+          text: t<string>("Targets"),
+        },
+        {
+          name: "waiting",
+          text: t<string>("Waiting"),
+        },
+        {
+          count: slashes.reduce((count, [, unapplied]) => count + unapplied.length, 0),
+          name: "slashes",
+          text: t<string>("Slashes"),
+        },
+        {
+          hasParams: true,
+          name: "query",
+          text: t<string>("Validator stats"),
+        },
+      ].filter((q): q is { name: string; text: string } => !!q),
+    [api, slashes, t]
+  );
 
   return (
     <main className={`staking--App ${className}`}>
       <HelpOverlay md={basicMd as string} />
-      <Tabs
-        basePath={basePath}
-        hidden={
-          hasAccounts
-            ? undefined
-            : HIDDEN_ACC
-        }
-        items={items}
-      />
-      <Summary
-        isVisible={pathname === basePath}
-        stakingOverview={stakingOverview}
-        targets={targets}
-      />
+      <Tabs basePath={basePath} hidden={hasAccounts ? undefined : HIDDEN_ACC} items={items} />
+      <Summary isVisible={pathname === basePath} stakingOverview={stakingOverview} targets={targets} />
       <Switch>
         <Route path={`${basePath}/payout`}>
-          <Payouts
-            isInElection={isInElection}
-            ownValidators={ownValidators}
-          />
+          <Payouts isInElection={isInElection} ownValidators={ownValidators} />
         </Route>
         <Route path={[`${basePath}/query/:value`, `${basePath}/query`]}>
           <Query />
         </Route>
         <Route path={`${basePath}/slashes`}>
-          <Slashes
-            ownStashes={ownStashes}
-            slashes={slashes}
-          />
+          <Slashes ownStashes={ownStashes} slashes={slashes} />
         </Route>
         <Route path={`${basePath}/targets`}>
           <Targets
@@ -153,16 +143,14 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
         </Route>
       </Switch>
       <Actions
-        className={pathname === `${basePath}/actions` ? '' : 'staking--hidden'}
+        className={pathname === `${basePath}/actions` ? "" : "staking--hidden"}
         isInElection={isInElection}
         ownStashes={ownStashes}
         targets={targets}
       />
-      {basePath === pathname && hasAccounts && (ownStashes?.length === 0) && (
-        <ActionsBanner />
-      )}
+      {basePath === pathname && hasAccounts && ownStashes?.length === 0 && <ActionsBanner />}
       <Overview
-        className={basePath === pathname ? '' : 'staking--hidden'}
+        className={basePath === pathname ? "" : "staking--hidden"}
         favorites={favorites}
         hasQueries={hasQueries}
         stakingOverview={stakingOverview}
@@ -173,7 +161,9 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
   );
 }
 
-export default React.memo(styled(StakingApp)(({ theme }: ThemeProps) => `
+export default React.memo(
+  styled(StakingApp)(
+    ({ theme }: ThemeProps) => `
   .staking--hidden {
     display: none;
   }
@@ -206,15 +196,19 @@ export default React.memo(styled(StakingApp)(({ theme }: ThemeProps) => `
     .ui--Expander-summary {
       color: var(--color-error);
 
-    ${theme.theme === 'dark'
-    ? `font-weight: bold;
+    ${
+      theme.theme === "dark"
+        ? `font-weight: bold;
       .ui--FormatBalance-value {
 
         > .ui--FormatBalance-postfix {
           opacity: 1;
         }
       }`
-    : ''};
+        : ""
+    };
     }
   }
-`));
+`
+  )
+);

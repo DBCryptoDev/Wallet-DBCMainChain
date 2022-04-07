@@ -1,41 +1,43 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
-import Tooltip from './Tooltip';
+import Tooltip from "./Tooltip";
 
 interface Props {
   className?: string;
-  color?: 'blue' | 'green' | 'grey' | 'orange' | 'pink' | 'red' | 'yellow' | 'theme';
+  color?: "blue" | "green" | "grey" | "orange" | "pink" | "red" | "yellow" | "theme";
   hover?: React.ReactNode;
   isTag?: boolean;
   label: React.ReactNode;
-  size?: 'small' | 'tiny';
+  size?: "small" | "tiny";
 }
 
 let tagId = 0;
 
-function Tag ({ className = '', color = 'grey', hover, isTag = true, label, size = 'small' }: Props): React.ReactElement<Props> {
+function Tag({
+  className = "",
+  color = "grey",
+  hover,
+  isTag = true,
+  label,
+  size = "small",
+}: Props): React.ReactElement<Props> {
   const [trigger] = useState(() => `tag-hover-${Date.now()}-${tagId++}`);
-  const tooltipProps = hover
-    ? { 'data-for': trigger, 'data-tip': true }
-    : {};
+  const tooltipProps = hover ? { "data-for": trigger, "data-tip": true } : {};
 
   return (
     <div
-      className={`${color === 'theme' ? 'highlight--color-bg highlight--bg' : ''} ${color}Color${isTag ? ' isTag' : ''} ${size}Size ${className}`}
-      color={color || 'grey'}
+      className={`${color === "theme" ? "highlight--color-bg highlight--bg" : ""} ${color}Color${
+        isTag ? " isTag" : ""
+      } ${size}Size ${className}`}
+      color={color || "grey"}
       {...tooltipProps}
     >
       {label}
-      {hover && (
-        <Tooltip
-          text={hover}
-          trigger={trigger}
-        />
-      )}
+      {hover && <Tooltip text={hover} trigger={trigger} />}
     </div>
   );
 }
@@ -54,7 +56,7 @@ export default React.memo(styled(Tag)`
   z-index: 1;
 
   &.tinySize {
-    font-size: .71428571rem;
+    font-size: 0.71428571rem;
   }
 
   &.blueColor {
@@ -93,7 +95,7 @@ export default React.memo(styled(Tag)`
     &:after {
       background-color: #fff;
       border-radius: 500rem;
-      content: '';
+      content: "";
       left: -0.25em;
       margin-top: -0.25em;
       position: absolute;
@@ -105,7 +107,7 @@ export default React.memo(styled(Tag)`
     &:before {
       background-color: inherit;
       background-image: none;
-      content: '';
+      content: "";
       right: 100%;
       width: 1.56em;
       height: 1.56em;

@@ -2,15 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { Codec } from '@polkadot/types/types';
-import type { CallOptions, CallParam, CallParams } from './types';
-import type { MountedRef } from './useIsMountedRef';
+import type { Codec } from "@polkadot/types/types";
+import type { CallOptions, CallParam, CallParams } from "./types";
+import type { MountedRef } from "./useIsMountedRef";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
-import { isNull, isUndefined } from '@polkadot/util';
+import { isNull, isUndefined } from "@polkadot/util";
 
-import { useIsMountedRef } from './useIsMountedRef';
+import { useIsMountedRef } from "./useIsMountedRef";
 
 type VoidFn = () => void;
 
@@ -40,22 +40,24 @@ interface TrackerRef {
 }
 
 // the default transform, just returns what we have
-export function transformIdentity <T> (value: unknown): T {
+export function transformIdentity<T>(value: unknown): T {
   return value as T;
 }
 
 // extract the serialized and mapped params, all ready for use in our call
-function extractParams <T> (fn: unknown, params: unknown[], { paramMap = transformIdentity }: CallOptions<T> = {}): [string, CallParams | null] {
+function extractParams<T>(
+  fn: unknown,
+  params: unknown[],
+  { paramMap = transformIdentity }: CallOptions<T> = {}
+): [string, CallParams | null] {
   return [
     JSON.stringify({ f: (fn as { name: string })?.name, p: params }),
-    params.length === 0 || !params.some((param) => isNull(param) || isUndefined(param))
-      ? paramMap(params)
-      : null
+    params.length === 0 || !params.some((param) => isNull(param) || isUndefined(param)) ? paramMap(params) : null,
   ];
 }
 
 // unsubscribe and remove from  the tracker
-export function unsubscribe (tracker: TrackerRef): void {
+export function unsubscribe(tracker: TrackerRef): void {
   tracker.current.isActive = false;
 
   if (tracker.current.subscriber) {
@@ -65,7 +67,14 @@ export function unsubscribe (tracker: TrackerRef): void {
 }
 
 // subscribe, trying to play nice with the browser threads
-function subscribe <T> (mountedRef: MountedRef, tracker: TrackerRef, fn: TrackFn | undefined, params: CallParams, setValue: (value: T) => void, { transform = transformIdentity, withParams, withParamsTransform }: CallOptions<T> = {}): void {
+function subscribe<T>(
+  mountedRef: MountedRef,
+  tracker: TrackerRef,
+  fn: TrackFn | undefined,
+  params: CallParams,
+  setValue: (value: T) => void,
+  { transform = transformIdentity, withParams, withParamsTransform }: CallOptions<T> = {}
+): void {
   const validParams = params.filter((p) => !isUndefined(p));
 
   unsubscribe(tracker);
@@ -76,18 +85,23 @@ function subscribe <T> (mountedRef: MountedRef, tracker: TrackerRef, fn: TrackFn
         // swap to acive mode
         tracker.current.isActive = true;
 
-        tracker.current.subscriber = (fn as (...params: unknown[]) => Promise<VoidFn>)(...params, (value: Codec): void => {
-          // we use the isActive flag here since .subscriber may not be set on immediate callback)
-          if (mountedRef.current && tracker.current.isActive) {
-            mountedRef.current && tracker.current.isActive && setValue(
-              withParams
-                ? [params, transform(value)] as any
-                : withParamsTransform
-                  ? transform([params, value])
-                  : transform(value)
-            );
+        tracker.current.subscriber = (fn as (...params: unknown[]) => Promise<VoidFn>)(
+          ...params,
+          (value: Codec): void => {
+            // we use the isActive flag here since .subscriber may not be set on immediate callback)
+            if (mountedRef.current && tracker.current.isActive) {
+              mountedRef.current &&
+                tracker.current.isActive &&
+                setValue(
+                  withParams
+                    ? ([params, transform(value)] as any)
+                    : withParamsTransform
+                    ? transform([params, value])
+                    : transform(value)
+                );
+            }
           }
-        });
+        );
       } else {
         tracker.current.subscriber = null;
       }
@@ -99,13 +113,17 @@ function subscribe <T> (mountedRef: MountedRef, tracker: TrackerRef, fn: TrackFn
 //  - returns a promise with an unsubscribe function
 //  - has a callback to set the value
 // FIXME The typings here need some serious TLC
-export function useCall <T> (fn: TrackFn | undefined | null | false, params?: CallParams, options?: CallOptions<T>): T | undefined {
+export function useCall<T>(
+  fn: TrackFn | undefined | null | false,
+  params?: CallParams,
+  options?: CallOptions<T>
+): T | undefined {
   const mountedRef = useIsMountedRef();
   const tracker = useRef<Tracker>({ isActive: false, serialized: null, subscriber: null });
   const [value, setValue] = useState<T | undefined>((options || {}).defaultValue);
 
   // initial effect, we need an un-subscription
-  useEffect((): () => void => {
+  useEffect((): (() => void) => {
     return () => unsubscribe(tracker);
   }, []);
 

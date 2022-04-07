@@ -1,23 +1,23 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { LinkOption } from '@polkadot/apps-config/settings/types';
-import type { Group } from './types';
+import type { LinkOption } from "@polkadot/apps-config/settings/types";
+import type { Group } from "./types";
 
 // ok, this seems to be an eslint bug, this _is_ a package import
 /* eslint-disable-next-line node/no-deprecated-api */
-import punycode from 'punycode';
-import React, { useCallback, useMemo, useState } from 'react';
-import store from 'store';
-import styled from 'styled-components';
+import punycode from "punycode";
+import React, { useCallback, useMemo, useState } from "react";
+import store from "store";
+import styled from "styled-components";
 
-import { createWsEndpoints, CUSTOM_ENDPOINT_KEY } from '@polkadot/apps-config';
-import { Button, Input, Sidebar } from '@polkadot/react-components';
-import { settings } from '@polkadot/ui-settings';
-import { isAscii } from '@polkadot/util';
+import { createWsEndpoints, CUSTOM_ENDPOINT_KEY } from "@polkadot/apps-config";
+import { Button, Input, Sidebar } from "@polkadot/react-components";
+import { settings } from "@polkadot/ui-settings";
+import { isAscii } from "@polkadot/util";
 
-import { useTranslation } from '../translate';
-import GroupDisplay from './Group';
+import { useTranslation } from "../translate";
+import GroupDisplay from "./Group";
 
 interface Props {
   className?: string;
@@ -32,18 +32,18 @@ interface UrlState {
   isUrlValid: boolean;
 }
 
-const STORAGE_AFFINITIES = 'network:affinities';
+const STORAGE_AFFINITIES = "network:affinities";
 
-function isValidUrl (url: string): boolean {
+function isValidUrl(url: string): boolean {
   return (
     // some random length... we probably want to parse via some lib
-    (url.length >= 7) &&
+    url.length >= 7 &&
     // check that it starts with a valid ws identifier
-    (url.startsWith('ws://') || url.startsWith('wss://'))
+    (url.startsWith("ws://") || url.startsWith("wss://"))
   );
 }
 
-function combineEndpoints (endpoints: LinkOption[]): Group[] {
+function combineEndpoints(endpoints: LinkOption[]): Group[] {
   return endpoints.reduce((result: Group[], e): Group[] => {
     if (e.isHeader) {
       result.push({ header: e.text, isDevelopment: e.isDevelopment, networks: [] });
@@ -58,7 +58,7 @@ function combineEndpoints (endpoints: LinkOption[]): Group[] {
           icon: e.info,
           isChild: e.isChild,
           name: e.text as string,
-          providers: [prov]
+          providers: [prov],
         });
       }
     }
@@ -67,7 +67,7 @@ function combineEndpoints (endpoints: LinkOption[]): Group[] {
   }, []);
 }
 
-function getCustomEndpoints (): string[] {
+function getCustomEndpoints(): string[] {
   try {
     const storedAsset = localStorage.getItem(CUSTOM_ENDPOINT_KEY);
 
@@ -82,11 +82,9 @@ function getCustomEndpoints (): string[] {
   return [];
 }
 
-function extractUrlState (apiUrl: string, groups: Group[]): UrlState {
+function extractUrlState(apiUrl: string, groups: Group[]): UrlState {
   let groupIndex = groups.findIndex(({ networks }) =>
-    networks.some(({ providers }) =>
-      providers.some(({ url }) => url === apiUrl)
-    )
+    networks.some(({ providers }) => providers.some(({ url }) => url === apiUrl))
   );
 
   if (groupIndex === -1) {
@@ -97,31 +95,33 @@ function extractUrlState (apiUrl: string, groups: Group[]): UrlState {
     apiUrl,
     groupIndex,
     hasUrlChanged: settings.get().apiUrl !== apiUrl,
-    isUrlValid: isValidUrl(apiUrl)
+    isUrlValid: isValidUrl(apiUrl),
   };
 }
 
-function loadAffinities (groups: Group[]): Record<string, string> {
-  return Object
-    .entries<string>(store.get(STORAGE_AFFINITIES) || {})
+function loadAffinities(groups: Group[]): Record<string, string> {
+  return Object.entries<string>(store.get(STORAGE_AFFINITIES) || {})
     .filter(([network, apiUrl]) =>
       groups.some(({ networks }) =>
-        networks.some(({ name, providers }) =>
-          name === network && providers.some(({ url }) => url === apiUrl)
-        )
+        networks.some(({ name, providers }) => name === network && providers.some(({ url }) => url === apiUrl))
       )
     )
-    .reduce((result: Record<string, string>, [network, apiUrl]): Record<string, string> => ({
-      ...result,
-      [network]: apiUrl
-    }), {});
+    .reduce(
+      (result: Record<string, string>, [network, apiUrl]): Record<string, string> => ({
+        ...result,
+        [network]: apiUrl,
+      }),
+      {}
+    );
 }
 
-function Endpoints ({ className = '', offset, onClose }: Props): React.ReactElement<Props> {
+function Endpoints({ className = "", offset, onClose }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const linkOptions = createWsEndpoints(t);
   const [groups, setGroups] = useState(() => combineEndpoints(linkOptions));
-  const [{ apiUrl, groupIndex, hasUrlChanged, isUrlValid }, setApiUrl] = useState<UrlState>(() => extractUrlState(settings.get().apiUrl, groups));
+  const [{ apiUrl, groupIndex, hasUrlChanged, isUrlValid }, setApiUrl] = useState<UrlState>(() =>
+    extractUrlState(settings.get().apiUrl, groups)
+  );
   const [storedCustomEndpoints, setStoredCustomEndpoints] = useState<string[]>(() => getCustomEndpoints());
   const [affinities, setAffinities] = useState(() => loadAffinities(groups));
 
@@ -157,10 +157,7 @@ function Endpoints ({ className = '', offset, onClose }: Props): React.ReactElem
     return result;
   }, [apiUrl, storedCustomEndpoints]);
 
-  const _changeGroup = useCallback(
-    (groupIndex: number) => setApiUrl((state) => ({ ...state, groupIndex })),
-    []
-  );
+  const _changeGroup = useCallback((groupIndex: number) => setApiUrl((state) => ({ ...state, groupIndex })), []);
 
   const _saveApiEndpoint = () => {
     try {
@@ -212,71 +209,69 @@ function Endpoints ({ className = '', offset, onClose }: Props): React.ReactElem
     [groups]
   );
 
-  const _onApply = useCallback(
-    (): void => {
-      settings.set({ ...(settings.get()), apiUrl });
+  const _onApply = useCallback((): void => {
+    settings.set({ ...settings.get(), apiUrl });
 
-      window.location.assign(`${window.location.origin}${window.location.pathname}?rpc=${encodeURIComponent(apiUrl)}${window.location.hash}`);
-      // window.location.reload();
+    window.location.assign(
+      `${window.location.origin}${window.location.pathname}?rpc=${encodeURIComponent(apiUrl)}${window.location.hash}`
+    );
+    // window.location.reload();
 
-      onClose();
-    },
-    [apiUrl, onClose]
-  );
+    onClose();
+  }, [apiUrl, onClose]);
 
   return (
     <Sidebar
       button={
         <Button
-          icon='sync'
+          icon="sync"
           isDisabled={!(hasUrlChanged && isUrlValid)}
-          label={t<string>('Switch')}
+          label={t<string>("Switch")}
           onClick={_onApply}
         />
       }
       className={className}
       offset={offset}
       onClose={onClose}
-      position='left'
+      position="left"
     >
-      {groups.map((group, index): React.ReactNode => (
-        <GroupDisplay
-          affinities={affinities}
-          apiUrl={apiUrl}
-          index={index}
-          isSelected={groupIndex === index}
-          key={index}
-          setApiUrl={_setApiUrl}
-          setGroup={_changeGroup}
-          value={group}
-        >
-          {group.isDevelopment && (
-            <div className='endpointCustomWrapper'>
-              <Input
-                className='endpointCustom'
-                isError={!isUrlValid}
-                isFull
-                label={t<string>('custom endpoint')}
-                onChange={_onChangeCustom}
-                value={apiUrl}
-              />
-              {isSavedCustomEndpoint
-                ? <Button
-                  className='customButton'
-                  icon='trash-alt'
-                  onClick={_removeApiEndpoint}
+      {groups.map(
+        (group, index): React.ReactNode => (
+          <GroupDisplay
+            affinities={affinities}
+            apiUrl={apiUrl}
+            index={index}
+            isSelected={groupIndex === index}
+            key={index}
+            setApiUrl={_setApiUrl}
+            setGroup={_changeGroup}
+            value={group}
+          >
+            {group.isDevelopment && (
+              <div className="endpointCustomWrapper">
+                <Input
+                  className="endpointCustom"
+                  isError={!isUrlValid}
+                  isFull
+                  label={t<string>("custom endpoint")}
+                  onChange={_onChangeCustom}
+                  value={apiUrl}
                 />
-                : <Button
-                  className='customButton'
-                  icon='save'
-                  isDisabled={!isUrlValid || isKnownUrl}
-                  onClick={_saveApiEndpoint}
-                />
-              }
-            </div>
-          )}
-        </GroupDisplay>
-      ))}
+                {isSavedCustomEndpoint ? (
+                  <Button className="customButton" icon="trash-alt" onClick={_removeApiEndpoint} />
+                ) : (
+                  <Button
+                    className="customButton"
+                    icon="save"
+                    isDisabled={!isUrlValid || isKnownUrl}
+                    onClick={_saveApiEndpoint}
+                  />
+                )}
+              </div>
+            )}
+          </GroupDisplay>
+        )
+      )}
     </Sidebar>
   );
 }

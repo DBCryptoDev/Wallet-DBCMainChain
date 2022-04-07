@@ -1,21 +1,21 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { KeyringJson } from '@polkadot/ui-keyring/types';
+import type { KeyringJson } from "@polkadot/ui-keyring/types";
 
-import * as tmp from 'tmp';
+import * as tmp from "tmp";
 
-import { FileStore } from '@polkadot/ui-keyring/stores';
+import { FileStore } from "@polkadot/ui-keyring/stores";
 
-import { accountStoreIpcHandler } from './account-store';
-import { IpcMainHandler } from './ipc-main-handler';
+import { accountStoreIpcHandler } from "./account-store";
+import { IpcMainHandler } from "./ipc-main-handler";
 
 const exampleAccount = (address: string): KeyringJson => ({
   address,
-  meta: {}
+  meta: {},
 });
 
-describe('Account store', () => {
+describe("Account store", () => {
   let accountStore: IpcMainHandler;
   let tmpDir: tmp.DirResult;
 
@@ -28,35 +28,40 @@ describe('Account store', () => {
     tmpDir.removeCallback();
   });
 
-  it('all returns empty array at first', () => {
-    expect(accountStore['account-store-all']()).toEqual([]);
+  it("all returns empty array at first", () => {
+    expect(accountStore["account-store-all"]()).toEqual([]);
   });
 
-  it('after adding accounts, they become visible', async () => {
-    await accountStore['account-store-set']('1', exampleAccount('a'));
-    await accountStore['account-store-set']('2', exampleAccount('b'));
+  it("after adding accounts, they become visible", async () => {
+    await accountStore["account-store-set"]("1", exampleAccount("a"));
+    await accountStore["account-store-set"]("2", exampleAccount("b"));
 
-    expect(accountStore['account-store-all']()).toEqual([{
-      key: '1', value: exampleAccount('a')
-    }, {
-      key: '2', value: exampleAccount('b')
-    }]);
+    expect(accountStore["account-store-all"]()).toEqual([
+      {
+        key: "1",
+        value: exampleAccount("a"),
+      },
+      {
+        key: "2",
+        value: exampleAccount("b"),
+      },
+    ]);
   });
 
-  it('get returns account if exists', async () => {
-    await accountStore['account-store-set']('1', exampleAccount('a'));
-    expect(await accountStore['account-store-get']('1')).toEqual(exampleAccount('a'));
+  it("get returns account if exists", async () => {
+    await accountStore["account-store-set"]("1", exampleAccount("a"));
+    expect(await accountStore["account-store-get"]("1")).toEqual(exampleAccount("a"));
   });
 
-  it('get returns null if account does not exist', async () => {
-    expect(await accountStore['account-store-get']('1')).toEqual(null);
+  it("get returns null if account does not exist", async () => {
+    expect(await accountStore["account-store-get"]("1")).toEqual(null);
   });
 
-  it('account disappears from list after it is removed', async () => {
-    await accountStore['account-store-set']('1', exampleAccount('a'));
-    await accountStore['account-store-remove']('1');
+  it("account disappears from list after it is removed", async () => {
+    await accountStore["account-store-set"]("1", exampleAccount("a"));
+    await accountStore["account-store-remove"]("1");
 
-    expect(await accountStore['account-store-get']('1')).toEqual(null);
-    expect(accountStore['account-store-all']()).toEqual([]);
+    expect(await accountStore["account-store-get"]("1")).toEqual(null);
+    expect(accountStore["account-store-all"]()).toEqual([]);
   });
 });

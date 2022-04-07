@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React from "react";
 
-import CopyButton from './CopyButton';
-import Labelled from './Labelled';
+import CopyButton from "./CopyButton";
+import Labelled from "./Labelled";
 
 interface Props {
   children?: React.ReactNode;
@@ -22,7 +22,19 @@ interface Props {
   withLabel?: boolean;
 }
 
-function Static ({ children, className = '', defaultValue, help, isFull, isHidden, isSmall, label, value, withCopy, withLabel }: Props): React.ReactElement<Props> {
+function Static({
+  children,
+  className = "",
+  defaultValue,
+  help,
+  isFull,
+  isHidden,
+  isSmall,
+  label,
+  value,
+  withCopy,
+  withLabel,
+}: Props): React.ReactElement<Props> {
   return (
     <Labelled
       className={className}
@@ -33,13 +45,11 @@ function Static ({ children, className = '', defaultValue, help, isFull, isHidde
       label={label}
       withLabel={withLabel}
     >
-      <div className='ui--Static ui dropdown selection disabled'>
+      <div className="ui--Static ui dropdown selection disabled">
         {value || defaultValue}
         {children}
       </div>
-      {withCopy && (
-        <CopyButton value={value} />
-      )}
+      {withCopy && <CopyButton value={value} />}
     </Labelled>
   );
 }

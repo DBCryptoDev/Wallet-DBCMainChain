@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/app-extrinsics authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SubmittableExtrinsic, SubmittableExtrinsicFunction } from '@polkadot/api/types';
-import type { RawParamOnChange, RawParamOnEnter, RawParamOnEscape } from '@polkadot/react-params/types';
+import type { SubmittableExtrinsic, SubmittableExtrinsicFunction } from "@polkadot/api/types";
+import type { RawParamOnChange, RawParamOnEnter, RawParamOnEscape } from "@polkadot/react-params/types";
 
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-import BaseExtrinsic from '../Extrinsic';
+import BaseExtrinsic from "../Extrinsic";
 
 interface Props {
   className?: string;
-  defaultValue: SubmittableExtrinsicFunction<'promise'>;
+  defaultValue: SubmittableExtrinsicFunction<"promise">;
   isDisabled?: boolean;
   isError?: boolean;
   isPrivate: boolean;
@@ -21,12 +21,24 @@ interface Props {
   withLabel?: boolean;
 }
 
-function ExtrinsicDisplay ({ className = '', defaultValue, isDisabled, isError, isPrivate, label, onChange, onEnter, onEscape, withLabel }: Props): React.ReactElement<Props> {
+function ExtrinsicDisplay({
+  className = "",
+  defaultValue,
+  isDisabled,
+  isError,
+  isPrivate,
+  label,
+  onChange,
+  onEnter,
+  onEscape,
+  withLabel,
+}: Props): React.ReactElement<Props> {
   const _onChange = useCallback(
-    (method?: SubmittableExtrinsic<'promise'>): void =>
-      onChange && onChange({
+    (method?: SubmittableExtrinsic<"promise">): void =>
+      onChange &&
+      onChange({
         isValid: !!method,
-        value: method
+        value: method,
       }),
     [onChange]
   );

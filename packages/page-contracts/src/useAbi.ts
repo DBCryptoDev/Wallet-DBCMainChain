@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from "react";
 
-import { Abi } from '@polkadot/api-contract';
-import { api } from '@polkadot/react-api';
-import { u8aToString } from '@polkadot/util';
+import { Abi } from "@polkadot/api-contract";
+import { api } from "@polkadot/react-api";
+import { u8aToString } from "@polkadot/util";
 
-import store from './store';
+import store from "./store";
 
 interface AbiState {
   abi: string | null;
@@ -24,7 +24,7 @@ interface UseAbi extends AbiState {
   onRemoveAbi: () => void;
 }
 
-function fromInitial (initialValue: [string | null | undefined, Abi | null | undefined], isRequired: boolean): AbiState {
+function fromInitial(initialValue: [string | null | undefined, Abi | null | undefined], isRequired: boolean): AbiState {
   return {
     abi: initialValue[0] || null,
     abiName: null,
@@ -32,7 +32,7 @@ function fromInitial (initialValue: [string | null | undefined, Abi | null | und
     errorText: null,
     isAbiError: false,
     isAbiSupplied: !!initialValue[1],
-    isAbiValid: !isRequired || !!initialValue[1]
+    isAbiValid: !isRequired || !!initialValue[1],
   };
 }
 
@@ -43,18 +43,21 @@ const EMPTY: AbiState = {
   errorText: null,
   isAbiError: false,
   isAbiSupplied: false,
-  isAbiValid: false
+  isAbiValid: false,
 };
 
-export default function useAbi (initialValue: [string | null | undefined, Abi | null | undefined] = [null, null], codeHash: string | null = null, isRequired = false): UseAbi {
+export default function useAbi(
+  initialValue: [string | null | undefined, Abi | null | undefined] = [null, null],
+  codeHash: string | null = null,
+  isRequired = false
+): UseAbi {
   const [state, setAbi] = useState<AbiState>(() => fromInitial(initialValue, isRequired));
 
   useEffect(
-    () => setAbi((state) =>
-      initialValue[0] && state.abi !== initialValue[0]
-        ? fromInitial(initialValue, isRequired)
-        : state
-    ),
+    () =>
+      setAbi((state) =>
+        initialValue[0] && state.abi !== initialValue[0] ? fromInitial(initialValue, isRequired) : state
+      ),
     [initialValue, isRequired]
   );
 
@@ -65,12 +68,12 @@ export default function useAbi (initialValue: [string | null | undefined, Abi | 
       try {
         setAbi({
           abi: json,
-          abiName: name.replace('.contract', '').replace('.json', '').replace('_', ' '),
+          abiName: name.replace(".contract", "").replace(".json", "").replace("_", " "),
           contractAbi: new Abi(json, api.registry.getChainProperties()),
           errorText: null,
           isAbiError: false,
           isAbiSupplied: true,
-          isAbiValid: true
+          isAbiValid: true,
         });
 
         codeHash && store.saveCode(codeHash, { abi: json });
@@ -83,18 +86,15 @@ export default function useAbi (initialValue: [string | null | undefined, Abi | 
     [codeHash]
   );
 
-  const onRemoveAbi = useCallback(
-    (): void => {
-      setAbi(EMPTY);
+  const onRemoveAbi = useCallback((): void => {
+    setAbi(EMPTY);
 
-      codeHash && store.saveCode(codeHash, { abi: null });
-    },
-    [codeHash]
-  );
+    codeHash && store.saveCode(codeHash, { abi: null });
+  }, [codeHash]);
 
   return {
     ...state,
     onChangeAbi,
-    onRemoveAbi
+    onRemoveAbi,
   };
 }

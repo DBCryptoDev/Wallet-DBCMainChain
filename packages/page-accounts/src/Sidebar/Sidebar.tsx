@@ -1,19 +1,28 @@
 // Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import styled from "styled-components";
 
-import { AccountName, Button, Icon, IdentityIcon, Input, LinkExternal, Sidebar, Tags } from '@polkadot/react-components';
-import { colorLink } from '@polkadot/react-components/styles/theme';
-import { useAccountInfo, useToggle } from '@polkadot/react-hooks';
+import {
+  AccountName,
+  Button,
+  Icon,
+  IdentityIcon,
+  Input,
+  LinkExternal,
+  Sidebar,
+  Tags,
+} from "@polkadot/react-components";
+import { colorLink } from "@polkadot/react-components/styles/theme";
+import { useAccountInfo, useToggle } from "@polkadot/react-hooks";
 
-import Transfer from '../modals/Transfer';
-import { useTranslation } from '../translate';
-import Balances from './Balances';
-import Flags from './Flags';
-import Identity from './Identity';
-import Multisig from './Multisig';
+import Transfer from "../modals/Transfer";
+import { useTranslation } from "../translate";
+import Balances from "./Balances";
+import Flags from "./Flags";
+import Identity from "./Identity";
+import Multisig from "./Multisig";
 
 interface Props {
   address: string;
@@ -22,138 +31,95 @@ interface Props {
   onUpdateName: () => void;
 }
 
-function FullSidebar ({ address, className = '', onClose, onUpdateName }: Props): React.ReactElement<Props> {
+function FullSidebar({ address, className = "", onClose, onUpdateName }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { accountIndex, flags, identity, isEditingName, isEditingTags, meta, name, onForgetAddress, onSaveName, onSaveTags, setName, setTags, tags, toggleIsEditingName, toggleIsEditingTags } = useAccountInfo(address);
+  const {
+    accountIndex,
+    flags,
+    identity,
+    isEditingName,
+    isEditingTags,
+    meta,
+    name,
+    onForgetAddress,
+    onSaveName,
+    onSaveTags,
+    setName,
+    setTags,
+    tags,
+    toggleIsEditingName,
+    toggleIsEditingTags,
+  } = useAccountInfo(address);
   const [isTransferOpen, toggleIsTransferOpen] = useToggle();
 
-  const _onForgetAddress = useCallback(
-    (): void => {
-      onForgetAddress();
-      onUpdateName && onUpdateName();
-    },
-    [onForgetAddress, onUpdateName]
-  );
+  const _onForgetAddress = useCallback((): void => {
+    onForgetAddress();
+    onUpdateName && onUpdateName();
+  }, [onForgetAddress, onUpdateName]);
 
-  const _onUpdateName = useCallback(
-    (): void => {
-      onSaveName();
-      onUpdateName && onUpdateName();
-    },
-    [onSaveName, onUpdateName]
-  );
+  const _onUpdateName = useCallback((): void => {
+    onSaveName();
+    onUpdateName && onUpdateName();
+  }, [onSaveName, onUpdateName]);
 
   return (
-    <Sidebar
-      className={className}
-      onClose={onClose}
-      position='right'
-    >
-      <div className='ui--AddressMenu-header'>
-        <IdentityIcon
-          size={80}
-          value={address}
-        />
-        <div className='ui--AddressMenu-addr'>
-          {address}
-        </div>
-        {accountIndex && (
-          <div className='ui--AddressMenu-addr'>
-            {accountIndex}
-          </div>
-        )}
+    <Sidebar className={className} onClose={onClose} position="right">
+      <div className="ui--AddressMenu-header">
+        <IdentityIcon size={80} value={address} />
+        <div className="ui--AddressMenu-addr">{address}</div>
+        {accountIndex && <div className="ui--AddressMenu-addr">{accountIndex}</div>}
         <AccountName
-          onClick={(flags.isEditable && !isEditingName) ? toggleIsEditingName : undefined}
+          onClick={flags.isEditable && !isEditingName ? toggleIsEditingName : undefined}
           override={
-            isEditingName
-              ? (
-                <Input
-                  autoFocus
-                  className='name--input'
-                  defaultValue={name}
-                  onBlur={(flags.isInContacts || flags.isOwned) ? _onUpdateName : undefined}
-                  onChange={setName}
-                  withLabel={false}
-                />
-              )
-              : flags.isEditable
-                ? (name.toUpperCase() || t<string>('<unknown>'))
-                : undefined
+            isEditingName ? (
+              <Input
+                autoFocus
+                className="name--input"
+                defaultValue={name}
+                onBlur={flags.isInContacts || flags.isOwned ? _onUpdateName : undefined}
+                onChange={setName}
+                withLabel={false}
+              />
+            ) : flags.isEditable ? (
+              name.toUpperCase() || t<string>("<unknown>")
+            ) : undefined
           }
           value={address}
           withSidebar={false}
         >
-          {(!isEditingName && flags.isEditable) && (
-            <Icon
-              className='inline-icon'
-              icon='edit'
-            />
-          )}
+          {!isEditingName && flags.isEditable && <Icon className="inline-icon" icon="edit" />}
         </AccountName>
-        <div className='ui--AddressMenu-tags'>
+        <div className="ui--AddressMenu-tags">
           <Tags
             isEditable
             isEditing={isEditingTags}
             onChange={setTags}
             onSave={onSaveTags}
             onToggleIsEditing={toggleIsEditingTags}
-            size='tiny'
+            size="tiny"
             value={tags}
           />
         </div>
         <Flags flags={flags} />
-        <div className='ui--AddressMenu-buttons'>
+        <div className="ui--AddressMenu-buttons">
           <Button.Group>
-            <Button
-              icon='paper-plane'
-              label={t<string>('Send')}
-              onClick={toggleIsTransferOpen}
-            />
-            {flags.isOwned && (
-              <Button
-                icon='check'
-                isBasic
-                label={t<string>('Owned')}
-              />
-            )}
+            <Button icon="paper-plane" label={t<string>("Send")} onClick={toggleIsTransferOpen} />
+            {flags.isOwned && <Button icon="check" isBasic label={t<string>("Owned")} />}
             {!flags.isOwned && !flags.isInContacts && (
-              <Button
-                icon='plus'
-                label={t<string>('Save')}
-                onClick={_onUpdateName}
-              />
+              <Button icon="plus" label={t<string>("Save")} onClick={_onUpdateName} />
             )}
             {!flags.isOwned && flags.isInContacts && (
-              <Button
-                icon='ban'
-                label={t<string>('Remove')}
-                onClick={_onForgetAddress}
-              />
+              <Button icon="ban" label={t<string>("Remove")} onClick={_onForgetAddress} />
             )}
           </Button.Group>
-          {isTransferOpen && (
-            <Transfer
-              key='modal-transfer'
-              onClose={toggleIsTransferOpen}
-              recipientId={address}
-            />
-          )}
+          {isTransferOpen && <Transfer key="modal-transfer" onClose={toggleIsTransferOpen} recipientId={address} />}
         </div>
       </div>
       <Balances address={address} />
-      <Identity
-        address={address}
-        identity={identity}
-      />
-      <Multisig
-        isMultisig={flags.isMultisig}
-        meta={meta}
-      />
+      <Identity address={address} identity={identity} />
+      <Multisig isMultisig={flags.isMultisig} meta={meta} />
       <section>
-        <LinkExternal
-          data={address}
-          type='address'
-        />
+        <LinkExternal data={address} type="address" />
       </section>
     </Sidebar>
   );
@@ -183,7 +149,7 @@ export default React.memo(styled(FullSidebar)`
     width: 26ch;
   }
 
-  .ui--AddressMenu-addr+.ui--AddressMenu-addr {
+  .ui--AddressMenu-addr + .ui--AddressMenu-addr {
     margin-top: -0.25rem;
   }
 
@@ -233,7 +199,8 @@ export default React.memo(styled(FullSidebar)`
       }
     }
 
-    .parent, .subs {
+    .parent,
+    .subs {
       padding: 0 !important;
     }
   }
@@ -288,7 +255,7 @@ export default React.memo(styled(FullSidebar)`
   .inline-icon {
     cursor: pointer;
     margin: 0 0 0 0.5rem;
-    color:  ${colorLink};
+    color: ${colorLink};
   }
 
   .name--input {
@@ -300,7 +267,7 @@ export default React.memo(styled(FullSidebar)`
         background: rgba(230, 230, 230, 0.8) !important;
         border: 0 !important;
         border-radius: 0 !important;
-        box-shadow: 0 3px 3px rgba(0,0,0,.2);
+        box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
       }
     }
   }

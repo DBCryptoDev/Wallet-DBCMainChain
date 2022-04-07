@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useMemo } from "react";
+import styled from "styled-components";
 
-import { Button, IdentityIcon } from '@polkadot/react-components';
-import { u8aToHex } from '@polkadot/util';
+import { Button, IdentityIcon } from "@polkadot/react-components";
+import { u8aToHex } from "@polkadot/util";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 interface Props {
   address: string;
@@ -19,51 +19,37 @@ interface Props {
   seed: Uint8Array;
 }
 
-function Match ({ address, className = '', count, offset, onCreateToggle, onRemove, seed }: Props): React.ReactElement<Props> {
+function Match({
+  address,
+  className = "",
+  count,
+  offset,
+  onCreateToggle,
+  onRemove,
+  seed,
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
-  const hexSeed = useMemo(
-    () => u8aToHex(seed),
-    [seed]
-  );
-  const _onCreate = useCallback(
-    () => onCreateToggle(hexSeed),
-    [hexSeed, onCreateToggle]
-  );
-  const _onRemove = useCallback(
-    () => onRemove(address),
-    [address, onRemove]
-  );
+  const hexSeed = useMemo(() => u8aToHex(seed), [seed]);
+  const _onCreate = useCallback(() => onCreateToggle(hexSeed), [hexSeed, onCreateToggle]);
+  const _onRemove = useCallback(() => onRemove(address), [address, onRemove]);
 
   return (
     <tr className={className}>
-      <td
-        className='number'
-        colSpan={2}
-      >
-        <IdentityIcon
-          className='vanity--Match-icon'
-          value={address}
-        />
+      <td className="number" colSpan={2}>
+        <IdentityIcon className="vanity--Match-icon" value={address} />
       </td>
-      <td className='address all'>
-        <div className='vanity--Match-addr'>
-          <span className='no'>{address.slice(0, offset)}</span><span className='yes'>{address.slice(offset, count + offset)}</span><span className='no'>{address.slice(count + offset)}</span>
+      <td className="address all">
+        <div className="vanity--Match-addr">
+          <span className="no">{address.slice(0, offset)}</span>
+          <span className="yes">{address.slice(offset, count + offset)}</span>
+          <span className="no">{address.slice(count + offset)}</span>
         </div>
       </td>
-      <td className='hash'>
-        {hexSeed}
-      </td>
-      <td className='button'>
-        <Button
-          icon='plus'
-          label={t<string>('Save')}
-          onClick={_onCreate}
-        />
-        <Button
-          icon='times'
-          onClick={_onRemove}
-        />
+      <td className="hash">{hexSeed}</td>
+      <td className="button">
+        <Button icon="plus" label={t<string>("Save")} onClick={_onCreate} />
+        <Button icon="times" onClick={_onRemove} />
       </td>
     </tr>
   );

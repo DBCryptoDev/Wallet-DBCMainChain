@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/app-claims authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { StatementKind } from '@polkadot/types/interfaces';
+import type { StatementKind } from "@polkadot/types/interfaces";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { useTranslation } from './translate';
-import { getStatement } from './util';
+import { useTranslation } from "./translate";
+import { getStatement } from "./util";
 
 export interface Props {
   className?: string;
@@ -16,22 +16,28 @@ export interface Props {
 }
 
 // Get the full hardcoded text for a statement
-function StatementFullText ({ statementUrl, systemChain }: { statementUrl?: string; systemChain: string }): React.ReactElement | null {
+function StatementFullText({
+  statementUrl,
+  systemChain,
+}: {
+  statementUrl?: string;
+  systemChain: string;
+}): React.ReactElement | null {
   const { t } = useTranslation();
 
   switch (systemChain) {
-    case 'Polkadot':
-    case 'Polkadot CC1':
-      return statementUrl
-        ? <iframe src={statementUrl} />
-        : null;
+    case "Polkadot":
+    case "Polkadot CC1":
+      return statementUrl ? <iframe src={statementUrl} /> : null;
 
     default:
-      return <p>{t('Warning: we did not find any attest statement for {{chain}}', { replace: { chain: systemChain } })}</p>;
+      return (
+        <p>{t("Warning: we did not find any attest statement for {{chain}}", { replace: { chain: systemChain } })}</p>
+      );
   }
 }
 
-function Statement ({ className, kind, systemChain }: Props): React.ReactElement<Props> | null {
+function Statement({ className, kind, systemChain }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const statementUrl = getStatement(systemChain, kind)?.url;
 
@@ -41,23 +47,21 @@ function Statement ({ className, kind, systemChain }: Props): React.ReactElement
 
   return (
     <div className={className}>
-      {t('Please read these terms and conditions carefully. By submitting this statement, you are deemed to have accepted these Terms and Conditions. If you do not agree to these terms, please refrain from accessing or proceeding. You can also find them at:')}
-      <a className='statementUrl'
-        href={statementUrl}
-        rel='noopener noreferrer'
-        target='_blank'>{statementUrl}</a>
-      <div className='statement'>
-        <StatementFullText
-          statementUrl={statementUrl}
-          systemChain={systemChain}
-        />
+      {t(
+        "Please read these terms and conditions carefully. By submitting this statement, you are deemed to have accepted these Terms and Conditions. If you do not agree to these terms, please refrain from accessing or proceeding. You can also find them at:"
+      )}
+      <a className="statementUrl" href={statementUrl} rel="noopener noreferrer" target="_blank">
+        {statementUrl}
+      </a>
+      <div className="statement">
+        <StatementFullText statementUrl={statementUrl} systemChain={systemChain} />
       </div>
     </div>
   );
 }
 
 export default React.memo(styled(Statement)`
-  .statement{
+  .statement {
     border: 1px solid #c2c2c2;
     background: #f2f2f2;
     height: 15rem;
@@ -77,7 +81,7 @@ export default React.memo(styled(Statement)`
     }
   }
 
-  .statementUrl{
-    margin-left: 0.3rem
+  .statementUrl {
+    margin-left: 0.3rem;
   }
 `);

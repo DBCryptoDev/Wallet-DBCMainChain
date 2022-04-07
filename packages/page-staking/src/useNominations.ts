@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Option, StorageKey } from '@polkadot/types';
-import type { Nominations } from '@polkadot/types/interfaces';
-import type { NominatedBy } from './types';
+import type { Option, StorageKey } from "@polkadot/types";
+import type { Nominations } from "@polkadot/types/interfaces";
+import type { NominatedBy } from "./types";
 
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { useApi, useCall } from "@polkadot/react-hooks";
 
 type Result = Record<string, NominatedBy[]>;
 
-function extractNominators (nominations: [StorageKey, Option<Nominations>][]): Result {
+function extractNominators(nominations: [StorageKey, Option<Nominations>][]): Result {
   return nominations.reduce((mapped: Result, [key, optNoms]) => {
     if (optNoms.isSome && key.args.length) {
       const nominatorId = key.args[0].toString();
@@ -33,12 +33,9 @@ function extractNominators (nominations: [StorageKey, Option<Nominations>][]): R
   }, {});
 }
 
-export default function useNominations (isActive = true): Result | undefined {
+export default function useNominations(isActive = true): Result | undefined {
   const { api } = useApi();
   const nominators = useCall<[StorageKey, Option<Nominations>][]>(isActive && api.query.staking.nominators.entries);
 
-  return useMemo(
-    () => nominators && extractNominators(nominators),
-    [nominators]
-  );
+  return useMemo(() => nominators && extractNominators(nominators), [nominators]);
 }

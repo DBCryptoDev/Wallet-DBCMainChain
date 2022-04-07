@@ -1,23 +1,23 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { RuntimeVersion } from '@polkadot/types/interfaces';
+import type { RuntimeVersion } from "@polkadot/types/interfaces";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { ChainImg, Icon } from '@polkadot/react-components';
-import { useApi, useCall, useIpfs, useToggle } from '@polkadot/react-hooks';
-import { BestNumber, Chain } from '@polkadot/react-query';
+import { ChainImg, Icon } from "@polkadot/react-components";
+import { useApi, useCall, useIpfs, useToggle } from "@polkadot/react-hooks";
+import { BestNumber, Chain } from "@polkadot/react-query";
 
-import Endpoints from '../Endpoints';
-import { useTranslation } from '../translate';
+import Endpoints from "../Endpoints";
+import { useTranslation } from "../translate";
 
 interface Props {
   className?: string;
 }
 
-function ChainInfo ({ className }: Props): React.ReactElement<Props> {
+function ChainInfo({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api, isApiReady } = useApi();
   const runtimeVersion = useCall<RuntimeVersion>(isApiReady && api.rpc.state.subscribeRuntimeVersion);
@@ -28,30 +28,22 @@ function ChainInfo ({ className }: Props): React.ReactElement<Props> {
   return (
     <div className={className}>
       <div
-        className={`apps--SideBar-logo-inner${canToggle ? ' isClickable' : ''} highlight--color-contrast`}
+        className={`apps--SideBar-logo-inner${canToggle ? " isClickable" : ""} highlight--color-contrast`}
         onClick={toggleEndpoints}
       >
         <ChainImg />
-        <div className='info media--1000'>
-          <Chain className='chain' />
+        <div className="info media--1000">
+          <Chain className="chain" />
           {runtimeVersion && (
-            <div className='runtimeVersion'>{t<string>('version {{version}}', { replace: { version: runtimeVersion.specVersion.toNumber() } })}</div>
+            <div className="runtimeVersion">
+              {t<string>("version {{version}}", { replace: { version: runtimeVersion.specVersion.toNumber() } })}
+            </div>
           )}
-          <BestNumber
-            className='bestNumber'
-            label='#'
-          />
+          <BestNumber className="bestNumber" label="#" />
         </div>
-        {canToggle && (
-          <Icon
-            className='dropdown'
-            icon={isEndpointsVisible ? 'caret-right' : 'caret-down'}
-          />
-        )}
+        {canToggle && <Icon className="dropdown" icon={isEndpointsVisible ? "caret-right" : "caret-down"} />}
       </div>
-      {isEndpointsVisible && (
-        <Endpoints onClose={toggleEndpoints} />
-      )}
+      {isEndpointsVisible && <Endpoints onClose={toggleEndpoints} />}
     </div>
   );
 }
@@ -100,15 +92,16 @@ export default React.memo(styled(ChainInfo)`
         text-overflow: ellipsis;
       }
 
-      .chain, .bestNumber {
+      .chain,
+      .bestNumber {
         font-size: 0.9rem;
         line-height: 1.2;
       }
 
       .runtimeVersion {
-          font-size: 0.75rem;
-          line-height: 1.2;
-          letter-spacing: -0.01em;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
       }
     }
   }

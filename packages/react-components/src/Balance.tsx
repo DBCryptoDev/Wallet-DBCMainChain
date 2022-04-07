@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
+import type { AccountId, AccountIndex, Address } from "@polkadot/types/interfaces";
 
-import BN from 'bn.js';
-import React from 'react';
+import BN from "bn.js";
+import React from "react";
 
-import { Balance, FormatBalance } from '@polkadot/react-query';
-import { BN_ZERO } from '@polkadot/util';
+import { Balance, FormatBalance } from "@polkadot/react-query";
+import { BN_ZERO } from "@polkadot/util";
 
 export interface RenderProps {
   className?: string;
@@ -23,7 +23,7 @@ export interface Props {
   withLabel?: boolean;
 }
 
-export function renderProvided ({ className = '', label, value }: RenderProps): React.ReactNode {
+export function renderProvided({ className = "", label, value }: RenderProps): React.ReactNode {
   let others: undefined | React.ReactNode;
 
   if (Array.isArray(value)) {
@@ -31,44 +31,29 @@ export function renderProvided ({ className = '', label, value }: RenderProps): 
     const total = totals.reduce((total, value): BN => total.add(value), BN_ZERO).gtn(0);
 
     if (total) {
-      others = totals.map((balance, index): React.ReactNode =>
-        <FormatBalance
-          key={index}
-          value={balance}
-        />
-      );
+      others = totals.map((balance, index): React.ReactNode => <FormatBalance key={index} value={balance} />);
     }
   }
 
   return (
-    <FormatBalance
-      className={`ui--Balance ${className}`}
-      label={label}
-      value={Array.isArray(value) ? value[0] : value}
-    >
-      {others && (
-        <span>&nbsp;(+{others})</span>
-      )}
+    <FormatBalance className={`ui--Balance ${className}`} label={label} value={Array.isArray(value) ? value[0] : value}>
+      {others && <span>&nbsp;(+{others})</span>}
     </FormatBalance>
   );
 }
 
-function BalanceDisplay (props: Props): React.ReactElement<Props> | null {
-  const { balance, className = '', label, params } = props;
+function BalanceDisplay(props: Props): React.ReactElement<Props> | null {
+  const { balance, className = "", label, params } = props;
 
   if (!params) {
     return null;
   }
 
-  return balance
-    ? <>{renderProvided({ className, label, value: balance })}</>
-    : (
-      <Balance
-        className={`ui--Balance ${className}`}
-        label={label}
-        params={params}
-      />
-    );
+  return balance ? (
+    <>{renderProvided({ className, label, value: balance })}</>
+  ) : (
+    <Balance className={`ui--Balance ${className}`} label={label} params={params} />
+  );
 }
 
 export default React.memo(BalanceDisplay);

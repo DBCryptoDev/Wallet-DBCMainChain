@@ -1,15 +1,15 @@
 // Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveElectionsInfo } from '@polkadot/api-derive/types';
-import type { AccountId } from '@polkadot/types/interfaces';
+import type { DeriveElectionsInfo } from "@polkadot/api-derive/types";
+import type { AccountId } from "@polkadot/types/interfaces";
 
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
 
-import { Table } from '@polkadot/react-components';
+import { Table } from "@polkadot/react-components";
 
-import { useTranslation } from '../translate';
-import Candidate from './Candidate';
+import { useTranslation } from "../translate";
+import Candidate from "./Candidate";
 
 interface Props {
   allVotes?: Record<string, AccountId[]>;
@@ -18,30 +18,24 @@ interface Props {
   prime?: AccountId | null;
 }
 
-function Members ({ allVotes = {}, className = '', electionsInfo, prime }: Props): React.ReactElement<Props> {
+function Members({ allVotes = {}, className = "", electionsInfo, prime }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
-  const headerRef = useRef([
-    [t('members'), 'start', 2],
-    [t('backing'), 'expand'],
-    [t('votes')]
-  ]);
+  const headerRef = useRef([[t("members"), "start", 2], [t("backing"), "expand"], [t("votes")]]);
 
   return (
-    <Table
-      className={className}
-      empty={electionsInfo && t<string>('No members found')}
-      header={headerRef.current}
-    >
-      {electionsInfo?.members.map(([accountId, balance]): React.ReactNode => (
-        <Candidate
-          address={accountId}
-          balance={balance}
-          isPrime={prime?.eq(accountId)}
-          key={accountId.toString()}
-          voters={allVotes[accountId.toString()]}
-        />
-      ))}
+    <Table className={className} empty={electionsInfo && t<string>("No members found")} header={headerRef.current}>
+      {electionsInfo?.members.map(
+        ([accountId, balance]): React.ReactNode => (
+          <Candidate
+            address={accountId}
+            balance={balance}
+            isPrime={prime?.eq(accountId)}
+            key={accountId.toString()}
+            voters={allVotes[accountId.toString()]}
+          />
+        )
+      )}
     </Table>
   );
 }

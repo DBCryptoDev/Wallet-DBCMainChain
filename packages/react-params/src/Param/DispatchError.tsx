@@ -1,19 +1,19 @@
 // Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DispatchError } from '@polkadot/types/interfaces';
-import type { Props } from '../types';
+import type { DispatchError } from "@polkadot/types/interfaces";
+import type { Props } from "../types";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Input } from '@polkadot/react-components';
+import { Input } from "@polkadot/react-components";
 
-import { useTranslation } from '../translate';
-import Static from './Static';
-import Unknown from './Unknown';
+import { useTranslation } from "../translate";
+import Static from "./Static";
+import Unknown from "./Unknown";
 
 interface ModuleErrorDefault {
-  isModule?: boolean
+  isModule?: boolean;
 }
 
 interface Details {
@@ -21,11 +21,11 @@ interface Details {
   type?: string;
 }
 
-function isModuleError (value?: ModuleErrorDefault): value is DispatchError {
+function isModuleError(value?: ModuleErrorDefault): value is DispatchError {
   return !!value?.isModule;
 }
 
-function ErrorDisplay (props: Props): React.ReactElement<Props> {
+function ErrorDisplay(props: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [{ details, type }, setDetails] = useState<Details>({});
 
@@ -38,8 +38,8 @@ function ErrorDisplay (props: Props): React.ReactElement<Props> {
         const { documentation, name, section } = mod.registry.findMetaError(mod);
 
         return setDetails({
-          details: documentation.join(', '),
-          type: `${section}.${name}`
+          details: documentation.join(", "),
+          type: `${section}.${name}`,
         });
       } catch (error) {
         // Errors may not actually be exposed, in this case, just return the default representation
@@ -56,20 +56,8 @@ function ErrorDisplay (props: Props): React.ReactElement<Props> {
 
   return (
     <Static {...props}>
-      <Input
-        className='full'
-        isDisabled
-        label={t<string>('type')}
-        value={type}
-      />
-      {details && (
-        <Input
-          className='full'
-          isDisabled
-          label={t<string>('details')}
-          value={details}
-        />
-      )}
+      <Input className="full" isDisabled label={t<string>("type")} value={type} />
+      {details && <Input className="full" isDisabled label={t<string>("details")} value={details} />}
     </Static>
   );
 }

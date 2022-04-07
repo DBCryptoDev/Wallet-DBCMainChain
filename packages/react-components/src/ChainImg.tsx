@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useMemo } from "react";
+import styled from "styled-components";
 
-import { chainLogos, emptyLogos, namedLogos, nodeLogos } from '@polkadot/apps-config';
-import { useApi } from '@polkadot/react-hooks';
+import { chainLogos, emptyLogos, namedLogos, nodeLogos } from "@polkadot/apps-config";
+import { useApi } from "@polkadot/react-hooks";
 
 interface Props {
   className?: string;
@@ -15,24 +15,22 @@ interface Props {
   withoutHl?: boolean;
 }
 
-function sanitize (value?: string): string {
-  return value?.toLowerCase().replace('-', ' ') || '';
+function sanitize(value?: string): string {
+  return value?.toLowerCase().replace("-", " ") || "";
 }
 
-function ChainImg ({ className = '', isInline, logo, onClick, withoutHl }: Props): React.ReactElement<Props> {
+function ChainImg({ className = "", isInline, logo, onClick, withoutHl }: Props): React.ReactElement<Props> {
   const { systemChain, systemName } = useApi();
   const [isEmpty, img] = useMemo((): [boolean, string] => {
-    const found = logo
-      ? namedLogos[logo]
-      : chainLogos[sanitize(systemChain)] || nodeLogos[sanitize(systemName)];
+    const found = logo ? namedLogos[logo] : chainLogos[sanitize(systemChain)] || nodeLogos[sanitize(systemName)];
 
-    return [!found || logo === 'empty', (found || emptyLogos.empty) as string];
+    return [!found || logo === "empty", (found || emptyLogos.empty) as string];
   }, [logo, systemChain, systemName]);
 
   return (
     <img
-      alt='chain logo'
-      className={`${className}${(isEmpty && !withoutHl) ? ' highlight--bg' : ''}${isInline ? ' isInline' : ''}`}
+      alt="chain logo"
+      className={`${className}${isEmpty && !withoutHl ? " highlight--bg" : ""}${isInline ? " isInline" : ""}`}
       onClick={onClick}
       src={img}
     />

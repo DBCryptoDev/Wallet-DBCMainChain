@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TabItem } from './types';
+import type { TabItem } from "./types";
 
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
 
-import Badge from '../Badge';
+import Badge from "../Badge";
 
 interface Props extends TabItem {
   basePath: string;
@@ -16,10 +16,18 @@ interface Props extends TabItem {
   index: number;
 }
 
-function Tab ({ basePath, className = '', count, hasParams, index, isExact, isRoot, name, text }: Props): React.ReactElement<Props> {
-  const to = isRoot
-    ? basePath
-    : `${basePath}/${name}`;
+function Tab({
+  basePath,
+  className = "",
+  count,
+  hasParams,
+  index,
+  isExact,
+  isRoot,
+  name,
+  text,
+}: Props): React.ReactElement<Props> {
+  const to = isRoot ? basePath : `${basePath}/${name}`;
 
   // only do exact matching when not the fallback (first position tab),
   // params are problematic for dynamic hidden such as app-accounts
@@ -27,22 +35,14 @@ function Tab ({ basePath, className = '', count, hasParams, index, isExact, isRo
 
   return (
     <NavLink
-      activeClassName='tabLinkActive'
+      activeClassName="tabLinkActive"
       className={`ui--Tab ${className}`}
       exact={tabIsExact}
       strict={tabIsExact}
       to={to}
     >
-      <div className='tabLinkText'>
-        {text}
-      </div>
-      {!!count && (
-        <Badge
-          className='tabCounter'
-          color='counter'
-          info={count}
-        />
-      )}
+      <div className="tabLinkText">{text}</div>
+      {!!count && <Badge className="tabCounter" color="counter" info={count} />}
     </NavLink>
   );
 }
@@ -51,31 +51,30 @@ export default React.memo(styled(Tab)`
   position: relative;
   display: flex;
   align-items: center;
-  color: #8B8B8B;
+  color: #8b8b8b;
   padding: 0 1.5rem;
   height: 100%;
   font-size: 1rem;
   font-weight: 400;
 
+  &:hover {
+    color: #8b8b8b;
 
-    &:hover {
-      color: #8B8B8B;
-
-      .tabLinkText::after{
-        background-color: #8B8B8B;
-      }
+    .tabLinkText::after {
+      background-color: #8b8b8b;
     }
+  }
 
-    &:hover .tabLinkText::after,
-    &.tabLinkActive .tabLinkText::after {
-      content: '';
-      position: absolute;
-      width: 3.14rem;
-      height: 2px;
-      bottom: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+  &:hover .tabLinkText::after,
+  &.tabLinkActive .tabLinkText::after {
+    content: "";
+    position: absolute;
+    width: 3.14rem;
+    height: 2px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
   &.tabLinkActive {
     color: var(--color-text) !important;

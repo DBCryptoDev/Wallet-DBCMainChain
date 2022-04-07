@@ -148,11 +148,11 @@ export const chainColors: Record<string, any> = [
   ["PHOENIX", chainPhoenix],
   ["DBC Mainnet", chainDBCMainnet],
   ["DBC testnet", chainDBCMainnet],
-  ["DBC Network", chainDBCMainnet]
+  ["DBC Network", chainDBCMainnet],
 ].reduce(
   (colors, [chain, color]): Record<string, any> => ({
     ...colors,
-    [chain.toLowerCase()]: color
+    [chain.toLowerCase()]: color,
   }),
   {}
 );
@@ -184,14 +184,14 @@ export const nodeColors: Record<string, any> = [
   ["Ternoa Node", nodeTernoa],
   ["Unique Node", nodeUnique],
   ["Zenlink Collator", nodeZenlink],
-  ["SubDAO Collator", nodeSubDAO]
+  ["SubDAO Collator", nodeSubDAO],
   // ['node template', emptyColor],
   // ['parity polkadot', emptyColor],
   // ['substrate node', emptyColor]
 ].reduce(
   (colors, [node, color]): Record<string, any> => ({
     ...colors,
-    [node.toLowerCase().replace(/-/g, " ")]: color
+    [node.toLowerCase().replace(/-/g, " ")]: color,
   }),
   {}
 );

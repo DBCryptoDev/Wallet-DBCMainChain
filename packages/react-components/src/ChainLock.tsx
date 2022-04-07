@@ -1,14 +1,14 @@
 // Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useMemo } from "react";
+import styled from "styled-components";
 
-import { useApi } from '@polkadot/react-hooks';
-import { chains } from '@polkadot/ui-settings/defaults/chains';
+import { useApi } from "@polkadot/react-hooks";
+import { chains } from "@polkadot/ui-settings/defaults/chains";
 
-import Toggle from './Toggle';
-import { useTranslation } from './translate';
+import Toggle from "./Toggle";
+import { useTranslation } from "./translate";
 
 interface Props {
   className?: string;
@@ -17,34 +17,24 @@ interface Props {
   onChange: (genesisHash: string | null) => void;
 }
 
-function calcLock (apiGenesis: string, genesisHash: string | null): boolean {
+function calcLock(apiGenesis: string, genesisHash: string | null): boolean {
   if (!genesisHash) {
     return false;
   }
 
-  return (
-    Object.values(chains).find((hashes): boolean =>
-      hashes.includes(apiGenesis)
-    ) || [apiGenesis]
-  ).includes(genesisHash);
+  return (Object.values(chains).find((hashes): boolean => hashes.includes(apiGenesis)) || [apiGenesis]).includes(
+    genesisHash
+  );
 }
 
-function ChainLock ({ className = '', genesisHash, isDisabled, onChange }: Props): React.ReactElement<Props> | null {
+function ChainLock({ className = "", genesisHash, isDisabled, onChange }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api, isDevelopment } = useApi();
 
-  const isTiedToChain = useMemo(
-    () => calcLock(api.genesisHash.toHex(), genesisHash),
-    [api, genesisHash]
-  );
+  const isTiedToChain = useMemo(() => calcLock(api.genesisHash.toHex(), genesisHash), [api, genesisHash]);
 
   const _onChange = useCallback(
-    (isTiedToChain: boolean) =>
-      onChange(
-        isTiedToChain
-          ? api.genesisHash.toHex()
-          : null
-      ),
+    (isTiedToChain: boolean) => onChange(isTiedToChain ? api.genesisHash.toHex() : null),
     [api, onChange]
   );
 
@@ -56,7 +46,7 @@ function ChainLock ({ className = '', genesisHash, isDisabled, onChange }: Props
     <Toggle
       className={className}
       isDisabled={isDisabled}
-      label={t<string>('only this network')}
+      label={t<string>("only this network")}
       onChange={_onChange}
       preventDefault
       value={isTiedToChain}

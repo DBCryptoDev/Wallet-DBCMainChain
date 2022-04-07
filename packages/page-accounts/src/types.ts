@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ActionStatus } from '@polkadot/react-components/Status/types';
-import type { Balance, Conviction } from '@polkadot/types/interfaces';
-import type { KeyringAddress } from '@polkadot/ui-keyring/types';
+import type { ActionStatus } from "@polkadot/react-components/Status/types";
+import type { Balance, Conviction } from "@polkadot/types/interfaces";
+import type { KeyringAddress } from "@polkadot/ui-keyring/types";
 
-import { WithTranslation } from 'react-i18next';
+import { WithTranslation } from "react-i18next";
 
-export { AppProps as ComponentProps } from '@polkadot/react-components/types';
+export { AppProps as ComponentProps } from "@polkadot/react-components/types";
 
 export interface BareProps {
   className?: string;
@@ -21,9 +21,9 @@ export interface ModalProps {
 }
 
 export interface Delegation {
-  accountDelegated: string
-  amount: Balance
-  conviction: Conviction
+  accountDelegated: string;
+  amount: Balance;
+  conviction: Conviction;
 }
 
 export interface SortedAccount {

@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/app-treasury authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { useApi, useEventTrigger } from '@polkadot/react-hooks';
+import { useApi, useEventTrigger } from "@polkadot/react-hooks";
 
-export default function useTipHashes (): string[] | undefined {
+export default function useTipHashes(): string[] | undefined {
   const { api } = useApi();
   const trigger = useEventTrigger([api.events.tips?.NewTip, api.events.tips?.TipClosed, api.events.tips?.TipRetracted]);
   const [state, setState] = useState<string[]>();
@@ -17,9 +17,7 @@ export default function useTipHashes (): string[] | undefined {
     if (trigger && query) {
       query
         .keys()
-        .then((keys) => setState(
-          keys.map(({ args: [hash] }) => hash.toHex())
-        ))
+        .then((keys) => setState(keys.map(({ args: [hash] }) => hash.toHex())))
         .catch(console.error);
     } else {
       setState([]);

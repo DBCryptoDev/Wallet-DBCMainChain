@@ -1,18 +1,18 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import BN from 'bn.js';
-import React from 'react';
+import BN from "bn.js";
+import React from "react";
 
-import { BN_ONE, formatNumber } from '@polkadot/util';
+import { BN_ONE, formatNumber } from "@polkadot/util";
 
-function isSingle (entry: BN | [BN, BN]): entry is BN {
+function isSingle(entry: BN | [BN, BN]): entry is BN {
   return !Array.isArray(entry);
 }
 
-export function createErasString (eras: BN[]): React.ReactNode {
+export function createErasString(eras: BN[]): React.ReactNode {
   if (!eras.length) {
-    return '';
+    return "";
   }
 
   const parts = eras
@@ -40,17 +40,13 @@ export function createErasString (eras: BN[]): React.ReactNode {
 
       return result;
     }, [])
-    .map((entry) =>
-      isSingle(entry)
-        ? formatNumber(entry)
-        : `${formatNumber(entry[0])}-${formatNumber(entry[1])}`
-    );
+    .map((entry) => (isSingle(entry) ? formatNumber(entry) : `${formatNumber(entry[0])}-${formatNumber(entry[1])}`));
 
   return (
     <>
       {parts.map((section, index) => (
         <React.Fragment key={section}>
-          {index !== 0 && ', '}
+          {index !== 0 && ", "}
           <span>{section}</span>
         </React.Fragment>
       ))}

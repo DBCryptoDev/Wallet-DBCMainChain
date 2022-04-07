@@ -1,14 +1,14 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { useToggle } from '@polkadot/react-hooks';
+import { useToggle } from "@polkadot/react-hooks";
 
-import EditButton from './EditButton';
-import Input from './Input';
-import Tags from './Tags';
+import EditButton from "./EditButton";
+import Input from "./Input";
+import Tags from "./Tags";
 
 export const styles = `
   text-align: left;
@@ -167,7 +167,26 @@ export interface RowProps {
   tags?: string[];
 }
 
-function Row ({ address, buttons, children, className = '', defaultName, details, icon, iconInfo, isDisabled, isEditableName, isEditableTags, isInline, name, onChangeName, onChangeTags, onSaveName, onSaveTags, tags }: RowProps): React.ReactElement<RowProps> {
+function Row({
+  address,
+  buttons,
+  children,
+  className = "",
+  defaultName,
+  details,
+  icon,
+  iconInfo,
+  isDisabled,
+  isEditableName,
+  isEditableTags,
+  isInline,
+  name,
+  onChangeName,
+  onChangeTags,
+  onSaveName,
+  onSaveTags,
+  tags,
+}: RowProps): React.ReactElement<RowProps> {
   const [isEditingName, toggleIsEditingName] = useToggle();
   const [isEditingTags, toggleIsEditingTags] = useToggle();
 
@@ -177,84 +196,59 @@ function Row ({ address, buttons, children, className = '', defaultName, details
   };
 
   return (
-    <div
-      className={`ui--Row${isDisabled ? ' isDisabled' : ''}${isInline ? ' isInline' : ''} ${className}`}
-    >
-      <div className='ui--Row-base'>
+    <div className={`ui--Row${isDisabled ? " isDisabled" : ""}${isInline ? " isInline" : ""} ${className}`}>
+      <div className="ui--Row-base">
         {icon && (
-          <div className='ui--Row-icon'>
+          <div className="ui--Row-icon">
             {icon}
-            {iconInfo && (
-              <div className='ui--Row-icon-info'>
-                {iconInfo}
-              </div>
-            )}
+            {iconInfo && <div className="ui--Row-icon-info">{iconInfo}</div>}
           </div>
         )}
-        <div className='ui--Row-details'>
-          {(name || defaultName) && (
-            isEditableName && isEditingName
-              ? (
-                <Input
-                  autoFocus
-                  defaultValue={name || defaultName}
-                  isInPlaceEditor
-                  onBlur={_onSaveName}
-                  onChange={onChangeName}
-                  onEnter
-                  withLabel={false}
-                />
-              )
-              : (
-                <div className='ui--Row-name'>
-                  {
-                    isEditableName
-                      ? (
-                        <EditButton onClick={toggleIsEditingName}>
-                          {name || defaultName}
-                        </EditButton>
-                      )
-                      : name || defaultName
-                  }
-                </div>
-              )
-          )}
-          {address && (
-            <div className='ui--Row-address'>
-              {address}
-            </div>
-          )}
+        <div className="ui--Row-details">
+          {(name || defaultName) &&
+            (isEditableName && isEditingName ? (
+              <Input
+                autoFocus
+                defaultValue={name || defaultName}
+                isInPlaceEditor
+                onBlur={_onSaveName}
+                onChange={onChangeName}
+                onEnter
+                withLabel={false}
+              />
+            ) : (
+              <div className="ui--Row-name">
+                {isEditableName ? (
+                  <EditButton onClick={toggleIsEditingName}>{name || defaultName}</EditButton>
+                ) : (
+                  name || defaultName
+                )}
+              </div>
+            ))}
+          {address && <div className="ui--Row-address">{address}</div>}
           {details}
           {tags && (
             <Tags
-              className='ui--Row-tags'
+              className="ui--Row-tags"
               isEditable={isEditableTags}
               isEditing={isEditingTags}
               onChange={onChangeTags}
               onSave={onSaveTags}
               onToggleIsEditing={toggleIsEditingTags}
-              size='tiny'
+              size="tiny"
               value={tags}
             />
           )}
         </div>
-        {buttons && (
-          <div className='ui--Row-buttons'>
-            {buttons}
-          </div>
-        )}
+        {buttons && <div className="ui--Row-buttons">{buttons}</div>}
       </div>
-      {children && (
-        <div className='ui--Row-children'>
-          {children}
-        </div>
-      )}
+      {children && <div className="ui--Row-children">{children}</div>}
     </div>
   );
 }
 
 export default React.memo(
-  styled(Row)`${
-    styles
-  }`
+  styled(Row)`
+    ${styles}
+  `
 );

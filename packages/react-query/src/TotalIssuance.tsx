@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/react-query authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React from "react";
 
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { useApi, useCall } from "@polkadot/react-hooks";
 
-import FormatBalance from './FormatBalance';
+import FormatBalance from "./FormatBalance";
 
 interface Props {
   children?: React.ReactNode;
@@ -13,17 +13,14 @@ interface Props {
   label?: React.ReactNode;
 }
 
-function TotalIssuance ({ children, className = '', label }: Props): React.ReactElement<Props> {
+function TotalIssuance({ children, className = "", label }: Props): React.ReactElement<Props> {
   const { api } = useApi();
   const totalIssuance = useCall<string>(api.query.balances?.totalIssuance);
 
   return (
     <div className={className}>
-      {label || ''}
-      <FormatBalance
-        value={totalIssuance}
-        withSi
-      />
+      {label || ""}
+      <FormatBalance value={totalIssuance} withSi />
       {children}
     </div>
   );

@@ -1,14 +1,14 @@
 // Copyright 2017-2021 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Option } from '@polkadot/types';
-import type { RegistrarInfo } from '@polkadot/types/interfaces';
+import type { Option } from "@polkadot/types";
+import type { RegistrarInfo } from "@polkadot/types/interfaces";
 
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { useAccounts } from './useAccounts';
-import { useApi } from './useApi';
-import { useCall } from './useCall';
+import { useAccounts } from "./useAccounts";
+import { useApi } from "./useApi";
+import { useCall } from "./useCall";
 
 interface RegistrarNull {
   address: string | null;
@@ -26,28 +26,25 @@ interface State {
   skipQuery?: boolean;
 }
 
-export function useRegistrars (skipQuery?: boolean): State {
+export function useRegistrars(skipQuery?: boolean): State {
   const { api } = useApi();
   const { allAccounts, hasAccounts } = useAccounts();
   const query = useCall<Option<RegistrarInfo>[]>(!skipQuery && hasAccounts && api.query.identity?.registrars);
 
   // determine if we have a registrar or not - registrars are allowed to approve
-  return useMemo(
-    (): State => {
-      const registrars = (query || [])
-        .map((registrar, index): RegistrarNull => ({
-          address: registrar.isSome
-            ? registrar.unwrap().account.toString()
-            : null,
-          index
-        }))
-        .filter((registrar): registrar is Registrar => !!registrar.address);
+  return useMemo((): State => {
+    const registrars = (query || [])
+      .map(
+        (registrar, index): RegistrarNull => ({
+          address: registrar.isSome ? registrar.unwrap().account.toString() : null,
+          index,
+        })
+      )
+      .filter((registrar): registrar is Registrar => !!registrar.address);
 
-      return {
-        isRegistrar: registrars.some(({ address }) => allAccounts.includes(address)),
-        registrars
-      };
-    },
-    [allAccounts, query]
-  );
+    return {
+      isRegistrar: registrars.some(({ address }) => allAccounts.includes(address)),
+      registrars,
+    };
+  }, [allAccounts, query]);
 }

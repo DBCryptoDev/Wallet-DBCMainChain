@@ -1,14 +1,14 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Network } from './types';
+import type { Network } from "./types";
 
-import React, { useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useMemo } from "react";
+import styled from "styled-components";
 
-import { ChainImg } from '@polkadot/react-components';
+import { ChainImg } from "@polkadot/react-components";
 
-import Url from './Url';
+import Url from "./Url";
 
 interface Props {
   affinity?: string;
@@ -18,50 +18,34 @@ interface Props {
   value: Network;
 }
 
-function NetworkDisplay ({ affinity, apiUrl, className = '', setApiUrl, value: { icon, isChild, name, providers } }: Props): React.ReactElement<Props> {
-  const isSelected = useMemo(
-    () => providers.some(({ url }) => url === apiUrl),
-    [apiUrl, providers]
-  );
+function NetworkDisplay({
+  affinity,
+  apiUrl,
+  className = "",
+  setApiUrl,
+  value: { icon, isChild, name, providers },
+}: Props): React.ReactElement<Props> {
+  const isSelected = useMemo(() => providers.some(({ url }) => url === apiUrl), [apiUrl, providers]);
 
   const _selectUrl = useCallback(
-    () => setApiUrl(
-      name,
-      affinity && providers.find(({ url }) => url === affinity)
-        ? affinity
-        : providers[0].url
-    ),
+    () => setApiUrl(name, affinity && providers.find(({ url }) => url === affinity) ? affinity : providers[0].url),
     [affinity, name, providers, setApiUrl]
   );
 
-  const _setApiUrl = useCallback(
-    (apiUrl: string) => setApiUrl(name, apiUrl),
-    [name, setApiUrl]
-  );
+  const _setApiUrl = useCallback((apiUrl: string) => setApiUrl(name, apiUrl), [name, setApiUrl]);
 
   return (
-    <div className={`${className}${isSelected ? ' isSelected highlight--border' : ''}`}>
-      <div
-        className={`endpointSection${isChild ? ' isChild' : ''}`}
-        onClick={_selectUrl}
-      >
-        <ChainImg
-          className='endpointIcon'
-          isInline
-          logo={icon === 'local' ? 'empty' : (icon || 'empty')}
-          withoutHl
-        />
-        <div className='endpointValue'>{name}</div>
+    <div className={`${className}${isSelected ? " isSelected highlight--border" : ""}`}>
+      <div className={`endpointSection${isChild ? " isChild" : ""}`} onClick={_selectUrl}>
+        <ChainImg className="endpointIcon" isInline logo={icon === "local" ? "empty" : icon || "empty"} withoutHl />
+        <div className="endpointValue">{name}</div>
       </div>
-      {isSelected && providers.map(({ name, url }): React.ReactNode => (
-        <Url
-          apiUrl={apiUrl}
-          key={url}
-          label={name}
-          setApiUrl={_setApiUrl}
-          url={url}
-        />
-      ))}
+      {isSelected &&
+        providers.map(
+          ({ name, url }): React.ReactNode => (
+            <Url apiUrl={apiUrl} key={url} label={name} setApiUrl={_setApiUrl} url={url} />
+          )
+        )}
     </div>
   );
 }
@@ -89,7 +73,7 @@ export default React.memo(styled(NetworkDisplay)`
       margin-left: 1.25rem;
     }
 
-    &+.endpointProvider {
+    & + .endpointProvider {
       margin-top: -0.125rem;
     }
   }

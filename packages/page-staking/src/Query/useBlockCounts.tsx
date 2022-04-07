@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveSessionIndexes } from '@polkadot/api-derive/types';
-import type { u32 } from '@polkadot/types';
-import type { SessionRewards } from '../types';
+import type { DeriveSessionIndexes } from "@polkadot/api-derive/types";
+import type { u32 } from "@polkadot/types";
+import type { SessionRewards } from "../types";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { useApi, useCall, useIsMountedRef } from '@polkadot/react-hooks';
-import { BN_ONE, BN_ZERO, isFunction } from '@polkadot/util';
+import { useApi, useCall, useIsMountedRef } from "@polkadot/react-hooks";
+import { BN_ONE, BN_ZERO, isFunction } from "@polkadot/util";
 
-export default function useBlockCounts (accountId: string, sessionRewards: SessionRewards[]): u32[] {
+export default function useBlockCounts(accountId: string, sessionRewards: SessionRewards[]): u32[] {
   const { api } = useApi();
   const mountedRef = useIsMountedRef();
   const indexes = useCall<DeriveSessionIndexes>(api.derive.session?.indexes);
@@ -23,19 +23,22 @@ export default function useBlockCounts (accountId: string, sessionRewards: Sessi
       const filtered = sessionRewards.filter(({ sessionIndex }): boolean => sessionIndex.gt(BN_ZERO));
 
       if (filtered.length) {
-        Promise
-          .all(filtered.map(({ parentHash, sessionIndex }): Promise<u32> =>
-            api.query.imOnline.authoredBlocks.at(parentHash, sessionIndex.sub(BN_ONE), accountId)
-          ))
+        Promise.all(
+          filtered.map(
+            ({ parentHash, sessionIndex }): Promise<u32> =>
+              api.query.imOnline.authoredBlocks.at(parentHash, sessionIndex.sub(BN_ONE), accountId)
+          )
+        )
           .then((historic): void => {
             mountedRef.current && setHistoric(historic);
-          }).catch(console.error);
+          })
+          .catch(console.error);
       }
     }
   }, [accountId, api, mountedRef, sessionRewards]);
 
   useEffect((): void => {
-    setCounts([...historic, current || api.createType('u32')].slice(1));
+    setCounts([...historic, current || api.createType("u32")].slice(1));
   }, [api, current, historic]);
 
   return counts;

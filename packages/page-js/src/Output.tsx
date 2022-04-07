@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/app-js authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Log } from './types';
+import type { Log } from "./types";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { isError, isNull, isUndefined } from '@polkadot/util';
+import { isError, isNull, isUndefined } from "@polkadot/util";
 
 interface Props {
   children?: React.ReactNode;
@@ -18,35 +18,30 @@ const format = (value: unknown): string => {
   if (isError(value)) {
     return value.stack ? value.stack : value.toString();
   } else if (isUndefined(value)) {
-    return 'undefined';
+    return "undefined";
   } else if (isNull(value)) {
-    return 'null';
+    return "null";
   } else if (Array.isArray(value)) {
-    return `[${value.map((value): string => format(value)).join(', ')}]`;
+    return `[${value.map((value): string => format(value)).join(", ")}]`;
   } else if (value instanceof Map) {
-    return `{${[...value.entries()].map(([key, value]): string => (key as string) + ': ' + format(value)).join(', ')}}`;
+    return `{${[...value.entries()].map(([key, value]): string => (key as string) + ": " + format(value)).join(", ")}}`;
   }
 
   return (value as string).toString();
 };
 
 const renderEntry = ({ args, type }: Log, index: number): React.ReactNode => (
-  <div
-    className={`js--Log ${type}`}
-    key={index}
-  >
-    {args.map((arg): string => format(arg)).join(' ')}
+  <div className={`js--Log ${type}`} key={index}>
+    {args.map((arg): string => format(arg)).join(" ")}
   </div>
 );
 
-function Output ({ children, className = '', logs }: Props): React.ReactElement<Props> {
+function Output({ children, className = "", logs }: Props): React.ReactElement<Props> {
   return (
     <article className={`container ${className}`}>
-      <div className='logs-wrapper'>
-        <div className='logs-container'>
-          <pre className='logs-content'>
-            {logs.map(renderEntry)}
-          </pre>
+      <div className="logs-wrapper">
+        <div className="logs-container">
+          <pre className="logs-content">{logs.map(renderEntry)}</pre>
         </div>
       </div>
       {children}

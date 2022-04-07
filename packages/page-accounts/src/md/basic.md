@@ -21,6 +21,7 @@ This password is also used to encrypt the private key in the backup file downloa
 # Account recovery
 
 You can recover an account from its:
+
 - seed or mnemonic:
   Click on the "Add account" button, type your seed or mnemonic in the associated field.
 
@@ -29,15 +30,12 @@ You can recover an account from its:
 
 # Minimum Account Balances - Essential Deposit & Reaping
 
-
 Accounts with a balance lower than the minimal amount (existential deposit) will be reaped
 (All remaining funds lost, and the account's state removed from the network). Learn more on the polkadot wiki.
-
 
 Accounts with under 1 DOT for Polkadot are considered as nonexistent for the network. If an account's
 balance ever drops below this amount, it is removed from the network's state. In this web application,
 that account will still be visible, but with a balance of 0.
-
 
 For a fund transfer to a new account (balance of 0), if the amount transferred is less than
 the minimum allowed balance, then the transfer will "succeed" but the destination account will
@@ -45,7 +43,6 @@ not be created (its balance will remain 0); this essentially burns the transfer 
 because the receiver's balance never exceed the minimum allowed balance. Note that the new account could
 be a previously active, but reaped account with a balance of 0 before the transfer. A transfer of over
 the existential deposit amount to it will succeed as expected and make a new account with the same address.
-
 
 If the receiver already exists (read it has a balance greater than 0), it is perfectly possible to transfer very low amounts.
 

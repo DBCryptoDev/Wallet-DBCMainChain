@@ -1,30 +1,29 @@
 // Copyright 2017-2021 @polkadot/app-society authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { VoteType } from '../types';
+import type { VoteType } from "../types";
 
-import React from 'react';
+import React from "react";
 
-import { AddressMini, Expander } from '@polkadot/react-components';
+import { AddressMini, Expander } from "@polkadot/react-components";
 
 interface Props {
   label: string;
   votes: VoteType[];
 }
 
-function VotesExpander ({ label, votes }: Props): React.ReactElement<Props> | null {
+function VotesExpander({ label, votes }: Props): React.ReactElement<Props> | null {
   if (votes.length === 0) {
     return null;
   }
 
   return (
     <Expander summary={`${label} (${votes.length})`}>
-      {votes.map(([who]): React.ReactNode => (
-        <AddressMini
-          key={who.toString()}
-          value={who}
-        />
-      ))}
+      {votes.map(
+        ([who]): React.ReactNode => (
+          <AddressMini key={who.toString()} value={who} />
+        )
+      )}
     </Expander>
   );
 }

@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SortedTargets } from '../../types';
-import type { NominateInfo } from '../partials/types';
+import type { SortedTargets } from "../../types";
+import type { NominateInfo } from "../partials/types";
 
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
-import { Modal, TxButton } from '@polkadot/react-components';
+import { Modal, TxButton } from "@polkadot/react-components";
 
-import { useTranslation } from '../../translate';
-import NominatePartial from '../partials/Nominate';
+import { useTranslation } from "../../translate";
+import NominatePartial from "../partials/Nominate";
 
 interface Props {
   className?: string;
@@ -21,19 +21,22 @@ interface Props {
   targets: SortedTargets;
 }
 
-function Nominate ({ className = '', controllerId, nominating, onClose, stashId, targets }: Props): React.ReactElement<Props> | null {
+function Nominate({
+  className = "",
+  controllerId,
+  nominating,
+  onClose,
+  stashId,
+  targets,
+}: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const [{ nominateTx }, setTx] = useState<NominateInfo>({});
 
   return (
-    <Modal
-      className={className}
-      header={t<string>('Nominate Validators')}
-      size='large'
-    >
+    <Modal className={className} header={t<string>("Nominate Validators")} size="large">
       <Modal.Content>
         <NominatePartial
-          className='nominatePartial'
+          className="nominatePartial"
           controllerId={controllerId}
           nominating={nominating}
           onChange={setTx}
@@ -46,9 +49,9 @@ function Nominate ({ className = '', controllerId, nominating, onClose, stashId,
         <TxButton
           accountId={controllerId}
           extrinsic={nominateTx}
-          icon='hand-paper'
+          icon="hand-paper"
           isDisabled={!nominateTx}
-          label={t<string>('Nominate')}
+          label={t<string>("Nominate")}
           onStart={onClose}
         />
       </Modal.Actions>

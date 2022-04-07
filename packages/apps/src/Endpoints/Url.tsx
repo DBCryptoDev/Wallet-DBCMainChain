@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import styled from "styled-components";
 
-import { Toggle } from '@polkadot/react-components';
+import { Toggle } from "@polkadot/react-components";
 
 interface Props {
   apiUrl: string;
@@ -14,21 +14,10 @@ interface Props {
   url: string;
 }
 
-function Url ({ apiUrl, className, label, setApiUrl, url }: Props): React.ReactElement<Props> {
-  const _setApiUrl = useCallback(
-    () => setApiUrl(url),
-    [setApiUrl, url]
-  );
+function Url({ apiUrl, className, label, setApiUrl, url }: Props): React.ReactElement<Props> {
+  const _setApiUrl = useCallback(() => setApiUrl(url), [setApiUrl, url]);
 
-  return (
-    <Toggle
-      className={className}
-      isRadio
-      label={label}
-      onChange={_setApiUrl}
-      value={apiUrl === url}
-    />
-  );
+  return <Toggle className={className} isRadio label={label} onChange={_setApiUrl} value={apiUrl === url} />;
 }
 
 export default React.memo(styled(Url)`

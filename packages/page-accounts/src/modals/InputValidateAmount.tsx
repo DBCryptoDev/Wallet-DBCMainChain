@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
-import type { AmountValidateState } from '../Accounts/types';
+import type { DeriveBalancesAll } from "@polkadot/api-derive/types";
+import type { AmountValidateState } from "../Accounts/types";
 
-import BN from 'bn.js';
-import React, { useEffect, useState } from 'react';
+import BN from "bn.js";
+import React, { useEffect, useState } from "react";
 
-import { MarkError, MarkWarning } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
-import { BN_ZERO } from '@polkadot/util';
+import { MarkError, MarkWarning } from "@polkadot/react-components";
+import { useApi, useCall } from "@polkadot/react-hooks";
+import { BN_ZERO } from "@polkadot/util";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 interface Props {
   amount?: BN | null;
@@ -19,7 +19,7 @@ interface Props {
   onError: (state: AmountValidateState | null) => void;
 }
 
-function ValidateAmount ({ amount, delegatingAccount, onError }: Props): React.ReactElement<Props> | null {
+function ValidateAmount({ amount, delegatingAccount, onError }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const delegatingAccountBalance = useCall<DeriveBalancesAll>(api.derive.balances.all, [delegatingAccount]);
@@ -30,14 +30,14 @@ function ValidateAmount ({ amount, delegatingAccount, onError }: Props): React.R
       let newError: string | null = null;
 
       if (amount.gte(delegatingAccountBalance.freeBalance)) {
-        newError = t('The maximum amount you can delegate is the amount of funds available on the delegating account.');
+        newError = t("The maximum amount you can delegate is the amount of funds available on the delegating account.");
       }
 
       setResult((state): AmountValidateState => {
         const error = state.error !== newError ? newError : state.error;
         const warning = state.warning;
 
-        onError((error || warning) ? { error, warning } : null);
+        onError(error || warning ? { error, warning } : null);
 
         return { error, warning };
       });

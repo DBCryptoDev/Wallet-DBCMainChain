@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { LinkTypes } from '@polkadot/apps-config/links/types';
+import type { LinkTypes } from "@polkadot/apps-config/links/types";
 
-import BN from 'bn.js';
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import BN from "bn.js";
+import React, { useMemo } from "react";
+import styled from "styled-components";
 
-import { externalLinks } from '@polkadot/apps-config';
-import { useApi } from '@polkadot/react-hooks';
+import { externalLinks } from "@polkadot/apps-config";
+import { useApi } from "@polkadot/react-hooks";
 
-import { useTranslation } from './translate';
+import { useTranslation } from "./translate";
 
 interface Props {
   className?: string;
@@ -25,9 +25,8 @@ interface Props {
 //   return `${name[0]}${name[name.length - 1]}`;
 // }
 
-function genLinks (systemChain: string, { data, hash, isLogo, type }: Props): React.ReactNode[] {
-  return Object
-    .entries(externalLinks)
+function genLinks(systemChain: string, { data, hash, isLogo, type }: Props): React.ReactNode[] {
+  return Object.entries(externalLinks)
     .map(([name, { chains, create, isActive, logo, paths, url }]): React.ReactNode | null => {
       const extChain = chains[systemChain];
       const extPath = paths[type];
@@ -40,21 +39,18 @@ function genLinks (systemChain: string, { data, hash, isLogo, type }: Props): Re
         <a
           href={create(extChain, extPath, data, hash)}
           key={name}
-          rel='noopener noreferrer'
-          target='_blank'
+          rel="noopener noreferrer"
+          target="_blank"
           title={`${name}, ${url}`}
         >
-          {isLogo
-            ? <img src={logo} />
-            : name
-          }
+          {isLogo ? <img src={logo} /> : name}
         </a>
       );
     })
     .filter((node): node is React.ReactNode => !!node);
 }
 
-function LinkExternal ({ className = '', data, hash, isLogo, isSmall, type }: Props): React.ReactElement<Props> | null {
+function LinkExternal({ className = "", data, hash, isLogo, isSmall, type }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { systemChain } = useApi();
   const links = useMemo(
@@ -67,9 +63,13 @@ function LinkExternal ({ className = '', data, hash, isLogo, isSmall, type }: Pr
   }
 
   return (
-    <div className={`${className}${isLogo ? ' isLogo' : ''}${isSmall ? ' isSmall' : ''}`}>
-      {!(isLogo || isSmall) && <div>{t<string>('View this externally')}</div>}
-      <div className='links'>{links.map((link, index) => <span key={index}>{link}</span>)}</div>
+    <div className={`${className}${isLogo ? " isLogo" : ""}${isSmall ? " isSmall" : ""}`}>
+      {!(isLogo || isSmall) && <div>{t<string>("View this externally")}</div>}
+      <div className="links">
+        {links.map((link, index) => (
+          <span key={index}>{link}</span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -109,7 +109,7 @@ export default React.memo(styled(LinkExternal)`
       display: inline-block;
     }
 
-    span+span {
+    span + span {
       margin-left: 0.3rem;
     }
   }

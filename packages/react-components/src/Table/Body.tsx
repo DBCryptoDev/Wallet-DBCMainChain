@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { isString } from '@polkadot/util';
+import { isString } from "@polkadot/util";
 
-import Spinner from '../Spinner';
+import Spinner from "../Spinner";
 
 interface Props {
   children?: React.ReactNode;
@@ -16,26 +16,22 @@ interface Props {
   noBodyTag?: boolean;
 }
 
-function Body ({ children, className = '', empty, emptySpinner, noBodyTag }: Props): React.ReactElement<Props> {
-  return children
-    ? (
-      noBodyTag
-        ? <>{children}</>
-        : <tbody className={className}>{children}</tbody>
+function Body({ children, className = "", empty, emptySpinner, noBodyTag }: Props): React.ReactElement<Props> {
+  return children ? (
+    noBodyTag ? (
+      <>{children}</>
+    ) : (
+      <tbody className={className}>{children}</tbody>
     )
-    : (
-      <tbody className={className}>
-        <tr>
-          <td colSpan={100}>{
-            isString(empty)
-              ? <div className='empty'>{empty}</div>
-              : empty || <Spinner label={emptySpinner} />
-          }</td>
-        </tr>
-      </tbody>
-    );
+  ) : (
+    <tbody className={className}>
+      <tr>
+        <td colSpan={100}>
+          {isString(empty) ? <div className="empty">{empty}</div> : empty || <Spinner label={emptySpinner} />}
+        </td>
+      </tr>
+    </tbody>
+  );
 }
 
-export default React.memo(styled(Body)`
-
-`);
+export default React.memo(styled(Body)``);

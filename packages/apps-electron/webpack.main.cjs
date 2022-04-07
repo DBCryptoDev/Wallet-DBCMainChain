@@ -3,53 +3,51 @@
 
 /* eslint-disable camelcase */
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const path = require('path');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require("path");
 
-function createWebpack () {
+function createWebpack() {
   return [
     {
       entry: {
-        electron: './src/electron',
-        preload: './src/preload.ts'
+        electron: "./src/electron",
+        preload: "./src/preload.ts",
       },
-      mode: 'production',
+      mode: "production",
       module: {
         rules: [
           {
             include: /node_modules/,
             test: /\.mjs$/,
-            type: 'javascript/auto'
+            type: "javascript/auto",
           },
           {
             exclude: /(node_modules)/,
             test: /\.(js|mjs|ts|tsx)$/,
             use: [
-              require.resolve('thread-loader'),
+              require.resolve("thread-loader"),
               {
-                loader: require.resolve('babel-loader'),
-                options: require('@polkadot/dev/config/babel-config-webpack.cjs')
-              }
-            ]
-          }
-        ]
+                loader: require.resolve("babel-loader"),
+                options: require("@polkadot/dev/config/babel-config-webpack.cjs"),
+              },
+            ],
+          },
+        ],
       },
       node: {
         __dirname: false,
-        __filename: false
+        __filename: false,
       },
       output: {
-        filename: '[name].js',
-        path: path.join(__dirname, '/build')
+        filename: "[name].js",
+        path: path.join(__dirname, "/build"),
       },
-      plugins: [
-        new CopyWebpackPlugin({ patterns: [{ from: 'assets' }] })
-      ],
+      plugins: [new CopyWebpackPlugin({ patterns: [{ from: "assets" }] })],
       resolve: {
-        extensions: ['.js', '.jsx', '.json', '.mjs', '.ts', '.tsx']
+        extensions: [".js", ".jsx", ".json", ".mjs", ".ts", ".tsx"],
       },
-      target: 'electron-main'
-    }
+      target: "electron-main",
+    },
   ];
 }
 

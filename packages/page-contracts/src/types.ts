@@ -1,9 +1,9 @@
 // Copyright 2017-2021 @polkadot/app-contracts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import BN from 'bn.js';
+import BN from "bn.js";
 
-import { Abi } from '@polkadot/api-contract';
+import { Abi } from "@polkadot/api-contract";
 
 export interface CodeJson {
   abi?: string | null;
@@ -32,7 +32,7 @@ export interface UseWeight {
   isValid: boolean;
   megaGas: BN;
   percentage: number;
-  setIsEmpty: React.Dispatch<boolean>
+  setIsEmpty: React.Dispatch<boolean>;
   setMegaGas: React.Dispatch<BN | undefined>;
   weight: BN;
 }

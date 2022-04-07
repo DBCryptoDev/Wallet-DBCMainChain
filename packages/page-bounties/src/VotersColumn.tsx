@@ -1,64 +1,69 @@
 // Copyright 2017-2021 @polkadot/app-bounties authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveCollectiveProposal } from '@polkadot/api-derive/types';
-import type { BountyStatus } from '@polkadot/types/interfaces';
+import type { DeriveCollectiveProposal } from "@polkadot/api-derive/types";
+import type { BountyStatus } from "@polkadot/types/interfaces";
 
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useMemo } from "react";
+import styled from "styled-components";
 
-import { AddressSmall, Icon } from '@polkadot/react-components';
-import { ThemeProps } from '@polkadot/react-components/types';
+import { AddressSmall, Icon } from "@polkadot/react-components";
+import { ThemeProps } from "@polkadot/react-components/types";
 
-import { getProposalToDisplay } from './helpers/extendedStatuses';
-import { bountyLabelColor } from './theme';
-import { useTranslation } from './translate';
+import { getProposalToDisplay } from "./helpers/extendedStatuses";
+import { bountyLabelColor } from "./theme";
+import { useTranslation } from "./translate";
 
 interface Props {
   className?: string;
-  option: 'ayes' | 'nays';
+  option: "ayes" | "nays";
   proposals: DeriveCollectiveProposal[];
   status: BountyStatus;
 }
 
 const icons = {
-  ayes: 'check',
-  nays: 'times'
+  ayes: "check",
+  nays: "times",
 };
 
-function VotersColumn ({ className, option, proposals, status }: Props): React.ReactElement<Props> {
+function VotersColumn({ className, option, proposals, status }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const proposal = useMemo(() => getProposalToDisplay(proposals, status), [proposals, status]);
-  const votes = useMemo(() => option === 'ayes' ? proposal?.votes?.ayes : proposal?.votes?.nays, [proposal, option]);
+  const votes = useMemo(() => (option === "ayes" ? proposal?.votes?.ayes : proposal?.votes?.nays), [proposal, option]);
 
-  const voters = useMemo(() => votes?.map((accountId) =>
-    <div
-      className='voter'
-      data-testid={`voters_${option}_${accountId.toString()}`}
-      key={accountId.toString()}
-    >
-      <AddressSmall value={accountId}/>
-    </div>),
-  [option, votes]);
+  const voters = useMemo(
+    () =>
+      votes?.map((accountId) => (
+        <div className="voter" data-testid={`voters_${option}_${accountId.toString()}`} key={accountId.toString()}>
+          <AddressSmall value={accountId} />
+        </div>
+      )),
+    [option, votes]
+  );
 
   return (
     <>
-      {proposal &&
+      {proposal && (
         <div className={className}>
-          <div className='vote-numbers'>
-            <span className='vote-numbers-icon'><Icon icon={icons[option]} /></span>
-            <span className='vote-numbers-label'>
-              {option === 'ayes' && t('Aye: {{count}}', { replace: { count: votes ? votes.length : 0 } })}
-              {option === 'nays' && t('Nay: {{count}}', { replace: { count: votes ? votes.length : 0 } })}
+          <div className="vote-numbers">
+            <span className="vote-numbers-icon">
+              <Icon icon={icons[option]} />
+            </span>
+            <span className="vote-numbers-label">
+              {option === "ayes" && t("Aye: {{count}}", { replace: { count: votes ? votes.length : 0 } })}
+              {option === "nays" && t("Nay: {{count}}", { replace: { count: votes ? votes.length : 0 } })}
             </span>
           </div>
           {voters}
-        </div>}
+        </div>
+      )}
     </>
   );
 }
 
-export default React.memo(styled(VotersColumn)(({ theme }: ThemeProps) => `
+export default React.memo(
+  styled(VotersColumn)(
+    ({ theme }: ThemeProps) => `
   width: 50%;
 
   .vote-numbers {
@@ -80,4 +85,6 @@ export default React.memo(styled(VotersColumn)(({ theme }: ThemeProps) => `
     text-transform: uppercase;
     color: var(--color-label);
   }
-`));
+`
+  )
+);

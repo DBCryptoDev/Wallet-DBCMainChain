@@ -1,14 +1,14 @@
 // Copyright 2017-2021 @polkadot/app-gilt authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { u32 } from '@polkadot/types';
-import type { ActiveGiltsTotal, BalanceOf } from '@polkadot/types/interfaces';
-import type { GiltInfo, QueueTotal } from './types';
+import type { u32 } from "@polkadot/types";
+import type { ActiveGiltsTotal, BalanceOf } from "@polkadot/types/interfaces";
+import type { GiltInfo, QueueTotal } from "./types";
 
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { useApi, useCallMulti } from '@polkadot/react-hooks';
-import { BN_ONE } from '@polkadot/util';
+import { useApi, useCallMulti } from "@polkadot/react-hooks";
+import { BN_ONE } from "@polkadot/util";
 
 interface State {
   info?: GiltInfo;
@@ -17,22 +17,17 @@ interface State {
 const optGiltInfo = {
   defaultValue: {} as GiltInfo,
   transform: ([activeTotal, queueTotals]: [ActiveGiltsTotal, [u32, BalanceOf][]]): GiltInfo => ({
-    activeIndex: activeTotal.index.isZero()
-      ? null
-      : activeTotal.index.sub(BN_ONE),
+    activeIndex: activeTotal.index.isZero() ? null : activeTotal.index.sub(BN_ONE),
     activeTotal,
     queueTotals: queueTotals
       .map(([numItems, balance], index): QueueTotal => ({ balance, index: index + 1, numItems }))
-      .filter(({ balance }) => !balance.isZero())
-  })
+      .filter(({ balance }) => !balance.isZero()),
+  }),
 };
 
-export default function useInfo (): State {
+export default function useInfo(): State {
   const { api } = useApi();
-  const info = useCallMulti<GiltInfo>([
-    api.query.gilt.activeTotal,
-    api.query.gilt.queueTotals
-  ], optGiltInfo);
+  const info = useCallMulti<GiltInfo>([api.query.gilt.activeTotal, api.query.gilt.queueTotals], optGiltInfo);
 
   // useEffect((): void => {
   //   info.activeIndex &&
@@ -42,8 +37,5 @@ export default function useInfo (): State {
   //       .catch(console.error);
   // }, [api, info?.activeIndex]);
 
-  return useMemo(
-    () => ({ info }),
-    [info]
-  );
+  return useMemo(() => ({ info }), [info]);
 }

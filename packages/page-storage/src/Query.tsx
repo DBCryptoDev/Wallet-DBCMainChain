@@ -1,20 +1,20 @@
 // Copyright 2017-2021 @polkadot/app-storage authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { QueryableStorageEntry } from '@polkadot/api/types';
-import type { ComponentRenderer, DefaultProps, RenderFn } from '@polkadot/react-api/hoc/types';
-import type { ConstValue } from '@polkadot/react-components/InputConsts/types';
-import type { Option, Raw } from '@polkadot/types';
-import type { QueryTypes, StorageModuleQuery } from './types';
+import type { QueryableStorageEntry } from "@polkadot/api/types";
+import type { ComponentRenderer, DefaultProps, RenderFn } from "@polkadot/react-api/hoc/types";
+import type { ConstValue } from "@polkadot/react-components/InputConsts/types";
+import type { Option, Raw } from "@polkadot/types";
+import type { QueryTypes, StorageModuleQuery } from "./types";
 
-import React, { useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useMemo } from "react";
+import styled from "styled-components";
 
-import { withCallDiv } from '@polkadot/react-api/hoc';
-import { Button, Labelled } from '@polkadot/react-components';
-import valueToText from '@polkadot/react-params/valueToText';
-import { unwrapStorageType } from '@polkadot/types/primitive/StorageKey';
-import { compactStripLength, isU8a, u8aToHex, u8aToString } from '@polkadot/util';
+import { withCallDiv } from "@polkadot/react-api/hoc";
+import { Button, Labelled } from "@polkadot/react-components";
+import valueToText from "@polkadot/react-params/valueToText";
+import { unwrapStorageType } from "@polkadot/types/primitive/StorageKey";
+import { compactStripLength, isU8a, u8aToHex, u8aToString } from "@polkadot/util";
 
 interface Props {
   className?: string;
@@ -30,51 +30,56 @@ interface CacheInstance {
 
 const cache: CacheInstance[] = [];
 
-function keyToName (isConst: boolean, _key: Uint8Array | QueryableStorageEntry<'promise'> | ConstValue): string {
+function keyToName(isConst: boolean, _key: Uint8Array | QueryableStorageEntry<"promise"> | ConstValue): string {
   if (isConst) {
     const key = _key as ConstValue;
 
     return `const ${key.section}.${key.method}`;
   }
 
-  const key = _key as Uint8Array | QueryableStorageEntry<'promise'>;
+  const key = _key as Uint8Array | QueryableStorageEntry<"promise">;
 
   if (isU8a(key)) {
     const [, u8a] = compactStripLength(key);
 
     // If the string starts with `:`, handle it as a pure string
-    return u8a[0] === 0x3a
-      ? u8aToString(u8a)
-      : u8aToHex(u8a);
+    return u8a[0] === 0x3a ? u8aToString(u8a) : u8aToHex(u8a);
   }
 
   return `${key.creator.section}.${key.creator.method}`;
 }
 
-function typeToString ({ creator: { meta: { modifier, type } } }: QueryableStorageEntry<'promise'>): string {
+function typeToString({
+  creator: {
+    meta: { modifier, type },
+  },
+}: QueryableStorageEntry<"promise">): string {
   const _type = unwrapStorageType(type);
 
-  return modifier.isOptional
-    ? `Option<${_type}>`
-    : _type;
+  return modifier.isOptional ? `Option<${_type}>` : _type;
 }
 
-function createComponent (type: string, Component: React.ComponentType<any>, defaultProps: DefaultProps, renderHelper: ComponentRenderer): { Component: React.ComponentType<any>; render: (createComponent: RenderFn) => React.ComponentType<any>; refresh: (swallowErrors: boolean, contentShorten: boolean) => React.ComponentType<any> } {
+function createComponent(
+  type: string,
+  Component: React.ComponentType<any>,
+  defaultProps: DefaultProps,
+  renderHelper: ComponentRenderer
+): {
+  Component: React.ComponentType<any>;
+  render: (createComponent: RenderFn) => React.ComponentType<any>;
+  refresh: (swallowErrors: boolean, contentShorten: boolean) => React.ComponentType<any>;
+} {
   return {
     Component,
     // In order to modify the parameters which are used to render the default component, we can use this method
     refresh: (swallowErrors: boolean, contentShorten: boolean): React.ComponentType<any> =>
-      renderHelper(
-        (value: any) => <pre>{valueToText(type, value, swallowErrors, contentShorten)}</pre>,
-        defaultProps
-      ),
+      renderHelper((value: any) => <pre>{valueToText(type, value, swallowErrors, contentShorten)}</pre>, defaultProps),
     // In order to replace the default component during runtime we can provide a RenderFn to create a new 'plugged' component
-    render: (createComponent: RenderFn): React.ComponentType<any> =>
-      renderHelper(createComponent, defaultProps)
+    render: (createComponent: RenderFn): React.ComponentType<any> => renderHelper(createComponent, defaultProps),
   };
 }
 
-function getCachedComponent (query: QueryTypes): CacheInstance {
+function getCachedComponent(query: QueryTypes): CacheInstance {
   const { id, isConst, key, params = [] } = query as StorageModuleQuery;
 
   if (!cache[id]) {
@@ -89,38 +94,34 @@ function getCachedComponent (query: QueryTypes): CacheInstance {
     } else {
       if (isU8a(key)) {
         // subscribe to the raw key here
-        renderHelper = withCallDiv('rpc.state.subscribeStorage', {
-          paramName: 'params',
+        renderHelper = withCallDiv("rpc.state.subscribeStorage", {
+          paramName: "params",
           paramValid: true,
           params: [[key]],
           transform: ([data]: Option<Raw>[]): Option<Raw> => data,
-          withIndicator: true
+          withIndicator: true,
         });
       } else {
         const values: unknown[] = params.map(({ value }) => value);
-        const { creator: { meta: { type } } } = key;
-        const allCount = type.isPlain
-          ? 0
-          : type.isMap
-            ? 1
-            : 2;
+        const {
+          creator: {
+            meta: { type },
+          },
+        } = key;
+        const allCount = type.isPlain ? 0 : type.isMap ? 1 : 2;
 
-        renderHelper = withCallDiv('subscribe', {
-          paramName: 'params',
+        renderHelper = withCallDiv("subscribe", {
+          paramName: "params",
           paramValid: true,
-          params: values.length === allCount
-            ? [key, ...values]
-            : [key.entries, ...values],
-          withIndicator: true
+          params: values.length === allCount ? [key, ...values] : [key.entries, ...values],
+          withIndicator: true,
         });
       }
 
-      type = key.creator && key.creator.meta
-        ? typeToString(key)
-        : 'Raw';
+      type = key.creator && key.creator.meta ? typeToString(key) : "Raw";
     }
 
-    const defaultProps = { className: 'ui--output' };
+    const defaultProps = { className: "ui--output" };
     const Component = renderHelper(
       // By default we render a simple div node component with the query results in it
       (value: any) => <pre>{valueToText(type, value, true, true)}</pre>,
@@ -133,7 +134,7 @@ function getCachedComponent (query: QueryTypes): CacheInstance {
   return cache[id];
 }
 
-function Query ({ className = '', onRemove, value }: Props): React.ReactElement<Props> | null {
+function Query({ className = "", onRemove, value }: Props): React.ReactElement<Props> | null {
   const [{ Component }, callName, callType] = useMemo(
     () => [
       getCachedComponent(value),
@@ -141,20 +142,17 @@ function Query ({ className = '', onRemove, value }: Props): React.ReactElement<
       value.isConst
         ? (value.key as unknown as ConstValue).meta.type.toString()
         : isU8a(value.key)
-          ? 'Raw'
-          : typeToString(value.key as QueryableStorageEntry<'promise'>)
+        ? "Raw"
+        : typeToString(value.key as QueryableStorageEntry<"promise">),
     ],
     [value]
   );
 
-  const _onRemove = useCallback(
-    (): void => {
-      delete cache[value.id];
+  const _onRemove = useCallback((): void => {
+    delete cache[value.id];
 
-      onRemove(value.id);
-    },
-    [onRemove, value]
-  );
+    onRemove(value.id);
+  }, [onRemove, value]);
 
   if (!Component) {
     return null;
@@ -162,10 +160,10 @@ function Query ({ className = '', onRemove, value }: Props): React.ReactElement<
 
   return (
     <div className={`storage--Query storage--actionrow ${className}`}>
-      <div className='storage--actionrow-value'>
+      <div className="storage--actionrow-value">
         <Labelled
           label={
-            <div className='storage--actionrow-label'>
+            <div className="storage--actionrow-label">
               {callName}: {callType}
             </div>
           }
@@ -173,12 +171,8 @@ function Query ({ className = '', onRemove, value }: Props): React.ReactElement<
           <Component />
         </Labelled>
       </div>
-      <div className='storage--actionrow-buttons'>
-        <Button
-          icon='times'
-          key='close'
-          onClick={_onRemove}
-        />
+      <div className="storage--actionrow-buttons">
+        <Button icon="times" key="close" onClick={_onRemove} />
       </div>
     </div>
   );

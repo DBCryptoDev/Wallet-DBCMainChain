@@ -1,23 +1,21 @@
 // Copyright 2017-2021 @polkadot/apps-routing authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TFunction } from 'i18next';
-import type { Route } from './types';
+import type { TFunction } from "i18next";
+import type { Route } from "./types";
 
-import Component from '@polkadot/app-poll';
+import Component from "@polkadot/app-poll";
 
-export default function create (t: TFunction): Route {
+export default function create(t: TFunction): Route {
   return {
     Component,
     display: {
       needsAccounts: true,
-      needsApi: [
-        'tx.poll.vote'
-      ]
+      needsApi: ["tx.poll.vote"],
     },
-    group: 'governance',
-    icon: 'podcast',
-    name: 'poll',
-    text: t('nav.poll', 'Token poll', { ns: 'apps-routing' })
+    group: "governance",
+    icon: "podcast",
+    name: "poll",
+    text: t("nav.poll", "Token poll", { ns: "apps-routing" }),
   };
 }

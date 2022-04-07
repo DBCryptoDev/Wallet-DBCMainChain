@@ -1,19 +1,19 @@
 // Copyright 2017-2021 @polkadot/app-calendar authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DateState } from './types';
+import type { DateState } from "./types";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import styled from "styled-components";
 
-import { Tabs } from '@polkadot/react-components';
+import { Tabs } from "@polkadot/react-components";
 
-import Day from './Day';
-import Month from './Month';
-import { useTranslation } from './translate';
-import UpcomingEvents from './UpcomingEvents';
-import useScheduled from './useScheduled';
-import { getDateState, nextMonth, prevMonth } from './util';
+import Day from "./Day";
+import Month from "./Month";
+import { useTranslation } from "./translate";
+import UpcomingEvents from "./UpcomingEvents";
+import useScheduled from "./useScheduled";
+import { getDateState, nextMonth, prevMonth } from "./util";
 
 interface Props {
   basePath: string;
@@ -22,20 +22,22 @@ interface Props {
 
 const NOW_INC = 30 * 1000;
 
-function CalendarApp ({ basePath, className }: Props): React.ReactElement<Props> {
+function CalendarApp({ basePath, className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const scheduled = useScheduled();
   const [now, setNow] = useState(() => new Date());
   const [dateState, setDateState] = useState(() => getDateState(now, now));
   const [allEventsView, setAllEventsView] = useState(false);
 
-  const itemsRef = useRef([{
-    isRoot: true,
-    name: 'view',
-    text: t<string>('Upcoming events')
-  }]);
+  const itemsRef = useRef([
+    {
+      isRoot: true,
+      name: "view",
+      text: t<string>("Upcoming events"),
+    },
+  ]);
 
-  useEffect((): () => void => {
+  useEffect((): (() => void) => {
     const intervalId = setInterval(() => setNow(new Date()), NOW_INC);
 
     return (): void => {
@@ -43,28 +45,26 @@ function CalendarApp ({ basePath, className }: Props): React.ReactElement<Props>
     };
   }, []);
 
-  const [hasNextMonth, hasNextDay, lastDay] = useMemo(
-    () => {
-      const nextDay = new Date(dateState.dateSelected);
+  const [hasNextMonth, hasNextDay, lastDay] = useMemo(() => {
+    const nextDay = new Date(dateState.dateSelected);
 
-      nextDay.setDate(nextDay.getDate() + 1);
+    nextDay.setDate(nextDay.getDate() + 1);
 
-      const nextDayTime = nextDay.getTime();
-      const nextMonthTime = dateState.dateMonthNext.getTime();
-      const hasNextMonth = scheduled.some(({ dateTime }) => dateTime >= nextMonthTime);
-      const hasNextDay = hasNextMonth || scheduled.some(({ dateTime }) => dateTime >= nextDayTime);
-      const lastDay = hasNextMonth
-        ? 42 // more than days in month
-        : scheduled.reduce((lastDay: number, { date }): number => {
-          return date.getFullYear() === dateState.dateMonth.getFullYear() && date.getMonth() === dateState.dateMonth.getMonth()
+    const nextDayTime = nextDay.getTime();
+    const nextMonthTime = dateState.dateMonthNext.getTime();
+    const hasNextMonth = scheduled.some(({ dateTime }) => dateTime >= nextMonthTime);
+    const hasNextDay = hasNextMonth || scheduled.some(({ dateTime }) => dateTime >= nextDayTime);
+    const lastDay = hasNextMonth
+      ? 42 // more than days in month
+      : scheduled.reduce((lastDay: number, { date }): number => {
+          return date.getFullYear() === dateState.dateMonth.getFullYear() &&
+            date.getMonth() === dateState.dateMonth.getMonth()
             ? Math.max(lastDay, date.getDate())
             : lastDay;
         }, 0);
 
-      return [hasNextMonth, hasNextDay, lastDay];
-    },
-    [dateState, scheduled]
-  );
+    return [hasNextMonth, hasNextDay, lastDay];
+  }, [dateState, scheduled]);
 
   const _nextMonth = useCallback(
     () => setDateState(({ dateMonth, dateSelected }) => getDateState(nextMonth(dateMonth), dateSelected)),
@@ -77,50 +77,47 @@ function CalendarApp ({ basePath, className }: Props): React.ReactElement<Props>
   );
 
   const _nextDay = useCallback(
-    () => setDateState(({ dateSelected }): DateState => {
-      const date = new Date(dateSelected);
+    () =>
+      setDateState(({ dateSelected }): DateState => {
+        const date = new Date(dateSelected);
 
-      date.setDate(date.getDate() + 1);
+        date.setDate(date.getDate() + 1);
 
-      return getDateState(date, date);
-    }),
+        return getDateState(date, date);
+      }),
     []
   );
 
   const _prevDay = useCallback(
-    () => setDateState(({ dateSelected }): DateState => {
-      const date = new Date(dateSelected);
+    () =>
+      setDateState(({ dateSelected }): DateState => {
+        const date = new Date(dateSelected);
 
-      date.setDate(date.getDate() - 1);
+        date.setDate(date.getDate() - 1);
 
-      return getDateState(date, date);
-    }),
+        return getDateState(date, date);
+      }),
     []
   );
 
   const _setDay = useCallback(
-    (day: number) => setDateState(({ dateMonth }): DateState => {
-      const date = new Date(dateMonth);
+    (day: number) =>
+      setDateState(({ dateMonth }): DateState => {
+        const date = new Date(dateMonth);
 
-      date.setDate(day);
+        date.setDate(day);
 
-      return getDateState(date, date);
-    }),
+        return getDateState(date, date);
+      }),
     []
   );
 
-  const _setAllEventsView = useCallback(
-    (v) => setAllEventsView(v),
-    []
-  );
+  const _setAllEventsView = useCallback((v) => setAllEventsView(v), []);
 
   return (
     <main className={className}>
-      <Tabs
-        basePath={basePath}
-        items={itemsRef.current}
-      />
-      <div className='calendarFlex'>
+      <Tabs basePath={basePath} items={itemsRef.current} />
+      <div className="calendarFlex">
         <Month
           hasNextMonth={hasNextMonth}
           lastDay={lastDay}
@@ -131,27 +128,20 @@ function CalendarApp ({ basePath, className }: Props): React.ReactElement<Props>
           setPrevMonth={_prevMonth}
           state={dateState}
         />
-        <div className='wrapper-style'>
-          {allEventsView
-            ? (
-              <UpcomingEvents
-                className='upcoming-events'
-                scheduled={scheduled}
-                setView={_setAllEventsView}
-              />
-            )
-            : (
-              <Day
-                date={dateState.dateSelected}
-                hasNextDay={hasNextDay}
-                now={now}
-                scheduled={scheduled}
-                setNextDay={_nextDay}
-                setPrevDay={_prevDay}
-                setView={_setAllEventsView}
-              />
-            )
-          }
+        <div className="wrapper-style">
+          {allEventsView ? (
+            <UpcomingEvents className="upcoming-events" scheduled={scheduled} setView={_setAllEventsView} />
+          ) : (
+            <Day
+              date={dateState.dateSelected}
+              hasNextDay={hasNextDay}
+              now={now}
+              scheduled={scheduled}
+              setNextDay={_nextDay}
+              setPrevDay={_prevDay}
+              setView={_setAllEventsView}
+            />
+          )}
         </div>
       </div>
     </main>
@@ -178,7 +168,7 @@ export default React.memo(styled(CalendarApp)`
       border: 1px solid var(--border-table);
       border-radius: 0.25rem;
 
-      &+div {
+      & + div {
         margin-left: 1.5rem;
       }
 

@@ -1,15 +1,24 @@
 // Copyright 2017-2021 @polkadot/app-extrinsics authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Props, RawParam } from '@polkadot/react-params/types';
+import type { Props, RawParam } from "@polkadot/react-params/types";
 
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-import { useApi } from '@polkadot/react-hooks';
+import { useApi } from "@polkadot/react-hooks";
 
-import ExtrinsicDisplay from './Extrinsic';
+import ExtrinsicDisplay from "./Extrinsic";
 
-function ProposalDisplay ({ className = '', isDisabled, isError, label, onChange, onEnter, onEscape, withLabel }: Props): React.ReactElement<Props> {
+function ProposalDisplay({
+  className = "",
+  isDisabled,
+  isError,
+  label,
+  onChange,
+  onEnter,
+  onEscape,
+  withLabel,
+}: Props): React.ReactElement<Props> {
   const { api, apiDefaultTxSudo } = useApi();
 
   const _onChange = useCallback(
@@ -17,13 +26,14 @@ function ProposalDisplay ({ className = '', isDisabled, isError, label, onChange
       let proposal = null;
 
       if (isValid && value) {
-        proposal = api.createType('Proposal', value);
+        proposal = api.createType("Proposal", value);
       }
 
-      onChange && onChange({
-        isValid,
-        value: proposal
-      });
+      onChange &&
+        onChange({
+          isValid,
+          value: proposal,
+        });
     },
     [api, onChange]
   );

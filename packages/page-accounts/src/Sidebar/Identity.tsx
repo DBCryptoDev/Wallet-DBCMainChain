@@ -1,24 +1,24 @@
 // Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AddressIdentity } from '@polkadot/react-hooks/types';
-import type { AccountId, BalanceOf } from '@polkadot/types/interfaces';
+import type { AddressIdentity } from "@polkadot/react-hooks/types";
+import type { AccountId, BalanceOf } from "@polkadot/types/interfaces";
 
-import React from 'react';
+import React from "react";
 
-import { AddressMini, AvatarItem, Expander, Icon, IconLink, Tag } from '@polkadot/react-components';
-import { useApi, useCall, useRegistrars, useToggle } from '@polkadot/react-hooks';
-import { isHex } from '@polkadot/util';
+import { AddressMini, AvatarItem, Expander, Icon, IconLink, Tag } from "@polkadot/react-components";
+import { useApi, useCall, useRegistrars, useToggle } from "@polkadot/react-hooks";
+import { isHex } from "@polkadot/util";
 
-import { useTranslation } from '../translate';
-import RegistrarJudgement from './RegistrarJudgement';
+import { useTranslation } from "../translate";
+import RegistrarJudgement from "./RegistrarJudgement";
 
 interface Props {
   address: string;
   identity?: AddressIdentity;
 }
 
-function Identity ({ address, identity }: Props): React.ReactElement<Props> | null {
+function Identity({ address, identity }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const { isRegistrar, registrars } = useRegistrars();
@@ -31,39 +31,31 @@ function Identity ({ address, identity }: Props): React.ReactElement<Props> | nu
 
   return (
     <section>
-      <div className='ui--AddressMenu-section ui--AddressMenu-identity'>
-        <div className='ui--AddressMenu-sectionHeader'>
+      <div className="ui--AddressMenu-section ui--AddressMenu-identity">
+        <div className="ui--AddressMenu-sectionHeader">
           <div>
-            <Icon icon='address-card' />
+            <Icon icon="address-card" />
             &nbsp;
-            {t<string>('identity')}
+            {t<string>("identity")}
           </div>
           <Tag
-            color={
-              identity.isBad
-                ? 'red'
-                : identity.isGood
-                  ? 'green'
-                  : 'yellow'
-            }
+            color={identity.isBad ? "red" : identity.isGood ? "green" : "yellow"}
             isTag={false}
             label={
               <>
                 <b>{identity.judgements.length}&nbsp;</b>
-                {
-                  identity.judgements.length
-                    ? identity.isBad
-                      ? identity.isErroneous
-                        ? t<string>('Erroneous')
-                        : t<string>('Low quality')
-                      : identity.isKnownGood
-                        ? t<string>('Known good')
-                        : t<string>('Reasonable')
-                    : t<string>('No judgments')
-                }
+                {identity.judgements.length
+                  ? identity.isBad
+                    ? identity.isErroneous
+                      ? t<string>("Erroneous")
+                      : t<string>("Low quality")
+                    : identity.isKnownGood
+                    ? t<string>("Known good")
+                    : t<string>("Reasonable")
+                  : t<string>("No judgments")}
               </>
             }
-            size='tiny'
+            size="tiny"
           />
         </div>
         <div>
@@ -74,125 +66,109 @@ function Identity ({ address, identity }: Props): React.ReactElement<Props> | nu
               //   ? <img src={identity.image} />
               //   : <i className='icon user ui--AddressMenu-identityIcon' />
               //
-              <Icon
-                className='ui--AddressMenu-identityIcon'
-                icon='user'
-              />
+              <Icon className="ui--AddressMenu-identityIcon" icon="user" />
             }
             subtitle={identity.legal}
             title={identity.display}
           />
-          <div className='ui--AddressMenu-identityTable'>
+          <div className="ui--AddressMenu-identityTable">
             {identity.parent && (
-              <div className='tr parent'>
-                <div className='th'>{t<string>('parent')}</div>
-                <div className='td'>
-                  <AddressMini
-                    className='parent'
-                    isPadded={false}
-                    value={identity.parent}
-                  />
+              <div className="tr parent">
+                <div className="th">{t<string>("parent")}</div>
+                <div className="td">
+                  <AddressMini className="parent" isPadded={false} value={identity.parent} />
                 </div>
               </div>
             )}
             {identity.email && (
-              <div className='tr'>
-                <div className='th'>{t<string>('email')}</div>
-                <div className='td'>
-                  {isHex(identity.email) || !identity.isKnownGood
-                    ? identity.email
-                    : (
-                      <a
-                        href={`mailto:${identity.email as string}`}
-                        rel='noopener noreferrer'
-                        target='_blank'
-                      >
-                        {identity.email}
-                      </a>
-                    )}
+              <div className="tr">
+                <div className="th">{t<string>("email")}</div>
+                <div className="td">
+                  {isHex(identity.email) || !identity.isKnownGood ? (
+                    identity.email
+                  ) : (
+                    <a href={`mailto:${identity.email as string}`} rel="noopener noreferrer" target="_blank">
+                      {identity.email}
+                    </a>
+                  )}
                 </div>
               </div>
             )}
             {identity.web && (
-              <div className='tr'>
-                <div className='th'>{t<string>('website')}</div>
-                <div className='td'>
-                  {isHex(identity.web) || !identity.isKnownGood
-                    ? identity.web
-                    : (
-                      <a
-                        href={(identity.web as string).replace(/^(https?:\/\/)?/g, 'https://')}
-                        rel='noopener noreferrer'
-                        target='_blank'
-                      >
-                        {identity.web}
-                      </a>
-                    )}
+              <div className="tr">
+                <div className="th">{t<string>("website")}</div>
+                <div className="td">
+                  {isHex(identity.web) || !identity.isKnownGood ? (
+                    identity.web
+                  ) : (
+                    <a
+                      href={(identity.web as string).replace(/^(https?:\/\/)?/g, "https://")}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {identity.web}
+                    </a>
+                  )}
                 </div>
               </div>
             )}
             {identity.twitter && (
-              <div className='tr'>
-                <div className='th'>{t<string>('twitter')}</div>
-                <div className='td'>
-                  {isHex(identity.twitter) || !identity.isKnownGood
-                    ? identity.twitter
-                    : (
-                      <a
-                        href={
-                          (identity.twitter as string).startsWith('https://twitter.com/')
-                            ? (identity.twitter as string)
-                            : `https://twitter.com/${identity.twitter as string}`
-                        }
-                        rel='noopener noreferrer'
-                        target='_blank'
-                      >
-                        {identity.twitter}
-                      </a>
-                    )}
+              <div className="tr">
+                <div className="th">{t<string>("twitter")}</div>
+                <div className="td">
+                  {isHex(identity.twitter) || !identity.isKnownGood ? (
+                    identity.twitter
+                  ) : (
+                    <a
+                      href={
+                        (identity.twitter as string).startsWith("https://twitter.com/")
+                          ? (identity.twitter as string)
+                          : `https://twitter.com/${identity.twitter as string}`
+                      }
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {identity.twitter}
+                    </a>
+                  )}
                 </div>
               </div>
             )}
             {identity.riot && (
-              <div className='tr'>
-                <div className='th'>{t<string>('riot')}</div>
-                <div className='td'>
-                  {identity.riot}
-                </div>
+              <div className="tr">
+                <div className="th">{t<string>("riot")}</div>
+                <div className="td">{identity.riot}</div>
               </div>
             )}
             {!!subs?.length && (
-              <div className='tr subs'>
-                {subs.length > 1
-                  ? <div className='th top'>{t<string>('subs')}</div>
-                  : <div className='th'>{t<string>('sub')}</div>
-                }
-                <div className='td'>
+              <div className="tr subs">
+                {subs.length > 1 ? (
+                  <div className="th top">{t<string>("subs")}</div>
+                ) : (
+                  <div className="th">{t<string>("sub")}</div>
+                )}
+                <div className="td">
                   <Expander summary={`(${subs.length})`}>
-                    <div className='body column'>
-                      {subs.map((sub) =>
-                        <AddressMini
-                          className='subs'
-                          isPadded={false}
-                          key={sub.toString()}
-                          value={sub}
-                        />
-                      )}
+                    <div className="body column">
+                      {subs.map((sub) => (
+                        <AddressMini className="subs" isPadded={false} key={sub.toString()} value={sub} />
+                      ))}
                     </div>
                   </Expander>
                 </div>
-              </div>)}
+              </div>
+            )}
           </div>
         </div>
       </div>
       {isRegistrar && (
-        <div className='ui--AddressMenu-section'>
-          <div className='ui--AddressMenu-actions'>
+        <div className="ui--AddressMenu-section">
+          <div className="ui--AddressMenu-actions">
             <ul>
               <li>
                 <IconLink
-                  icon='address-card'
-                  label={t<string>('Add identity judgment')}
+                  icon="address-card"
+                  label={t<string>("Add identity judgment")}
                   onClick={toggleIsJudgementOpen}
                 />
               </li>
@@ -203,7 +179,7 @@ function Identity ({ address, identity }: Props): React.ReactElement<Props> | nu
       {isJudgementOpen && isRegistrar && (
         <RegistrarJudgement
           address={address}
-          key='modal-judgement'
+          key="modal-judgement"
           registrars={registrars}
           toggleJudgement={toggleIsJudgementOpen}
         />

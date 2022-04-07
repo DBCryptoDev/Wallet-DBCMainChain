@@ -1,15 +1,15 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DropdownProps } from 'semantic-ui-react';
+import type { DropdownProps } from "semantic-ui-react";
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button as SUIButton, Dropdown as SUIDropdown } from 'semantic-ui-react';
-import styled from 'styled-components';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Button as SUIButton, Dropdown as SUIDropdown } from "semantic-ui-react";
+import styled from "styled-components";
 
-import { isUndefined } from '@polkadot/util';
+import { isUndefined } from "@polkadot/util";
 
-import Labelled from './Labelled';
+import Labelled from "./Labelled";
 
 interface Props<Option> {
   allowAdd?: boolean;
@@ -43,10 +43,38 @@ interface Props<Option> {
 
 export type IDropdown<Option> = React.ComponentType<Props<Option>> & {
   Header: React.ComponentType<{ content: React.ReactNode }>;
-}
+};
 
-function BaseDropdown<Option> ({ allowAdd = false, children, className = '', defaultValue, dropdownClassName, help, isButton, isDisabled, isError, isFull, isMultiple, label, labelExtra, onAdd, onBlur, onChange, onClose, onSearch, options, placeholder, renderLabel, searchInput, tabIndex, transform, value, withEllipsis, withLabel }: Props<Option>): React.ReactElement<Props<Option>> {
-  const lastUpdate = useRef<string>('');
+function BaseDropdown<Option>({
+  allowAdd = false,
+  children,
+  className = "",
+  defaultValue,
+  dropdownClassName,
+  help,
+  isButton,
+  isDisabled,
+  isError,
+  isFull,
+  isMultiple,
+  label,
+  labelExtra,
+  onAdd,
+  onBlur,
+  onChange,
+  onClose,
+  onSearch,
+  options,
+  placeholder,
+  renderLabel,
+  searchInput,
+  tabIndex,
+  transform,
+  value,
+  withEllipsis,
+  withLabel,
+}: Props<Option>): React.ReactElement<Props<Option>> {
+  const lastUpdate = useRef<string>("");
   const [stored, setStored] = useState<string | undefined>();
 
   const _setStored = useCallback(
@@ -58,11 +86,7 @@ function BaseDropdown<Option> ({ allowAdd = false, children, className = '', def
 
         setStored(value);
 
-        onChange && onChange(
-          transform
-            ? transform(value)
-            : value
-        );
+        onChange && onChange(transform ? transform(value) : value);
       }
     },
     [onChange, transform]
@@ -73,14 +97,12 @@ function BaseDropdown<Option> ({ allowAdd = false, children, className = '', def
   }, [_setStored, defaultValue, value]);
 
   const _onAdd = useCallback(
-    (_: React.SyntheticEvent<HTMLElement>, { value }: DropdownProps): void =>
-      onAdd && onAdd(value),
+    (_: React.SyntheticEvent<HTMLElement>, { value }: DropdownProps): void => onAdd && onAdd(value),
     [onAdd]
   );
 
   const _onChange = useCallback(
-    (_: React.SyntheticEvent<HTMLElement> | null, { value }: DropdownProps): void =>
-      _setStored(value as string),
+    (_: React.SyntheticEvent<HTMLElement> | null, { value }: DropdownProps): void => _setStored(value as string),
     [_setStored]
   );
 
@@ -109,22 +131,25 @@ function BaseDropdown<Option> ({ allowAdd = false, children, className = '', def
     />
   );
 
-  return isButton
-    ? <SUIButton.Group>{dropdown}{children}</SUIButton.Group>
-    : (
-      <Labelled
-        className={`ui--Dropdown ${className}`}
-        help={help}
-        isFull={isFull}
-        label={label}
-        labelExtra={labelExtra}
-        withEllipsis={withEllipsis}
-        withLabel={withLabel}
-      >
-        {dropdown}
-        {children}
-      </Labelled>
-    );
+  return isButton ? (
+    <SUIButton.Group>
+      {dropdown}
+      {children}
+    </SUIButton.Group>
+  ) : (
+    <Labelled
+      className={`ui--Dropdown ${className}`}
+      help={help}
+      isFull={isFull}
+      label={label}
+      labelExtra={labelExtra}
+      withEllipsis={withEllipsis}
+      withLabel={withLabel}
+    >
+      {dropdown}
+      {children}
+    </Labelled>
+  );
 }
 
 const Dropdown = React.memo(styled(BaseDropdown)`

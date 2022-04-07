@@ -1,22 +1,22 @@
 // Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Props } from '../types';
+import type { Props } from "../types";
 
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-import { Dropdown } from '@polkadot/react-components';
-import { ClassOf } from '@polkadot/types/create';
-import { bnToBn } from '@polkadot/util';
+import { Dropdown } from "@polkadot/react-components";
+import { ClassOf } from "@polkadot/types/create";
+import { bnToBn } from "@polkadot/util";
 
-import Bare from './Bare';
+import Bare from "./Bare";
 
 type TextMap = Record<number, string>;
 
 const options = [
-  { text: 'Super majority approval', value: 0 },
-  { text: 'Super majority rejection', value: 1 },
-  { text: 'Simple majority', value: 2 }
+  { text: "Super majority approval", value: 0 },
+  { text: "Super majority rejection", value: 1 },
+  { text: "Simple majority", value: 2 },
 ];
 
 export const textMap = options.reduce((textMap, { text, value }): TextMap => {
@@ -25,24 +25,33 @@ export const textMap = options.reduce((textMap, { text, value }): TextMap => {
   return textMap;
 }, {} as unknown as TextMap);
 
-function VoteThresholdParam ({ className = '', defaultValue: { value }, isDisabled, isError, label, onChange, registry, withLabel }: Props): React.ReactElement<Props> {
+function VoteThresholdParam({
+  className = "",
+  defaultValue: { value },
+  isDisabled,
+  isError,
+  label,
+  onChange,
+  registry,
+  withLabel,
+}: Props): React.ReactElement<Props> {
   const _onChange = useCallback(
     (value: number) =>
-      onChange && onChange({
+      onChange &&
+      onChange({
         isValid: true,
-        value
+        value,
       }),
     [onChange]
   );
 
-  const defaultValue = value instanceof ClassOf(registry, 'VoteThreshold')
-    ? value.toNumber()
-    : bnToBn(value as number).toNumber();
+  const defaultValue =
+    value instanceof ClassOf(registry, "VoteThreshold") ? value.toNumber() : bnToBn(value as number).toNumber();
 
   return (
     <Bare className={className}>
       <Dropdown
-        className='full'
+        className="full"
         defaultValue={defaultValue}
         isDisabled={isDisabled}
         isError={isError}

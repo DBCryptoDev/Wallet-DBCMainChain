@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TypeDef } from '@polkadot/types/types';
-import type { ParamDef, Props, RawParam } from '../types';
+import type { TypeDef } from "@polkadot/types/types";
+import type { ParamDef, Props, RawParam } from "../types";
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
-import { Dropdown } from '@polkadot/react-components';
-import { Enum, getTypeDef } from '@polkadot/types';
+import { Dropdown } from "@polkadot/react-components";
+import { Enum, getTypeDef } from "@polkadot/types";
 
-import Params from '../';
-import Bare from './Bare';
-import Static from './Static';
+import Params from "../";
+import Bare from "./Bare";
+import Static from "./Static";
 
 interface Option {
   text?: string;
@@ -23,23 +23,36 @@ interface Options {
   subTypes: TypeDef[];
 }
 
-function EnumParam (props: Props): React.ReactElement<Props> {
-  const { className = '', defaultValue, isDisabled, isError, label, onChange, overrides, registry, type, withLabel } = props;
+function EnumParam(props: Props): React.ReactElement<Props> {
+  const {
+    className = "",
+    defaultValue,
+    isDisabled,
+    isError,
+    label,
+    onChange,
+    overrides,
+    registry,
+    type,
+    withLabel,
+  } = props;
   const [current, setCurrent] = useState<ParamDef[] | null>(null);
   const [initialValue, setInitialValue] = useState<string | null>(null);
   const [{ options, subTypes }, setOptions] = useState<Options>({ options: [], subTypes: [] });
 
   useEffect((): void => {
-    const rawType = registry.createType(type.type as 'u32').toRawType();
+    const rawType = registry.createType(type.type as "u32").toRawType();
     const typeDef = getTypeDef(rawType);
     const subTypes = typeDef.sub as TypeDef[];
 
     setOptions({
-      options: subTypes.map(({ name }): Option => ({
-        text: name,
-        value: name
-      })),
-      subTypes
+      options: subTypes.map(
+        ({ name }): Option => ({
+          text: name,
+          value: name,
+        })
+      ),
+      subTypes,
     });
     setCurrent([{ name: subTypes[0].name, type: subTypes[0] }]);
   }, [registry, type]);
@@ -58,21 +71,19 @@ function EnumParam (props: Props): React.ReactElement<Props> {
     (value: string): void => {
       const newType = subTypes.find(({ name }): boolean => name === value) || null;
 
-      setCurrent(
-        newType
-          ? [{ name: newType.name, type: newType }]
-          : null
-      );
+      setCurrent(newType ? [{ name: newType.name, type: newType }] : null);
     },
     [subTypes]
   );
 
   const _onChangeParam = useCallback(
     ([{ isValid, value }]: RawParam[]): void => {
-      current && onChange && onChange({
-        isValid,
-        value: { [current[0].name as string]: value }
-      });
+      current &&
+        onChange &&
+        onChange({
+          isValid,
+          value: { [current[0].name as string]: value },
+        });
     },
     [current, onChange]
   );
@@ -84,7 +95,7 @@ function EnumParam (props: Props): React.ReactElement<Props> {
   return (
     <Bare className={className}>
       <Dropdown
-        className='full'
+        className="full"
         defaultValue={initialValue}
         isDisabled={isDisabled}
         isError={isError}
@@ -94,14 +105,7 @@ function EnumParam (props: Props): React.ReactElement<Props> {
         withEllipsis
         withLabel={withLabel}
       />
-      {current && (
-        <Params
-          onChange={_onChangeParam}
-          overrides={overrides}
-          params={current}
-          registry={registry}
-        />
-      )}
+      {current && <Params onChange={_onChangeParam} overrides={overrides} params={current} registry={registry} />}
     </Bare>
   );
 }

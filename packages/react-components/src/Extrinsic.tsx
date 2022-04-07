@@ -1,28 +1,28 @@
 // Copyright 2017-2021 @polkadot/app-extrinsics authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SubmittableExtrinsic, SubmittableExtrinsicFunction } from '@polkadot/api/types';
-import type { RawParam } from '@polkadot/react-params/types';
-import type { TypeDef } from '@polkadot/types/types';
+import type { SubmittableExtrinsic, SubmittableExtrinsicFunction } from "@polkadot/api/types";
+import type { RawParam } from "@polkadot/react-params/types";
+import type { TypeDef } from "@polkadot/types/types";
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
-import Params from '@polkadot/react-params';
-import { GenericCall } from '@polkadot/types';
-import { getTypeDef } from '@polkadot/types/create';
-import { isUndefined } from '@polkadot/util';
+import Params from "@polkadot/react-params";
+import { GenericCall } from "@polkadot/types";
+import { getTypeDef } from "@polkadot/types/create";
+import { isUndefined } from "@polkadot/util";
 
-import InputExtrinsic from './InputExtrinsic';
-import paramComponents from './Params';
+import InputExtrinsic from "./InputExtrinsic";
+import paramComponents from "./Params";
 
 interface Props {
   className?: string;
-  defaultValue: SubmittableExtrinsicFunction<'promise'>;
+  defaultValue: SubmittableExtrinsicFunction<"promise">;
   isDisabled?: boolean;
   isError?: boolean;
   isPrivate?: boolean;
   label?: React.ReactNode;
-  onChange: (method?: SubmittableExtrinsic<'promise'>) => void;
+  onChange: (method?: SubmittableExtrinsic<"promise">) => void;
   onEnter?: () => void;
   onError?: (error?: Error | null) => void;
   onEscape?: () => void;
@@ -30,21 +30,32 @@ interface Props {
 }
 
 interface CallState {
-  fn: SubmittableExtrinsicFunction<'promise'>;
+  fn: SubmittableExtrinsicFunction<"promise">;
   params: {
     name: string;
-    type: TypeDef
+    type: TypeDef;
   }[];
 }
 
-function getParams ({ meta }: SubmittableExtrinsicFunction<'promise'>): { name: string; type: TypeDef }[] {
+function getParams({ meta }: SubmittableExtrinsicFunction<"promise">): { name: string; type: TypeDef }[] {
   return GenericCall.filterOrigin(meta).map((arg): { name: string; type: TypeDef } => ({
     name: arg.name.toString(),
-    type: getTypeDef(arg.type.toString())
+    type: getTypeDef(arg.type.toString()),
   }));
 }
 
-function ExtrinsicDisplay ({ defaultValue, isDisabled, isError, isPrivate, label, onChange, onEnter, onError, onEscape, withLabel }: Props): React.ReactElement<Props> {
+function ExtrinsicDisplay({
+  defaultValue,
+  isDisabled,
+  isError,
+  isPrivate,
+  label,
+  onChange,
+  onEnter,
+  onError,
+  onEscape,
+  withLabel,
+}: Props): React.ReactElement<Props> {
   const [extrinsic, setCall] = useState<CallState>({ fn: defaultValue, params: getParams(defaultValue) });
   const [values, setValues] = useState<RawParam[]>([]);
 
@@ -53,11 +64,9 @@ function ExtrinsicDisplay ({ defaultValue, isDisabled, isError, isPrivate, label
   }, [extrinsic]);
 
   useEffect((): void => {
-    const isValid = values.reduce((isValid, value): boolean =>
-      isValid &&
-      !isUndefined(value) &&
-      !isUndefined(value.value) &&
-      value.isValid, extrinsic.params.length === values.length
+    const isValid = values.reduce(
+      (isValid, value): boolean => isValid && !isUndefined(value) && !isUndefined(value.value) && value.isValid,
+      extrinsic.params.length === values.length
     );
 
     let method;
@@ -76,17 +85,20 @@ function ExtrinsicDisplay ({ defaultValue, isDisabled, isError, isPrivate, label
   }, [extrinsic, onChange, onError, values]);
 
   const _onChangeMethod = useCallback(
-    (fn: SubmittableExtrinsicFunction<'promise'>): void => setCall({ fn, params: getParams(fn) }),
+    (fn: SubmittableExtrinsicFunction<"promise">): void => setCall({ fn, params: getParams(fn) }),
     []
   );
 
-  const { fn: { meta, method, section }, params } = extrinsic;
+  const {
+    fn: { meta, method, section },
+    params,
+  } = extrinsic;
 
   return (
-    <div className='extrinsics--Extrinsic'>
+    <div className="extrinsics--Extrinsic">
       <InputExtrinsic
         defaultValue={defaultValue}
-        help={meta?.documentation.join(' ')}
+        help={meta?.documentation.join(" ")}
         isDisabled={isDisabled}
         isError={isError}
         isPrivate={isPrivate}

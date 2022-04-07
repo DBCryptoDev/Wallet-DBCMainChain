@@ -1,83 +1,111 @@
 // Copyright 2017-2021 @polkadot/app-parachains authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Option, StorageKey } from '@polkadot/types';
-import type { BlockNumber, WinningData } from '@polkadot/types/interfaces';
-import type { AuctionInfo, WinnerData, Winning } from './types';
+import type { Option, StorageKey } from "@polkadot/types";
+import type { BlockNumber, WinningData } from "@polkadot/types/interfaces";
+import type { AuctionInfo, WinnerData, Winning } from "./types";
 
-import BN from 'bn.js';
-import { useEffect, useRef, useState } from 'react';
+import BN from "bn.js";
+import { useEffect, useRef, useState } from "react";
 
-import { useApi, useBestNumber, useCall, useEventTrigger } from '@polkadot/react-hooks';
-import { BN_ONE, BN_ZERO, u8aEq } from '@polkadot/util';
+import { useApi, useBestNumber, useCall, useEventTrigger } from "@polkadot/react-hooks";
+import { BN_ONE, BN_ZERO, u8aEq } from "@polkadot/util";
 
-import { CROWD_PREFIX, RANGES } from './constants';
+import { CROWD_PREFIX, RANGES } from "./constants";
 
 const FIRST_PARAM = [0];
 
-function isNewWinners (a: WinnerData[], b: WinnerData[]): boolean {
+function isNewWinners(a: WinnerData[], b: WinnerData[]): boolean {
   return JSON.stringify({ w: a }) !== JSON.stringify({ w: b });
 }
 
-function isNewOrdering (a: WinnerData[], b: WinnerData[]): boolean {
-  return a.length !== b.length || a.some(({ firstSlot, lastSlot, paraId }, index) =>
-    !paraId.eq(b[index].paraId) ||
-    !firstSlot.eq(b[index].firstSlot) ||
-    !lastSlot.eq(b[index].lastSlot)
+function isNewOrdering(a: WinnerData[], b: WinnerData[]): boolean {
+  return (
+    a.length !== b.length ||
+    a.some(
+      ({ firstSlot, lastSlot, paraId }, index) =>
+        !paraId.eq(b[index].paraId) || !firstSlot.eq(b[index].firstSlot) || !lastSlot.eq(b[index].lastSlot)
+    )
   );
 }
 
-function extractWinners (auctionInfo: AuctionInfo, optData: Option<WinningData>): WinnerData[] {
+function extractWinners(auctionInfo: AuctionInfo, optData: Option<WinningData>): WinnerData[] {
   return optData.isNone
     ? []
     : optData.unwrap().reduce<WinnerData[]>((winners, optEntry, index): WinnerData[] => {
-      if (optEntry.isSome) {
-        const [accountId, paraId, value] = optEntry.unwrap();
-        const period = auctionInfo.leasePeriod || BN_ZERO;
-        const [first, last] = RANGES[index];
+        if (optEntry.isSome) {
+          const [accountId, paraId, value] = optEntry.unwrap();
+          const period = auctionInfo.leasePeriod || BN_ZERO;
+          const [first, last] = RANGES[index];
 
-        winners.push({
-          accountId: accountId.toString(),
-          firstSlot: period.addn(first),
-          isCrowdloan: u8aEq(CROWD_PREFIX, accountId.subarray(0, CROWD_PREFIX.length)),
-          lastSlot: period.addn(last),
-          paraId,
-          value
-        });
-      }
+          winners.push({
+            accountId: accountId.toString(),
+            firstSlot: period.addn(first),
+            isCrowdloan: u8aEq(CROWD_PREFIX, accountId.subarray(0, CROWD_PREFIX.length)),
+            lastSlot: period.addn(last),
+            paraId,
+            value,
+          });
+        }
 
-      return winners;
-    }, []);
+        return winners;
+      }, []);
 }
 
-function createWinning ({ endBlock }: AuctionInfo, blockOffset: BN | null | undefined, winners: WinnerData[]): Winning {
+function createWinning({ endBlock }: AuctionInfo, blockOffset: BN | null | undefined, winners: WinnerData[]): Winning {
   return {
-    blockNumber: endBlock && blockOffset
-      ? blockOffset.add(endBlock)
-      : blockOffset || BN_ZERO,
+    blockNumber: endBlock && blockOffset ? blockOffset.add(endBlock) : blockOffset || BN_ZERO,
     blockOffset: blockOffset || BN_ZERO,
     total: winners.reduce((total, { value }) => total.iadd(value), new BN(0)),
-    winners
+    winners,
   };
 }
 
-function extractData (auctionInfo: AuctionInfo, values: [StorageKey<[BlockNumber]>, Option<WinningData>][]): Winning[] {
+function extractData(auctionInfo: AuctionInfo, values: [StorageKey<[BlockNumber]>, Option<WinningData>][]): Winning[] {
   return values
-    .sort(([{ args: [a] }], [{ args: [b] }]) => a.cmp(b))
-    .reduce((all: Winning[], [{ args: [blockOffset] }, optData]): Winning[] => {
-      const winners = extractWinners(auctionInfo, optData);
+    .sort(
+      (
+        [
+          {
+            args: [a],
+          },
+        ],
+        [
+          {
+            args: [b],
+          },
+        ]
+      ) => a.cmp(b)
+    )
+    .reduce(
+      (
+        all: Winning[],
+        [
+          {
+            args: [blockOffset],
+          },
+          optData,
+        ]
+      ): Winning[] => {
+        const winners = extractWinners(auctionInfo, optData);
 
-      winners.length && (
-        all.length === 0 ||
-        isNewWinners(winners, all[all.length - 1].winners)
-      ) && all.push(createWinning(auctionInfo, blockOffset, winners));
+        winners.length &&
+          (all.length === 0 || isNewWinners(winners, all[all.length - 1].winners)) &&
+          all.push(createWinning(auctionInfo, blockOffset, winners));
 
-      return all;
-    }, [])
+        return all;
+      },
+      []
+    )
     .reverse();
 }
 
-function mergeCurrent (auctionInfo: AuctionInfo, prev: Winning[] | undefined, optCurrent: Option<WinningData>, blockOffset: BN): Winning[] | undefined {
+function mergeCurrent(
+  auctionInfo: AuctionInfo,
+  prev: Winning[] | undefined,
+  optCurrent: Option<WinningData>,
+  blockOffset: BN
+): Winning[] | undefined {
   const current = createWinning(auctionInfo, blockOffset, extractWinners(auctionInfo, optCurrent));
 
   if (current.winners.length) {
@@ -99,7 +127,11 @@ function mergeCurrent (auctionInfo: AuctionInfo, prev: Winning[] | undefined, op
   return prev;
 }
 
-function mergeFirst (auctionInfo: AuctionInfo, prev: Winning[] | undefined, optFirstData: Option<WinningData>): Winning[] | undefined {
+function mergeFirst(
+  auctionInfo: AuctionInfo,
+  prev: Winning[] | undefined,
+  optFirstData: Option<WinningData>
+): Winning[] | undefined {
   if (prev && prev.length <= 1) {
     const updated: Winning[] = prev || [];
     const firstEntry = createWinning(auctionInfo, null, extractWinners(auctionInfo, optFirstData));
@@ -118,7 +150,7 @@ function mergeFirst (auctionInfo: AuctionInfo, prev: Winning[] | undefined, optF
   return prev;
 }
 
-export default function useWinningData (auctionInfo?: AuctionInfo): Winning[] | undefined {
+export default function useWinningData(auctionInfo?: AuctionInfo): Winning[] | undefined {
   const { api } = useApi();
   const [result, setResult] = useState<Winning[] | undefined>();
   const bestNumber = useBestNumber();
@@ -129,16 +161,12 @@ export default function useWinningData (auctionInfo?: AuctionInfo): Winning[] | 
 
   // should be fired once, all entries as an initial round
   useEffect((): void => {
-    auctionInfo && allEntries && setResult(
-      extractData(auctionInfo, allEntries)
-    );
+    auctionInfo && allEntries && setResult(extractData(auctionInfo, allEntries));
   }, [allEntries, auctionInfo]);
 
   // when block 0 changes, update (typically in non-ending-period, static otherwise)
   useEffect((): void => {
-    auctionInfo && optFirstData && setResult((prev) =>
-      mergeFirst(auctionInfo, prev, optFirstData)
-    );
+    auctionInfo && optFirstData && setResult((prev) => mergeFirst(auctionInfo, prev, optFirstData));
   }, [auctionInfo, optFirstData]);
 
   // on a bid event, get the new entry (assuming the event really triggered, i.e. not just a block)
@@ -152,9 +180,7 @@ export default function useWinningData (auctionInfo?: AuctionInfo): Winning[] | 
 
       api.query.auctions
         ?.winning<Option<WinningData>>(blockOffset)
-        .then((optCurrent) => setResult((prev) =>
-          mergeCurrent(auctionInfo, prev, optCurrent, blockOffset)
-        ))
+        .then((optCurrent) => setResult((prev) => mergeCurrent(auctionInfo, prev, optCurrent, blockOffset)))
         .catch(console.error);
     }
   }, [api, bestNumber, auctionInfo, trigger, triggerRef]);

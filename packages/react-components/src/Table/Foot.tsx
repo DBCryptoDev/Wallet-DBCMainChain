@@ -1,8 +1,8 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface Props {
   className?: string;
@@ -10,16 +10,12 @@ interface Props {
   isEmpty: boolean;
 }
 
-function Foot ({ className = '', footer, isEmpty }: Props): React.ReactElement<Props> | null {
+function Foot({ className = "", footer, isEmpty }: Props): React.ReactElement<Props> | null {
   if (!footer || isEmpty) {
     return null;
   }
 
-  return (
-    <tfoot className={className}>
-      {footer}
-    </tfoot>
-  );
+  return <tfoot className={className}>{footer}</tfoot>;
 }
 
 export default React.memo(styled(Foot)`

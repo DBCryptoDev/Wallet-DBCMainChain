@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { QueueTx } from '@polkadot/react-components/Status/types';
+import type { QueueTx } from "@polkadot/react-components/Status/types";
 
-import BN from 'bn.js';
-import React from 'react';
-import styled from 'styled-components';
+import BN from "bn.js";
+import React from "react";
+import styled from "styled-components";
 
-import { Call, Expander, Modal } from '@polkadot/react-components';
+import { Call, Expander, Modal } from "@polkadot/react-components";
 
-import PaymentInfo from './PaymentInfo';
-import { useTranslation } from './translate';
+import PaymentInfo from "./PaymentInfo";
+import { useTranslation } from "./translate";
 
 interface Props {
   className?: string;
@@ -20,7 +20,13 @@ interface Props {
   tip?: BN;
 }
 
-function Transaction ({ className, currentItem: { accountId, extrinsic, isUnsigned, payload }, isSendable, onError, tip }: Props): React.ReactElement<Props> | null {
+function Transaction({
+  className,
+  currentItem: { accountId, extrinsic, isUnsigned, payload },
+  isSendable,
+  onError,
+  tip,
+}: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
 
   if (!extrinsic) {
@@ -28,28 +34,33 @@ function Transaction ({ className, currentItem: { accountId, extrinsic, isUnsign
   }
 
   const { meta, method, section } = extrinsic.registry.findMetaCall(extrinsic.callIndex);
-  const args = meta?.args.map(({ name }) => name).join(', ') || '';
+  const args = meta?.args.map(({ name }) => name).join(", ") || "";
 
   return (
     <Modal.Columns
       className={className}
-      hint={t<string>('The details of the transaction including the type, the description (as available from the chain metadata) as well as any parameters and fee estimations (as available) for the specific type of call.')}
+      hint={t<string>(
+        "The details of the transaction including the type, the description (as available from the chain metadata) as well as any parameters and fee estimations (as available) for the specific type of call."
+      )}
     >
       <Expander
-        className='tx-details'
-        summary={<>{t<string>('Sending transaction')} <span className='highlight'>{section}.{method}({args})</span></>}
+        className="tx-details"
+        summary={
+          <>
+            {t<string>("Sending transaction")}{" "}
+            <span className="highlight">
+              {section}.{method}({args})
+            </span>
+          </>
+        }
         summaryMeta={meta}
       >
-        <Call
-          onError={onError}
-          value={extrinsic}
-          withBorder={false}
-        />
+        <Call onError={onError} value={extrinsic} withBorder={false} />
       </Expander>
       {!isUnsigned && !payload && (
         <PaymentInfo
           accountId={accountId}
-          className='tx-details'
+          className="tx-details"
           extrinsic={extrinsic}
           isSendable={isSendable}
           tip={tip}
@@ -75,7 +86,8 @@ export default React.memo(styled(Transaction)`
       margin-left: 2rem;
     }
 
-    .meta, .mute {
+    .meta,
+    .mute {
       opacity: 0.6;
     }
   }

@@ -4,14 +4,14 @@
 type bountyTheme = {
   dark: string;
   light: string;
-}
+};
 
 export const bountyLabelColor: bountyTheme = {
-  dark: '#757575',
-  light: '#8B8B8B'
+  dark: "#757575",
+  light: "#8B8B8B",
 };
 
 export const bountySvgColor: bountyTheme = {
-  dark: '#8E8E8E',
-  light: '#4D4D4D'
+  dark: "#8E8E8E",
+  light: "#4D4D4D",
 };

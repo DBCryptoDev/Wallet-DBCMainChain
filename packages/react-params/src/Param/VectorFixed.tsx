@@ -1,25 +1,35 @@
 // Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ParamDef, Props, RawParam } from '../types';
+import type { ParamDef, Props, RawParam } from "../types";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { isUndefined } from '@polkadot/util';
+import { isUndefined } from "@polkadot/util";
 
-import getInitValue from '../initValue';
-import Params from '../';
-import Base from './Base';
-import useParamDefs from './useParamDefs';
+import getInitValue from "../initValue";
+import Params from "../";
+import Base from "./Base";
+import useParamDefs from "./useParamDefs";
 
-function generateParam ([{ name, type }]: ParamDef[], index: number): ParamDef {
+function generateParam([{ name, type }]: ParamDef[], index: number): ParamDef {
   return {
     name: `${index}: ${name || type.type}`,
-    type
+    type,
   };
 }
 
-function VectorFixed ({ className = '', defaultValue, isDisabled = false, label, onChange, overrides, registry, type, withLabel }: Props): React.ReactElement<Props> | null {
+function VectorFixed({
+  className = "",
+  defaultValue,
+  isDisabled = false,
+  label,
+  onChange,
+  overrides,
+  registry,
+  type,
+  withLabel,
+}: Props): React.ReactElement<Props> | null {
   const inputParams = useParamDefs(registry, type);
   const [params, setParams] = useState<ParamDef[]>([]);
   const [values, setValues] = useState<RawParam[]>([]);
@@ -27,8 +37,8 @@ function VectorFixed ({ className = '', defaultValue, isDisabled = false, label,
   // build up the list of parameters we are using
   useEffect((): void => {
     if (inputParams.length) {
-      const count = (inputParams[0].length || 1);
-      const max = isDisabled ? (defaultValue.value as RawParam[] || []).length : count;
+      const count = inputParams[0].length || 1;
+      const max = isDisabled ? ((defaultValue.value as RawParam[]) || []).length : count;
       const params: ParamDef[] = [];
 
       for (let index = 0; index < max; index++) {
@@ -41,9 +51,10 @@ function VectorFixed ({ className = '', defaultValue, isDisabled = false, label,
 
   // when !isDisable, generating an input list based on count
   useEffect((): void => {
-    !isDisabled && inputParams.length &&
+    !isDisabled &&
+      inputParams.length &&
       setValues((values): RawParam[] => {
-        const count = (inputParams[0].length || 1);
+        const count = inputParams[0].length || 1;
 
         if (values.length === count) {
           return values;
@@ -63,29 +74,23 @@ function VectorFixed ({ className = '', defaultValue, isDisabled = false, label,
   useEffect((): void => {
     isDisabled &&
       setValues(
-        (defaultValue.value as RawParam[] || []).map((value: RawParam) =>
-          isUndefined(value) || isUndefined(value.isValid)
-            ? { isValid: !isUndefined(value), value }
-            : value
+        ((defaultValue.value as RawParam[]) || []).map((value: RawParam) =>
+          isUndefined(value) || isUndefined(value.isValid) ? { isValid: !isUndefined(value), value } : value
         )
       );
   }, [defaultValue, isDisabled]);
 
   // when our values has changed, alert upstream
   useEffect((): void => {
-    onChange && onChange({
-      isValid: values.reduce((result: boolean, { isValid }) => result && isValid, true),
-      value: values.map(({ value }) => value)
-    });
+    onChange &&
+      onChange({
+        isValid: values.reduce((result: boolean, { isValid }) => result && isValid, true),
+        value: values.map(({ value }) => value),
+      });
   }, [values, onChange]);
 
   return (
-    <Base
-      className={className}
-      isOuter
-      label={label}
-      withLabel={withLabel}
-    >
+    <Base className={className} isOuter label={label} withLabel={withLabel}>
       <Params
         isDisabled={isDisabled}
         onChange={setValues}

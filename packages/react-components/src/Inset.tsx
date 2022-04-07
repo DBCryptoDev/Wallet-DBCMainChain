@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
 
-import { useToggle } from '@polkadot/react-hooks';
+import { useToggle } from "@polkadot/react-hooks";
 
-import Icon from './Icon';
+import Icon from "./Icon";
 
 export interface InsetProps {
   className?: string;
@@ -21,16 +21,23 @@ export interface InsetProps {
   withBottomMargin?: boolean;
 }
 
-function Inset ({ children, className = '', header, href, isCollapsible, isError, isSuccess, withBottomMargin, withTopMargin }: InsetProps): React.ReactElement<InsetProps> | null {
+function Inset({
+  children,
+  className = "",
+  header,
+  href,
+  isCollapsible,
+  isError,
+  isSuccess,
+  withBottomMargin,
+  withTopMargin,
+}: InsetProps): React.ReactElement<InsetProps> | null {
   const history = useHistory();
   const [isCollapsed, toggleCollapsed] = useToggle();
 
-  const _onClick = useCallback(
-    (): void => {
-      href && history.push(href);
-    },
-    [history, href]
-  );
+  const _onClick = useCallback((): void => {
+    href && history.push(href);
+  }, [history, href]);
 
   if (!children) {
     return null;
@@ -38,24 +45,19 @@ function Inset ({ children, className = '', header, href, isCollapsible, isError
 
   return (
     <div
-      className={`ui--Inset ${href ? ' as-link' : ''}${isCollapsible ? ' collapsible' : ''}${(isError && !isSuccess) ? ' error' : ''}${(!isError && isSuccess) ? ' success' : ''}${withBottomMargin ? ' bottom-margin' : ''}${withTopMargin ? ' top-margin' : ''} ${className}`}
+      className={`ui--Inset ${href ? " as-link" : ""}${isCollapsible ? " collapsible" : ""}${
+        isError && !isSuccess ? " error" : ""
+      }${!isError && isSuccess ? " success" : ""}${withBottomMargin ? " bottom-margin" : ""}${
+        withTopMargin ? " top-margin" : ""
+      } ${className}`}
     >
       {isCollapsible && (
-        <div
-          className='header'
-          onClick={toggleCollapsed}
-        >
+        <div className="header" onClick={toggleCollapsed}>
           <h3>{header}</h3>
-          <Icon
-            className={isCollapsed ? 'collapsed' : ''}
-            icon='angle-up'
-          />
+          <Icon className={isCollapsed ? "collapsed" : ""} icon="angle-up" />
         </div>
       )}
-      <div
-        className={`children${(isCollapsible && isCollapsed) ? ' collapsed' : ''}`}
-        onClick={_onClick}
-      >
+      <div className={`children${isCollapsible && isCollapsed ? " collapsed" : ""}`} onClick={_onClick}>
         {children}
       </div>
     </div>
@@ -64,7 +66,7 @@ function Inset ({ children, className = '', header, href, isCollapsible, isError
 
 export default React.memo(styled(Inset)`
   & {
-    box-shadow: 0 3px 3px rgba(0,0,0,.2);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
     position: relative;
     background: #fefefe;
     padding: 1rem;
@@ -83,7 +85,14 @@ export default React.memo(styled(Inset)`
     &.error {
       background: rgba(255, 0, 0, 0.05);
 
-      &, h1, h2, h3, h4, h5, h6, p {
+      &,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p {
         color: rgba(156, 0, 0) !important;
       }
     }
@@ -92,7 +101,14 @@ export default React.memo(styled(Inset)`
       border: 1px solid rgb(168, 255, 136);
       background: rgba(0, 255, 0, 0.05);
 
-      &, h1, h2, h3, h4, h5, h6, p {
+      &,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p {
         color: rgba(34, 125, 0) !important;
       }
     }
@@ -111,7 +127,7 @@ export default React.memo(styled(Inset)`
         height: 4rem;
         width: 4rem;
         font-size: 2rem;
-        color: rgba(0,0,0,0.35);
+        color: rgba(0, 0, 0, 0.35);
         position: absolute;
         right: 0;
         top: 0;
@@ -135,7 +151,7 @@ export default React.memo(styled(Inset)`
       cursor: pointer;
 
       &:hover {
-        box-shadow: 0 5px 5px rgba(0,0,0,.2);
+        box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
         transform: translateY(-2px);
       }
     }

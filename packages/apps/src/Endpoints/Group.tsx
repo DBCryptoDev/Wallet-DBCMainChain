@@ -1,14 +1,14 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Group } from './types';
+import type { Group } from "./types";
 
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import styled from "styled-components";
 
-import { Icon } from '@polkadot/react-components';
+import { Icon } from "@polkadot/react-components";
 
-import Network from './Network';
+import Network from "./Network";
 
 interface Props {
   affinities: Record<string, string>;
@@ -22,33 +22,39 @@ interface Props {
   value: Group;
 }
 
-function GroupDisplay ({ affinities, apiUrl, children, className = '', index, isSelected, setApiUrl, setGroup, value: { header, networks } }: Props): React.ReactElement<Props> {
-  const _setGroup = useCallback(
-    () => setGroup(isSelected ? -1 : index),
-    [index, isSelected, setGroup]
-  );
+function GroupDisplay({
+  affinities,
+  apiUrl,
+  children,
+  className = "",
+  index,
+  isSelected,
+  setApiUrl,
+  setGroup,
+  value: { header, networks },
+}: Props): React.ReactElement<Props> {
+  const _setGroup = useCallback(() => setGroup(isSelected ? -1 : index), [index, isSelected, setGroup]);
 
   return (
-    <div className={`${className}${isSelected ? ' isSelected' : ''}`}>
-      <div
-        className='groupHeader'
-        onClick={_setGroup}
-      >
-        <Icon icon={isSelected ? 'caret-up' : 'caret-down'} />
+    <div className={`${className}${isSelected ? " isSelected" : ""}`}>
+      <div className="groupHeader" onClick={_setGroup}>
+        <Icon icon={isSelected ? "caret-up" : "caret-down"} />
         {header}
       </div>
       {isSelected && (
         <>
-          <div className='groupNetworks'>
-            {networks.map((network, index): React.ReactNode => (
-              <Network
-                affinity={affinities[network.name]}
-                apiUrl={apiUrl}
-                key={index}
-                setApiUrl={setApiUrl}
-                value={network}
-              />
-            ))}
+          <div className="groupNetworks">
+            {networks.map(
+              (network, index): React.ReactNode => (
+                <Network
+                  affinity={affinities[network.name]}
+                  apiUrl={apiUrl}
+                  key={index}
+                  setApiUrl={setApiUrl}
+                  value={network}
+                />
+              )
+            )}
           </div>
           {children}
         </>

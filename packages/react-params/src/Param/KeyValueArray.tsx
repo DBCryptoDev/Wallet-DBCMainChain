@@ -1,19 +1,19 @@
 // Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Vec } from '@polkadot/types';
-import type { KeyValue as Pair } from '@polkadot/types/interfaces';
-import type { Props, RawParam } from '../types';
+import type { Vec } from "@polkadot/types";
+import type { KeyValue as Pair } from "@polkadot/types/interfaces";
+import type { Props, RawParam } from "../types";
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import { assert, isHex, u8aToHex, u8aToString } from '@polkadot/util';
+import { assert, isHex, u8aToHex, u8aToString } from "@polkadot/util";
 
-import { useTranslation } from '../translate';
-import Base from './Base';
-import Bytes from './Bytes';
-import File from './File';
-import { createParam } from './KeyValue';
+import { useTranslation } from "../translate";
+import Base from "./Base";
+import Bytes from "./Bytes";
+import File from "./File";
+import { createParam } from "./KeyValue";
 
 interface Parsed {
   isValid: boolean;
@@ -22,12 +22,12 @@ interface Parsed {
 
 const BYTES_TYPE = {
   info: 0,
-  type: 'Bytes'
+  type: "Bytes",
 };
 
-const EMPTY_PLACEHOLDER = 'click to select or drag and drop JSON key/value (hex-encoded) file';
+const EMPTY_PLACEHOLDER = "click to select or drag and drop JSON key/value (hex-encoded) file";
 
-function parseFile (raw: Uint8Array): Parsed {
+function parseFile(raw: Uint8Array): Parsed {
   const json = JSON.parse(u8aToString(raw)) as Record<string, string>;
   const keys = Object.keys(json);
   let isValid = keys.length !== 0;
@@ -46,11 +46,21 @@ function parseFile (raw: Uint8Array): Parsed {
 
   return {
     isValid,
-    value
+    value,
   };
 }
 
-function KeyValueArray ({ className = '', defaultValue, isDisabled, isError, label, onChange, onEnter, onEscape, withLabel }: Props): React.ReactElement<Props> {
+function KeyValueArray({
+  className = "",
+  defaultValue,
+  isDisabled,
+  isError,
+  label,
+  onChange,
+  onEnter,
+  onEscape,
+  withLabel,
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [placeholder, setPlaceholder] = useState<string>(t(EMPTY_PLACEHOLDER));
 
@@ -61,13 +71,15 @@ function KeyValueArray ({ className = '', defaultValue, isDisabled, isError, lab
       try {
         encoded = parseFile(raw);
 
-        setPlaceholder(t('{{count}} key/value pairs encoded for submission', {
-          replace: {
-            count: encoded.value.length
-          }
-        }));
+        setPlaceholder(
+          t("{{count}} key/value pairs encoded for submission", {
+            replace: {
+              count: encoded.value.length,
+            },
+          })
+        );
       } catch (error) {
-        console.error('Error converting json k/v', error);
+        console.error("Error converting json k/v", error);
 
         setPlaceholder(t(EMPTY_PLACEHOLDER));
       }
@@ -82,13 +94,10 @@ function KeyValueArray ({ className = '', defaultValue, isDisabled, isError, lab
 
     return (
       <>
-        <Base
-          className={className}
-          label={label}
-        >
+        <Base className={className} label={label}>
           <div />
         </Base>
-        <div className='ui--Params'>
+        <div className="ui--Params">
           {pairs.map(([key, value]): React.ReactNode => {
             const keyHex = u8aToHex(key.toU8a(true));
 

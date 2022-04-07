@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DefinitionRpcExt } from '@polkadot/types/types';
-import type { DropdownOption } from '../util/types';
+import type { DefinitionRpcExt } from "@polkadot/types/types";
+import type { DropdownOption } from "../util/types";
 
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-import Dropdown from '../Dropdown';
-import useRpcs from './useRpcs';
+import Dropdown from "../Dropdown";
+import useRpcs from "./useRpcs";
 
 interface Props {
   className?: string;
@@ -17,13 +17,10 @@ interface Props {
   value: DefinitionRpcExt;
 }
 
-function SelectMethod ({ className = '', isError, onChange, options, value }: Props): React.ReactElement<Props> | null {
+function SelectMethod({ className = "", isError, onChange, options, value }: Props): React.ReactElement<Props> | null {
   const rpcs = useRpcs();
 
-  const _transform = useCallback(
-    (method: string) => rpcs[value.section][method],
-    [rpcs, value]
-  );
+  const _transform = useCallback((method: string) => rpcs[value.section][method], [rpcs, value]);
 
   if (!options.length) {
     return null;

@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/apps-config authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TFunction } from 'i18next';
-import type { LinkOption } from '../settings/types';
+import type { TFunction } from "i18next";
+import type { LinkOption } from "../settings/types";
 
-import { expandEndpoints } from './util';
+import { expandEndpoints } from "./util";
 
 /* eslint-disable sort-keys */
 
@@ -14,7 +14,7 @@ import { expandEndpoints } from './util';
 //   text: The text to display on the dropdown
 //   value: The actual hosted secure websocket endpoint
 
-export function createProduction (t: TFunction): LinkOption[] {
+export function createProduction(t: TFunction): LinkOption[] {
   return expandEndpoints(t, [
     // fixed, polkadot
     // {
@@ -118,12 +118,12 @@ export function createProduction (t: TFunction): LinkOption[] {
     //   }
     // },
     {
-      info: 'dbcmainnet',
-      text: t('rpc.dbc', 'DBC Mainnet', { ns: 'apps-config' }),
+      info: "dbcmainnet",
+      text: t("rpc.dbc", "DBC Mainnet", { ns: "apps-config" }),
       providers: {
-        'DBC Mainnet': 'wss://info.dbcwallet.io'
-      }
-    }
+        "DBC Mainnet": "wss://info.dbcwallet.io",
+      },
+    },
     // {
     //   info: 'plasm',
     //   text: t('rpc.plasm', 'Plasm', { ns: 'apps-config' }),

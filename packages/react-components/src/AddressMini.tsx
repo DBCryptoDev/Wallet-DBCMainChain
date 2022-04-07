@@ -1,19 +1,19 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
-import type { KeyringItemType } from '@polkadot/ui-keyring/types';
+import type { AccountId, AccountIndex, Address } from "@polkadot/types/interfaces";
+import type { KeyringItemType } from "@polkadot/ui-keyring/types";
 
-import BN from 'bn.js';
-import React from 'react';
-import styled from 'styled-components';
+import BN from "bn.js";
+import React from "react";
+import styled from "styled-components";
 
-import AccountName from './AccountName';
-import BalanceDisplay from './Balance';
-import BondedDisplay from './Bonded';
-import IdentityIcon from './IdentityIcon';
-import LockedVote from './LockedVote';
-import { toShortAddress } from './util';
+import AccountName from "./AccountName";
+import BalanceDisplay from "./Balance";
+import BondedDisplay from "./Bonded";
+import IdentityIcon from "./IdentityIcon";
+import LockedVote from "./LockedVote";
+import { toShortAddress } from "./util";
 
 interface Props {
   balance?: BN | BN[];
@@ -38,61 +38,54 @@ interface Props {
   withShrink?: boolean;
 }
 
-function AddressMini ({ balance, bonded, children, className = '', iconInfo, isHighlight, isPadded = true, label, labelBalance, summary, value, withAddress = true, withBalance = false, withBonded = false, withLockedVote = false, withName = true, withShrink = false, withSidebar = true }: Props): React.ReactElement<Props> | null {
+function AddressMini({
+  balance,
+  bonded,
+  children,
+  className = "",
+  iconInfo,
+  isHighlight,
+  isPadded = true,
+  label,
+  labelBalance,
+  summary,
+  value,
+  withAddress = true,
+  withBalance = false,
+  withBonded = false,
+  withLockedVote = false,
+  withName = true,
+  withShrink = false,
+  withSidebar = true,
+}: Props): React.ReactElement<Props> | null {
   if (!value) {
     return null;
   }
 
   return (
-    <div className={`ui--AddressMini${isHighlight ? ' isHighlight' : ''}${isPadded ? ' padded' : ''}${withShrink ? ' withShrink' : ''} ${className}`}>
-      {label && (
-        <label className='ui--AddressMini-label'>{label}</label>
-      )}
-      <div className='ui--AddressMini-icon'>
+    <div
+      className={`ui--AddressMini${isHighlight ? " isHighlight" : ""}${isPadded ? " padded" : ""}${
+        withShrink ? " withShrink" : ""
+      } ${className}`}
+    >
+      {label && <label className="ui--AddressMini-label">{label}</label>}
+      <div className="ui--AddressMini-icon">
         <IdentityIcon value={value as Uint8Array} />
-        {iconInfo && (
-          <div className='ui--AddressMini-icon-info'>
-            {iconInfo}
-          </div>
-        )}
+        {iconInfo && <div className="ui--AddressMini-icon-info">{iconInfo}</div>}
       </div>
-      <div className='ui--AddressMini-info'>
+      <div className="ui--AddressMini-info">
         {withAddress && (
-          <div className='ui--AddressMini-address'>
-            {withName
-              ? (
-                <AccountName
-                  value={value}
-                  withSidebar={withSidebar}
-                />
-              )
-              : toShortAddress(value)
-            }
+          <div className="ui--AddressMini-address">
+            {withName ? <AccountName value={value} withSidebar={withSidebar} /> : toShortAddress(value)}
           </div>
         )}
         {children}
       </div>
-      <div className='ui--AddressMini-balances'>
-        {withBalance && (
-          <BalanceDisplay
-            balance={balance}
-            label={labelBalance}
-            params={value}
-          />
-        )}
-        {withBonded && (
-          <BondedDisplay
-            bonded={bonded}
-            label=''
-            params={value}
-          />
-        )}
-        {withLockedVote && (
-          <LockedVote params={value} />
-        )}
-        {summary && (
-          <div className='ui--AddressMini-summary'>{summary}</div>
-        )}
+      <div className="ui--AddressMini-balances">
+        {withBalance && <BalanceDisplay balance={balance} label={labelBalance} params={value} />}
+        {withBonded && <BondedDisplay bonded={bonded} label="" params={value} />}
+        {withLockedVote && <LockedVote params={value} />}
+        {summary && <div className="ui--AddressMini-summary">{summary}</div>}
       </div>
     </div>
   );

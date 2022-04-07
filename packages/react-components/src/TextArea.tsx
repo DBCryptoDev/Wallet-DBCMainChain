@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useCallback } from "react";
+import styled from "styled-components";
 
-import Labelled from './Labelled';
+import Labelled from "./Labelled";
 
 interface Props {
   children?: React.ReactNode;
@@ -18,7 +18,17 @@ interface Props {
   withLabel?: boolean;
 }
 
-function TextArea ({ children, className, help, isError, isReadOnly, label, onChange, seed, withLabel }: Props): React.ReactElement<Props> {
+function TextArea({
+  children,
+  className,
+  help,
+  isError,
+  isReadOnly,
+  label,
+  onChange,
+  seed,
+  withLabel,
+}: Props): React.ReactElement<Props> {
   const _onChange = useCallback(
     ({ target: { value } }: React.ChangeEvent<HTMLTextAreaElement>): void => {
       onChange && onChange(value);
@@ -27,18 +37,13 @@ function TextArea ({ children, className, help, isError, isReadOnly, label, onCh
   );
 
   return (
-    <Labelled
-      className={className}
-      help={help}
-      label={label}
-      withLabel={withLabel}
-    >
-      <div className='TextAreaWithDropdown'>
+    <Labelled className={className} help={help} label={label} withLabel={withLabel}>
+      <div className="TextAreaWithDropdown">
         <textarea
-          autoCapitalize='off'
-          autoCorrect='off'
+          autoCapitalize="off"
+          autoCorrect="off"
           autoFocus={false}
-          className={isError ? 'ui-textArea-withError' : ''}
+          className={isError ? "ui-textArea-withError" : ""}
           onChange={_onChange}
           readOnly={isReadOnly}
           rows={2}
@@ -56,7 +61,7 @@ export default React.memo(styled(TextArea)`
     display: flex;
     textarea {
       border-radius: 0.25rem 0 0 0.25rem;
-      border: 1px solid #DDE1EB;
+      border: 1px solid #dde1eb;
       border-right: none;
       background: var(--bg-input);
       box-sizing: border-box;
@@ -84,7 +89,7 @@ export default React.memo(styled(TextArea)`
     }
 
     & > .ui.buttons > .ui.button.floating.selection.dropdown {
-      border: 1px solid #DDE1EB;
+      border: 1px solid #dde1eb;
       border-left: none;
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;

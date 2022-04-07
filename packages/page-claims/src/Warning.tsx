@@ -1,19 +1,19 @@
 // Copyright 2017-2021 @polkadot/app-claims authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { AddressMini, Card } from '@polkadot/react-components';
+import { AddressMini, Card } from "@polkadot/react-components";
 
-import { useTranslation } from './translate';
-import usePolkadotPreclaims from './usePolkadotPreclaims';
+import { useTranslation } from "./translate";
+import usePolkadotPreclaims from "./usePolkadotPreclaims";
 
-export interface Props{
+export interface Props {
   className?: string;
 }
 
-function Warning ({ className }: Props): React.ReactElement<Props> | null {
+function Warning({ className }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const needsAttest = usePolkadotPreclaims();
 
@@ -24,18 +24,12 @@ function Warning ({ className }: Props): React.ReactElement<Props> | null {
   return (
     <Card isError>
       <div className={className}>
-        {
-          needsAttest.length > 1
-            ? t('You need to sign an attestation for the following accounts:')
-            : t('You need to sign an attestation for the following account:')
-        }{
-          needsAttest.map((address) => (
-            <AddressMini
-              key={address}
-              value={address}
-            />
-          ))
-        }
+        {needsAttest.length > 1
+          ? t("You need to sign an attestation for the following accounts:")
+          : t("You need to sign an attestation for the following account:")}
+        {needsAttest.map((address) => (
+          <AddressMini key={address} value={address} />
+        ))}
       </div>
     </Card>
   );

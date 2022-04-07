@@ -9,28 +9,28 @@ jobs:
   www:
     strategy:
       matrix:
-        step: ['build:release:www']
+        step: ["build:release:www"]
     name: ${{ matrix.step }}
     if: "! startsWith(github.event.head_commit.message, '[CI Skip]') && github.repository == 'polkadot-js/apps'"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.GH_PAT }}
-    - name: ${{ matrix.step }}
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        CRUST_SEEDS: ${{ secrets.CRUST_SEEDS }}
-        GH_PAGES_SRC: packages/apps/build
-        GH_PAT: ${{ secrets.GH_PAT }}
-        GH_RELEASE_GITHUB_API_TOKEN: ${{ secrets.GH_PAT }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        PINATA_API_KEY: ${{ secrets.PINATA_API_KEY }}
-        PINATA_SECRET_KEY: ${{ secrets.PINATA_SECRET_KEY }}
-      run: |
-        yarn install --immutable | grep -v 'YN0013'
-        yarn ${{ matrix.step }}
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_PAT }}
+      - name: ${{ matrix.step }}
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CRUST_SEEDS: ${{ secrets.CRUST_SEEDS }}
+          GH_PAGES_SRC: packages/apps/build
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_RELEASE_GITHUB_API_TOKEN: ${{ secrets.GH_PAT }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PINATA_API_KEY: ${{ secrets.PINATA_API_KEY }}
+          PINATA_SECRET_KEY: ${{ secrets.PINATA_SECRET_KEY }}
+        run: |
+          yarn install --immutable | grep -v 'YN0013'
+          yarn ${{ matrix.step }}
 
   # only run on "CI skip", i.e. when the actual version has been bumped to release/stable
   docker:
@@ -38,12 +38,12 @@ jobs:
     if: "startsWith(github.event.head_commit.message, '[CI Skip] release/stable') && github.repository == 'polkadot-js/apps'"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: docker
-      env:
-        DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
-      run: |
-        ./scripts/docker.sh
+      - uses: actions/checkout@v2
+      - name: docker
+        env:
+          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+        run: |
+          ./scripts/docker.sh
 
   # only run on "CI skip", i.e. when the actual version has been bumped to release/stable
   electron:
@@ -90,6 +90,6 @@ jobs:
   dummy:
     runs-on: ubuntu-latest
     steps:
-    - name: dummy
-      run: |
-        echo "Dummy skip step"
+      - name: dummy
+        run: |
+          echo "Dummy skip step"

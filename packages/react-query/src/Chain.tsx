@@ -1,11 +1,11 @@
 // Copyright 2017-2021 @polkadot/react-query authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React from "react";
 
-import { useApi } from '@polkadot/react-hooks';
+import { useApi } from "@polkadot/react-hooks";
 
-import { useTranslation } from './translate';
+import { useTranslation } from "./translate";
 
 interface Props {
   children?: React.ReactNode;
@@ -13,13 +13,15 @@ interface Props {
   label?: React.ReactNode;
 }
 
-function Chain ({ children, className = '', label }: Props): React.ReactElement<Props> {
+function Chain({ children, className = "", label }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { systemChain } = useApi();
 
   return (
     <div className={className}>
-      {label || ''}{systemChain || t('Unknown')}{children}
+      {label || ""}
+      {systemChain || t("Unknown")}
+      {children}
     </div>
   );
 }

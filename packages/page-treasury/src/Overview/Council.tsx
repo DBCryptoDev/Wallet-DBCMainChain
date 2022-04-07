@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/app-treasury authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SubmittableExtrinsic } from '@polkadot/api/types';
-import type { ProposalIndex } from '@polkadot/types/interfaces';
+import type { SubmittableExtrinsic } from "@polkadot/api/types";
+import type { ProposalIndex } from "@polkadot/types/interfaces";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
-import { getTreasuryProposalThreshold } from '@polkadot/apps-config';
-import { Button, Dropdown, InputAddress, Modal, TxButton } from '@polkadot/react-components';
-import { useApi, useToggle } from '@polkadot/react-hooks';
+import { getTreasuryProposalThreshold } from "@polkadot/apps-config";
+import { Button, Dropdown, InputAddress, Modal, TxButton } from "@polkadot/react-components";
+import { useApi, useToggle } from "@polkadot/react-hooks";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 interface Props {
   id: ProposalIndex;
@@ -19,29 +19,28 @@ interface Props {
 }
 
 interface ProposalState {
-  proposal?: SubmittableExtrinsic<'promise'> | null;
+  proposal?: SubmittableExtrinsic<"promise"> | null;
   proposalLength: number;
 }
 
-function Council ({ id, isDisabled, members }: Props): React.ReactElement<Props> | null {
+function Council({ id, isDisabled, members }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { api } = useApi();
   const [isOpen, toggleOpen] = useToggle();
   const [accountId, setAccountId] = useState<string | null>(null);
-  const [councilType, setCouncilType] = useState('accept');
+  const [councilType, setCouncilType] = useState("accept");
   const [{ proposal, proposalLength }, setProposal] = useState<ProposalState>({ proposalLength: 0 });
 
   const threshold = Math.ceil((members?.length || 0) * getTreasuryProposalThreshold(api));
 
   const councilTypeOptRef = useRef([
-    { text: t<string>('Acceptance proposal to council'), value: 'accept' },
-    { text: t<string>('Rejection proposal to council'), value: 'reject' }
+    { text: t<string>("Acceptance proposal to council"), value: "accept" },
+    { text: t<string>("Rejection proposal to council"), value: "reject" },
   ]);
 
   useEffect((): void => {
-    const proposal = councilType === 'reject'
-      ? api.tx.treasury.rejectProposal(id)
-      : api.tx.treasury.approveProposal(id);
+    const proposal =
+      councilType === "reject" ? api.tx.treasury.rejectProposal(id) : api.tx.treasury.approveProposal(id);
 
     setProposal({ proposal, proposalLength: proposal.length });
   }, [api, councilType, id]);
@@ -49,25 +48,28 @@ function Council ({ id, isDisabled, members }: Props): React.ReactElement<Props>
   return (
     <>
       {isOpen && (
-        <Modal
-          header={t<string>('Send to council')}
-          size='large'
-        >
+        <Modal header={t<string>("Send to council")} size="large">
           <Modal.Content>
-            <Modal.Columns hint={t<string>('The council member that is proposing this, submission equates to an "aye" vote.')}>
+            <Modal.Columns
+              hint={t<string>('The council member that is proposing this, submission equates to an "aye" vote.')}
+            >
               <InputAddress
                 filter={members}
-                help={t<string>('Select the council account you wish to use to make the proposal.')}
-                label={t<string>('submit with council account')}
+                help={t<string>("Select the council account you wish to use to make the proposal.")}
+                label={t<string>("submit with council account")}
                 onChange={setAccountId}
-                type='account'
+                type="account"
                 withLabel
               />
             </Modal.Columns>
-            <Modal.Columns hint={t<string>('Proposal can either be to approve or reject this spend. Once approved, the change is applied by either removing the proposal or scheduling payout.')}>
+            <Modal.Columns
+              hint={t<string>(
+                "Proposal can either be to approve or reject this spend. Once approved, the change is applied by either removing the proposal or scheduling payout."
+              )}
+            >
               <Dropdown
-                help={t<string>('The type of council proposal to submit.')}
-                label={t<string>('council proposal type')}
+                help={t<string>("The type of council proposal to submit.")}
+                label={t<string>("council proposal type")}
                 onChange={setCouncilType}
                 options={councilTypeOptRef.current}
                 value={councilType}
@@ -77,9 +79,9 @@ function Council ({ id, isDisabled, members }: Props): React.ReactElement<Props>
           <Modal.Actions onCancel={toggleOpen}>
             <TxButton
               accountId={accountId}
-              icon='check'
+              icon="check"
               isDisabled={!accountId || !threshold}
-              label={t<string>('Send to council')}
+              label={t<string>("Send to council")}
               onStart={toggleOpen}
               params={
                 api.tx.council.propose.meta.args.length === 3
@@ -91,12 +93,7 @@ function Council ({ id, isDisabled, members }: Props): React.ReactElement<Props>
           </Modal.Actions>
         </Modal>
       )}
-      <Button
-        icon='step-forward'
-        isDisabled={isDisabled}
-        label={t<string>('To council')}
-        onClick={toggleOpen}
-      />
+      <Button icon="step-forward" isDisabled={isDisabled} label={t<string>("To council")} onClick={toggleOpen} />
     </>
   );
 }

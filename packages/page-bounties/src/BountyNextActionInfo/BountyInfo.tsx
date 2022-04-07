@@ -1,36 +1,36 @@
 // Copyright 2017-2021 @polkadot/app-bounties authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { Icon } from '@polkadot/react-components';
-import { ThemeProps } from '@polkadot/react-components/types';
+import { Icon } from "@polkadot/react-components";
+import { ThemeProps } from "@polkadot/react-components/types";
 
-import { bountyLabelColor, bountySvgColor } from '../theme';
+import { bountyLabelColor, bountySvgColor } from "../theme";
 
 interface Props {
-  className: '';
+  className: "";
   description: string;
-  type?: 'info' | 'warning';
+  type?: "info" | "warning";
 }
 
-function BountyInfo ({ className = '', description, type = 'info' }: Props): React.ReactElement<Props> {
+function BountyInfo({ className = "", description, type = "info" }: Props): React.ReactElement<Props> {
   return (
     <div className={className}>
-      {type === 'warning' && (
-        <div className='info-icon'>
-          <Icon icon={'exclamation-triangle'}/>
+      {type === "warning" && (
+        <div className="info-icon">
+          <Icon icon={"exclamation-triangle"} />
         </div>
       )}
-      <div className='description'>
-        {description}
-      </div>
+      <div className="description">{description}</div>
     </div>
   );
 }
 
-export default React.memo(styled(BountyInfo)(({ theme }: ThemeProps) => `
+export default React.memo(
+  styled(BountyInfo)(
+    ({ theme }: ThemeProps) => `
   display: flex;
   align-items: center;
   font-weight: 500;
@@ -51,4 +51,6 @@ export default React.memo(styled(BountyInfo)(({ theme }: ThemeProps) => `
     color: ${bountyLabelColor[theme.theme]};
     word-wrap: break-word;
   }
-`));
+`
+  )
+);

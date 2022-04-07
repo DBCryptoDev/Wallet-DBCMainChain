@@ -1,9 +1,9 @@
 // Copyright 2017-2021 @polkadot/app-storage authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { QueryableStorageEntry } from '@polkadot/api/types';
-import type { ConstValue } from '@polkadot/react-components/InputConsts/types';
-import type { RawParams } from '@polkadot/react-params/types';
+import type { QueryableStorageEntry } from "@polkadot/api/types";
+import type { ConstValue } from "@polkadot/react-components/InputConsts/types";
+import type { RawParams } from "@polkadot/react-params/types";
 
 interface Base {
   isConst: boolean;
@@ -14,7 +14,7 @@ interface IdQuery extends Base {
 }
 
 export interface PartialModuleQuery extends Base {
-  key: QueryableStorageEntry<'promise'>;
+  key: QueryableStorageEntry<"promise">;
   params: RawParams;
 }
 

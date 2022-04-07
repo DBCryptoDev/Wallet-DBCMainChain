@@ -1,25 +1,26 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const defaults = {};
-const i18nRoot = path.join(__dirname, '../packages/apps/public/locales');
+const i18nRoot = path.join(__dirname, "../packages/apps/public/locales");
 
-function getEntries (langRoot) {
+function getEntries(langRoot) {
   return fs
     .readdirSync(langRoot)
-    .filter((entry) =>
-      !['.', '..'].includes(entry) &&
-      fs.lstatSync(path.join(langRoot, entry)).isFile() &&
-      entry.endsWith('.json') &&
-      !['index.json', 'translation.json'].includes(entry)
+    .filter(
+      (entry) =>
+        ![".", ".."].includes(entry) &&
+        fs.lstatSync(path.join(langRoot, entry)).isFile() &&
+        entry.endsWith(".json") &&
+        !["index.json", "translation.json"].includes(entry)
     )
     .sort();
 }
 
-function checkLanguage (lang) {
+function checkLanguage(lang) {
   console.log(`*** Checking ${lang}`);
 
   const langRoot = path.join(i18nRoot, lang);
@@ -28,7 +29,7 @@ function checkLanguage (lang) {
   const missing = roots.filter((entry) => !entries.includes(entry));
 
   if (missing.length) {
-    console.log(`\ttop-level missing ${missing.length}: ${missing.join(', ')}`);
+    console.log(`\ttop-level missing ${missing.length}: ${missing.join(", ")}`);
   }
 
   entries.forEach((entry) => {
@@ -48,35 +49,29 @@ function checkLanguage (lang) {
     if (missing.length) {
       console.log(`\t> ${entry} ${missing.length} keys missing`);
 
-      missing.forEach((key) =>
-        console.log(`\t\t${key}`)
-      );
+      missing.forEach((key) => console.log(`\t\t${key}`));
     }
 
     if (extra.length) {
       console.log(`\t> ${entry} ${extra.length} keys extra`);
 
-      extra.forEach((key) =>
-        console.log(`\t\t${key}`)
-      );
+      extra.forEach((key) => console.log(`\t\t${key}`));
     }
   });
 }
 
-function checkLanguages () {
-  fs
-    .readdirSync(i18nRoot)
-    .filter((entry) =>
-      !['.', '..'].includes(entry) &&
-      fs.lstatSync(path.join(i18nRoot, entry)).isDirectory() &&
-      entry !== 'en'
+function checkLanguages() {
+  fs.readdirSync(i18nRoot)
+    .filter(
+      (entry) =>
+        ![".", ".."].includes(entry) && fs.lstatSync(path.join(i18nRoot, entry)).isDirectory() && entry !== "en"
     )
     .sort()
     .forEach(checkLanguage);
 }
 
-function initDefault () {
-  const enRoot = path.join(i18nRoot, 'en');
+function initDefault() {
+  const enRoot = path.join(i18nRoot, "en");
 
   getEntries(enRoot).forEach((entry) => {
     const json = require(path.join(enRoot, entry));

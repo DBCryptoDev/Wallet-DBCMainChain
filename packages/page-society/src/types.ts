@@ -1,13 +1,13 @@
 // Copyright 2017-2021 @polkadot/app-society authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveSocietyCandidate } from '@polkadot/api-derive/types';
-import type { AccountId, Balance, BlockNumber, SocietyVote, StrikeCount } from '@polkadot/types/interfaces';
+import type { DeriveSocietyCandidate } from "@polkadot/api-derive/types";
+import type { AccountId, Balance, BlockNumber, SocietyVote, StrikeCount } from "@polkadot/types/interfaces";
 
 export interface MapMember {
   accountId: AccountId;
   isCandidateVoter: boolean;
-  isDefenderVoter: boolean
+  isDefenderVoter: boolean;
   isFounder: boolean;
   isHead: boolean;
   isSkeptic: boolean;

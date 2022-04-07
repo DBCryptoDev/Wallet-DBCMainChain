@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/app-parachains authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Balance, BlockNumber } from '@polkadot/types/interfaces';
-import type { AuctionInfo, Winning } from '../types';
+import type { Balance, BlockNumber } from "@polkadot/types/interfaces";
+import type { AuctionInfo, Winning } from "../types";
 
-import React from 'react';
+import React from "react";
 
-import { CardSummary, SummaryBox } from '@polkadot/react-components';
-import { useApi, useBestNumber, useCall } from '@polkadot/react-hooks';
-import { FormatBalance } from '@polkadot/react-query';
-import { BN_THREE, formatNumber } from '@polkadot/util';
+import { CardSummary, SummaryBox } from "@polkadot/react-components";
+import { useApi, useBestNumber, useCall } from "@polkadot/react-hooks";
+import { FormatBalance } from "@polkadot/react-query";
+import { BN_THREE, formatNumber } from "@polkadot/util";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
 interface Props {
   auctionInfo?: AuctionInfo;
@@ -19,7 +19,7 @@ interface Props {
   lastWinners?: Winning;
 }
 
-function Summary ({ auctionInfo, className, lastWinners }: Props): React.ReactElement<Props> {
+function Summary({ auctionInfo, className, lastWinners }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const bestNumber = useBestNumber();
@@ -28,62 +28,55 @@ function Summary ({ auctionInfo, className, lastWinners }: Props): React.ReactEl
   return (
     <SummaryBox className={className}>
       <section>
-        <CardSummary label={t<string>('auctions')}>
-          {formatNumber(auctionInfo?.numAuctions)}
-        </CardSummary>
+        <CardSummary label={t<string>("auctions")}>{formatNumber(auctionInfo?.numAuctions)}</CardSummary>
       </section>
       {auctionInfo && (
         <>
           <section>
             {auctionInfo.leasePeriod && (
-              <CardSummary label={t<string>('first - last')}>
+              <CardSummary label={t<string>("first - last")}>
                 {formatNumber(auctionInfo.leasePeriod)} - {formatNumber(auctionInfo.leasePeriod.add(BN_THREE))}
               </CardSummary>
             )}
             {totalIssuance && lastWinners && (
               <CardSummary
-                label={t<string>('total')}
+                label={t<string>("total")}
                 progress={{
                   hideValue: true,
                   total: totalIssuance,
                   value: lastWinners.total,
-                  withTime: true
+                  withTime: true,
                 }}
               >
-                <FormatBalance
-                  value={lastWinners.total}
-                  withSi
-                />
+                <FormatBalance value={lastWinners.total} withSi />
               </CardSummary>
             )}
           </section>
           <section>
-            {auctionInfo?.endBlock && bestNumber && (
-              bestNumber.lt(auctionInfo.endBlock)
-                ? (
-                  <CardSummary
-                    label={t<string>('end period at')}
-                    progress={{
-                      hideGraph: true,
-                      total: auctionInfo.endBlock,
-                      value: bestNumber,
-                      withTime: true
-                    }}
-                  >
-                    #{formatNumber(auctionInfo.endBlock)}
-                  </CardSummary>
-                )
-                : (
-                  <CardSummary
-                    label={t<string>('ending period')}
-                    progress={{
-                      total: api.consts.auctions.endingPeriod as BlockNumber,
-                      value: bestNumber.sub(auctionInfo.endBlock),
-                      withTime: true
-                    }}
-                  ></CardSummary>
-                )
-            )}
+            {auctionInfo?.endBlock &&
+              bestNumber &&
+              (bestNumber.lt(auctionInfo.endBlock) ? (
+                <CardSummary
+                  label={t<string>("end period at")}
+                  progress={{
+                    hideGraph: true,
+                    total: auctionInfo.endBlock,
+                    value: bestNumber,
+                    withTime: true,
+                  }}
+                >
+                  #{formatNumber(auctionInfo.endBlock)}
+                </CardSummary>
+              ) : (
+                <CardSummary
+                  label={t<string>("ending period")}
+                  progress={{
+                    total: api.consts.auctions.endingPeriod as BlockNumber,
+                    value: bestNumber.sub(auctionInfo.endBlock),
+                    withTime: true,
+                  }}
+                ></CardSummary>
+              ))}
           </section>
         </>
       )}

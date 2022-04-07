@@ -1,18 +1,18 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import Labelled from './Labelled';
+import Labelled from "./Labelled";
 
 interface Props {
   children: React.ReactNode;
   className?: string;
-  type?: 'error' | 'info' | 'warning';
+  type?: "error" | "info" | "warning";
 }
 
-function InfoForInput ({ children, className = '', type = 'info' }: Props): React.ReactElement<Props> {
+function InfoForInput({ children, className = "", type = "info" }: Props): React.ReactElement<Props> {
   return (
     <Labelled>
       <div className={`${className} ${type}`}>{children}</div>

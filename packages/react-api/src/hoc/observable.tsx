@@ -3,23 +3,30 @@
 
 // TODO: Lots of duplicated code between this and withObservable, surely there is a better way of doing this?
 
-import type { CallState } from '../types';
-import type { DefaultProps, HOC, Options, RenderFn } from './types';
+import type { CallState } from "../types";
+import type { DefaultProps, HOC, Options, RenderFn } from "./types";
 
-import React from 'react';
+import React from "react";
 
-import { Observable, of } from '@polkadot/x-rxjs';
-import { catchError, map } from '@polkadot/x-rxjs/operators';
+import { Observable, of } from "@polkadot/x-rxjs";
+import { catchError, map } from "@polkadot/x-rxjs/operators";
 
-import echoTransform from '../transform/echo';
-import { intervalObservable, isEqual, triggerChange } from '../util';
+import echoTransform from "../transform/echo";
+import { intervalObservable, isEqual, triggerChange } from "../util";
 
 interface State extends CallState {
   subscriptions: { unsubscribe: () => void }[];
 }
 
-export default function withObservable<T, P> (observable: Observable<P>, { callOnResult, propName = 'value', transform = echoTransform }: Options = {}): HOC {
-  return (Inner: React.ComponentType<any>, defaultProps: DefaultProps = {}, render?: RenderFn): React.ComponentType<any> => {
+export default function withObservable<T, P>(
+  observable: Observable<P>,
+  { callOnResult, propName = "value", transform = echoTransform }: Options = {}
+): HOC {
+  return (
+    Inner: React.ComponentType<any>,
+    defaultProps: DefaultProps = {},
+    render?: RenderFn
+  ): React.ComponentType<any> => {
     class WithObservable extends React.Component<any, State> {
       private isActive = true;
 
@@ -27,10 +34,10 @@ export default function withObservable<T, P> (observable: Observable<P>, { callO
         callResult: undefined,
         callUpdated: false,
         callUpdatedAt: 0,
-        subscriptions: []
+        subscriptions: [],
       };
 
-      public componentDidMount (): void {
+      public componentDidMount(): void {
         this.setState({
           subscriptions: [
             observable
@@ -39,16 +46,14 @@ export default function withObservable<T, P> (observable: Observable<P>, { callO
                 catchError(() => of(undefined))
               )
               .subscribe((value: any) => this.triggerUpdate(this.props, value)),
-            intervalObservable(this)
-          ]
+            intervalObservable(this),
+          ],
         });
       }
 
-      public componentWillUnmount (): void {
+      public componentWillUnmount(): void {
         this.isActive = false;
-        this.state.subscriptions.forEach((subscription): void =>
-          subscription.unsubscribe()
-        );
+        this.state.subscriptions.forEach((subscription): void => subscription.unsubscribe());
       }
 
       private triggerUpdate = (props: P, callResult?: T): void => {
@@ -62,14 +67,14 @@ export default function withObservable<T, P> (observable: Observable<P>, { callO
           this.setState({
             callResult,
             callUpdated: true,
-            callUpdatedAt: Date.now()
+            callUpdatedAt: Date.now(),
           });
         } catch (error) {
           console.error(this.props, error);
         }
-      }
+      };
 
-      public render (): React.ReactNode {
+      public render(): React.ReactNode {
         const { children } = this.props;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { callResult, callUpdated, callUpdatedAt } = this.state;
@@ -78,12 +83,13 @@ export default function withObservable<T, P> (observable: Observable<P>, { callO
           ...this.props,
           callUpdated,
           callUpdatedAt,
-          [propName]: callResult
+          [propName]: callResult,
         };
 
         return (
           <Inner {..._props}>
-            {render && render(callResult)}{children}
+            {render && render(callResult)}
+            {children}
           </Inner>
         );
       }

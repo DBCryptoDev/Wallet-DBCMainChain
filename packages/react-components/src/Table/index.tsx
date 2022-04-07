@@ -1,12 +1,12 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import Body from './Body';
-import Foot from './Foot';
-import Head from './Head';
+import Body from "./Body";
+import Foot from "./Foot";
+import Head from "./Head";
 
 interface TableProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ interface TableProps {
   noBodyTag?: boolean;
 }
 
-function extractBodyChildren (children: React.ReactNode): [boolean, React.ReactNode] {
+function extractBodyChildren(children: React.ReactNode): [boolean, React.ReactNode] {
   if (!Array.isArray(children)) {
     return [!children, children];
   }
@@ -32,29 +32,29 @@ function extractBodyChildren (children: React.ReactNode): [boolean, React.ReactN
   return [isEmpty, isEmpty ? null : kids];
 }
 
-function Table ({ children, className = '', empty, emptySpinner, filter, footer, header, isFixed, legend, noBodyTag }: TableProps): React.ReactElement<TableProps> {
+function Table({
+  children,
+  className = "",
+  empty,
+  emptySpinner,
+  filter,
+  footer,
+  header,
+  isFixed,
+  legend,
+  noBodyTag,
+}: TableProps): React.ReactElement<TableProps> {
   const [isEmpty, bodyChildren] = extractBodyChildren(children);
 
   return (
     <div className={`ui--Table ${className}`}>
       {legend}
-      <table className={`${(isFixed && !isEmpty) ? 'isFixed' : 'isNotFixed'} highlight--bg-faint`}>
-        <Head
-          filter={filter}
-          header={header}
-          isEmpty={isEmpty}
-        />
-        <Body
-          empty={empty}
-          emptySpinner={emptySpinner}
-          noBodyTag={noBodyTag}
-        >
+      <table className={`${isFixed && !isEmpty ? "isFixed" : "isNotFixed"} highlight--bg-faint`}>
+        <Head filter={filter} header={header} isEmpty={isEmpty} />
+        <Body empty={empty} emptySpinner={emptySpinner} noBodyTag={noBodyTag}>
           {bodyChildren}
         </Body>
-        <Foot
-          footer={footer}
-          isEmpty={isEmpty}
-        />
+        <Foot footer={footer} isEmpty={isEmpty} />
       </table>
     </div>
   );
@@ -174,7 +174,7 @@ export default React.memo(styled(Table)`
           text-align: right;
         }
 
-        .ui--Expander+.ui--Expander {
+        .ui--Expander + .ui--Expander {
           margin-top: 0.375rem;
         }
       }
@@ -304,8 +304,8 @@ export default React.memo(styled(Table)`
         box-shadow: none !important;
       }
 
-      .ui.toggle.checkbox input:checked~.box:before,
-      .ui.toggle.checkbox input:checked~label:before {
+      .ui.toggle.checkbox input:checked ~ .box:before,
+      .ui.toggle.checkbox input:checked ~ label:before {
         background-color: #eee !important;
       }
     }

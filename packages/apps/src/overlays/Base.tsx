@@ -1,22 +1,22 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { IconName } from '@fortawesome/fontawesome-svg-core';
+import type { IconName } from "@fortawesome/fontawesome-svg-core";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { Button, Icon } from '@polkadot/react-components';
-import { useToggle } from '@polkadot/react-hooks';
+import { Button, Icon } from "@polkadot/react-components";
+import { useToggle } from "@polkadot/react-hooks";
 
 interface Props {
   children: React.ReactNode;
   className?: string;
   icon: IconName;
-  type: 'error' | 'info';
+  type: "error" | "info";
 }
 
-function BaseOverlay ({ children, className = '', icon, type }: Props): React.ReactElement<Props> | null {
+function BaseOverlay({ children, className = "", icon, type }: Props): React.ReactElement<Props> | null {
   const [isHidden, toggleHidden] = useToggle();
 
   if (isHidden) {
@@ -24,23 +24,11 @@ function BaseOverlay ({ children, className = '', icon, type }: Props): React.Re
   }
 
   return (
-    <div className={`${className} ${type === 'error' ? 'isError' : 'isInfo'}`}>
-      <div className='content'>
-        <Icon
-          className='contentIcon'
-          icon={icon}
-          size='2x'
-        />
-        <div className='contentItem'>
-          {children}
-        </div>
-        <Button
-          className='closeIcon'
-          icon='times'
-          isBasic
-          isCircular
-          onClick={toggleHidden}
-        />
+    <div className={`${className} ${type === "error" ? "isError" : "isInfo"}`}>
+      <div className="content">
+        <Icon className="contentIcon" icon={icon} size="2x" />
+        <div className="contentItem">{children}</div>
+        <Button className="closeIcon" icon="times" isBasic isCircular onClick={toggleHidden} />
       </div>
     </div>
   );
@@ -62,7 +50,7 @@ export default React.memo(styled(BaseOverlay)`
   &:before {
     border-radius: 0.25rem;
     bottom: 0;
-    content: ' ';
+    content: " ";
     left: 0;
     position: absolute;
     right: 0;
@@ -101,7 +89,7 @@ export default React.memo(styled(BaseOverlay)`
       flex: 1;
       padding: 0 1rem;
 
-      > div+div {
+      > div + div {
         margin-top: 0.5rem;
       }
     }

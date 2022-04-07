@@ -1,10 +1,10 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { IconName } from '@fortawesome/fontawesome-svg-core';
-import type { Routes } from '@polkadot/apps-routing/types';
+import type { IconName } from "@fortawesome/fontawesome-svg-core";
+import type { Routes } from "@polkadot/apps-routing/types";
 
-import React from 'react';
+import React from "react";
 
 export interface ItemRoute {
   Modal?: React.ComponentType<any>;

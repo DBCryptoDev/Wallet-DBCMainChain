@@ -1,19 +1,19 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DeriveStakerPoints } from '@polkadot/api-derive/types';
-import type { ChartInfo, LineDataEntry, Props } from './types';
+import type { DeriveStakerPoints } from "@polkadot/api-derive/types";
+import type { ChartInfo, LineDataEntry, Props } from "./types";
 
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from "react";
 
-import { Chart, Spinner } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { Chart, Spinner } from "@polkadot/react-components";
+import { useApi, useCall } from "@polkadot/react-hooks";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
-const COLORS_POINTS = [undefined, '#acacac'];
+const COLORS_POINTS = [undefined, "#acacac"];
 
-function extractPoints (points: DeriveStakerPoints[] = []): ChartInfo {
+function extractPoints(points: DeriveStakerPoints[] = []): ChartInfo {
   const labels: string[] = [];
   const avgSet: LineDataEntry = [];
   const idxSet: LineDataEntry = [];
@@ -28,46 +28,34 @@ function extractPoints (points: DeriveStakerPoints[] = []): ChartInfo {
       avgCount++;
     }
 
-    avgSet.push((avgCount ? Math.ceil(total * 100 / avgCount) : 0) / 100);
+    avgSet.push((avgCount ? Math.ceil((total * 100) / avgCount) : 0) / 100);
     idxSet.push(points);
   });
 
   return {
     chart: [idxSet, avgSet],
-    labels
+    labels,
   };
 }
 
-function ChartPoints ({ validatorId }: Props): React.ReactElement<Props> {
+function ChartPoints({ validatorId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const params = useMemo(() => [validatorId, false], [validatorId]);
   const stakerPoints = useCall<DeriveStakerPoints[]>(api.derive.staking.stakerPoints, params);
 
-  const { chart, labels } = useMemo(
-    () => extractPoints(stakerPoints),
-    [stakerPoints]
-  );
+  const { chart, labels } = useMemo(() => extractPoints(stakerPoints), [stakerPoints]);
 
-  const legendsRef = useRef([
-    t<string>('points'),
-    t<string>('average')
-  ]);
+  const legendsRef = useRef([t<string>("points"), t<string>("average")]);
 
   return (
-    <div className='staking--Chart'>
-      <h1>{t<string>('era points')}</h1>
-      {labels.length
-        ? (
-          <Chart.Line
-            colors={COLORS_POINTS}
-            labels={labels}
-            legends={legendsRef.current}
-            values={chart}
-          />
-        )
-        : <Spinner />
-      }
+    <div className="staking--Chart">
+      <h1>{t<string>("era points")}</h1>
+      {labels.length ? (
+        <Chart.Line colors={COLORS_POINTS} labels={labels} legends={legendsRef.current} values={chart} />
+      ) : (
+        <Spinner />
+      )}
     </div>
   );
 }

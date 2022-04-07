@@ -1,9 +1,9 @@
 // Copyright 2017-2021 @polkadot/app-bounties authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { BountyStatus } from '@polkadot/types/interfaces';
+import type { BountyStatus } from "@polkadot/types/interfaces";
 
-import { BountyStatusType, StatusName } from '../types';
+import { BountyStatusType, StatusName } from "../types";
 
 export const getBountyStatus = (status: BountyStatus): BountyStatusType => {
   const statusAsString = status.type as StatusName;
@@ -13,14 +13,14 @@ export const getBountyStatus = (status: BountyStatus): BountyStatusType => {
     bountyStatus: statusAsString,
     curator: undefined,
     unlockAt: undefined,
-    updateDue: undefined
+    updateDue: undefined,
   };
 
   if (status.isCuratorProposed) {
     result = {
       ...result,
-      bountyStatus: 'CuratorProposed',
-      curator: status.asCuratorProposed.curator
+      bountyStatus: "CuratorProposed",
+      curator: status.asCuratorProposed.curator,
     };
   }
 
@@ -28,7 +28,7 @@ export const getBountyStatus = (status: BountyStatus): BountyStatusType => {
     result = {
       ...result,
       curator: status.asActive.curator,
-      updateDue: status.asActive.updateDue
+      updateDue: status.asActive.updateDue,
     };
   }
 
@@ -36,9 +36,9 @@ export const getBountyStatus = (status: BountyStatus): BountyStatusType => {
     result = {
       ...result,
       beneficiary: status.asPendingPayout.beneficiary,
-      bountyStatus: 'PendingPayout',
+      bountyStatus: "PendingPayout",
       curator: status.asPendingPayout.curator,
-      unlockAt: status.asPendingPayout.unlockAt
+      unlockAt: status.asPendingPayout.unlockAt,
     };
   }
 

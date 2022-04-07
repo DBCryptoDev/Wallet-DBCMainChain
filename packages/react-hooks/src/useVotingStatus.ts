@@ -1,16 +1,16 @@
 // Copyright 2017-2021 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { BlockNumber, Votes } from '@polkadot/types/interfaces';
+import type { BlockNumber, Votes } from "@polkadot/types/interfaces";
 
-import BN from 'bn.js';
-import { useMemo } from 'react';
+import BN from "bn.js";
+import { useMemo } from "react";
 
-import { ApiPromise } from '@polkadot/api';
-import { isFunction } from '@polkadot/util';
+import { ApiPromise } from "@polkadot/api";
+import { isFunction } from "@polkadot/util";
 
-import { useApi } from './useApi';
-import { useBestNumber } from './useBestNumber';
+import { useApi } from "./useApi";
+import { useBestNumber } from "./useBestNumber";
 
 interface State {
   hasFailed: boolean;
@@ -20,16 +20,28 @@ interface State {
   remainingBlocks: BN | null;
 }
 
-const DEFAULT_STATUS = { hasFailed: false, hasPassed: false, isCloseable: false, isVoteable: false, remainingBlocks: null };
+const DEFAULT_STATUS = {
+  hasFailed: false,
+  hasPassed: false,
+  isCloseable: false,
+  isVoteable: false,
+  remainingBlocks: null,
+};
 
-function getStatus (api: ApiPromise, bestNumber: BlockNumber, votes: Votes, numMembers: number, section: 'council' | 'technicalCommittee'): State {
+function getStatus(
+  api: ApiPromise,
+  bestNumber: BlockNumber,
+  votes: Votes,
+  numMembers: number,
+  section: "council" | "technicalCommittee"
+): State {
   if (!votes.end) {
     return {
       hasFailed: false,
       hasPassed: false,
       isCloseable: false,
       isVoteable: true,
-      remainingBlocks: null
+      remainingBlocks: null,
     };
   }
 
@@ -46,20 +58,20 @@ function getStatus (api: ApiPromise, bestNumber: BlockNumber, votes: Votes, numM
         : isEnd
       : false,
     isVoteable: !isEnd,
-    remainingBlocks: isEnd
-      ? null
-      : votes.end.sub(bestNumber)
+    remainingBlocks: isEnd ? null : votes.end.sub(bestNumber),
   };
 }
 
-export function useVotingStatus (votes: Votes | null | undefined, numMembers: number, section: 'council' | 'technicalCommittee'): State {
+export function useVotingStatus(
+  votes: Votes | null | undefined,
+  numMembers: number,
+  section: "council" | "technicalCommittee"
+): State {
   const { api } = useApi();
   const bestNumber = useBestNumber();
 
   return useMemo(
-    () => bestNumber && votes
-      ? getStatus(api, bestNumber, votes, numMembers, section)
-      : DEFAULT_STATUS,
+    () => (bestNumber && votes ? getStatus(api, bestNumber, votes, numMembers, section) : DEFAULT_STATUS),
     [api, bestNumber, numMembers, section, votes]
   );
 }

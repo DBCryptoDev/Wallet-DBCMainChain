@@ -1,17 +1,17 @@
 // Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import spinnerSrc from './Spinner.png';
-import { useTranslation } from './translate';
+import spinnerSrc from "./Spinner.png";
+import { useTranslation } from "./translate";
 
 interface Props {
   className?: string;
   label?: React.ReactNode;
   noLabel?: boolean;
-  variant?: 'app' | 'cover' | 'push' | 'mini';
+  variant?: "app" | "cover" | "push" | "mini";
 }
 
 // prefetch
@@ -19,16 +19,13 @@ const img = new Image();
 
 img.src = spinnerSrc as string;
 
-function Spinner ({ className = '', label, noLabel, variant = 'app' }: Props): React.ReactElement<Props> | null {
+function Spinner({ className = "", label, noLabel, variant = "app" }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
 
   return (
-    <div className={`${className} ui--Spinner${variant === 'cover' ? ' isCover' : ''}`}>
-      <img
-        className={variant === 'push' ? '' : 'highlight--bg highlight--border'}
-        src={spinnerSrc as string}
-      />
-      {!noLabel && variant === 'app' && <div className='text'>{label || t('Retrieving data')}</div>}
+    <div className={`${className} ui--Spinner${variant === "cover" ? " isCover" : ""}`}>
+      <img className={variant === "push" ? "" : "highlight--bg highlight--border"} src={spinnerSrc as string} />
+      {!noLabel && variant === "app" && <div className="text">{label || t("Retrieving data")}</div>}
     </div>
   );
 }
@@ -61,7 +58,7 @@ export default React.memo(styled(Spinner)`
     margin: 0.25rem auto 1.5rem auto;
     opacity: 0.6;
 
-    div+div {
+    div + div {
       margin-top: 0.25rem;
     }
   }
