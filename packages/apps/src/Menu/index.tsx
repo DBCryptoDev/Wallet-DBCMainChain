@@ -36,7 +36,7 @@ function createExternals(t: TFunction): ItemRoute[] {
       text: t<string>("nav.github", "GitHub", { ns: "apps-routing" }),
     },
     {
-      href: "https://www.dbchain.ai/home",
+      href: "https://deepbrainchain.github.io/DBC-Wiki/",
       icon: "book",
       name: "wiki",
       text: t<string>("nav.wiki", "Wiki", { ns: "apps-routing" }),
