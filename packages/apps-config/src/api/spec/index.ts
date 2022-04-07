@@ -20,6 +20,7 @@ import darwinia from "./darwinia";
 import darwiniaParachain from "./darwinia-parachain";
 import datahighwayParachain from "./datahighway";
 import dbc from "./dbc";
+import congtu from "./congtu";
 import dock from "./dock";
 import dotmog from "./dotmog";
 import dusty from "./dusty";
@@ -89,6 +90,7 @@ const spec: Record<string, OverrideBundleDefinition> = {
   "cumulus-test-parachain": testPara,
   "datahighway-parachain": datahighwayParachain,
   node: dbc,
+  congtu: congtu,
   "dev-parachain": zenlink,
   "dock-main-runtime": dock,
   "dock-testnet": dock,

@@ -20,7 +20,7 @@ export function createTesting(t: TFunction): LinkOption[] {
       info: "dbctestnet",
       text: t("rpc.dbc", "DBC testnet", { ns: "apps-config" }),
       providers: {
-        "DBC Network": "wss://infotest.dbcwallet.io",
+        "DBC Network": "wss://infotest.dbcwallet.io:7777",
       },
     },
     // // alphabetical based on chain name, e.g. Amber, Arcadia, Beresheet, ...
