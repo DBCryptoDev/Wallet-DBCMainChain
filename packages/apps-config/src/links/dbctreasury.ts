@@ -11,7 +11,8 @@ export default {
     Kusama: "ksm",
     Polkadot: "dot",
   },
-  create: (chain: string, path: string, data: BN | number | string): string => `https://www.reddit.com/r/DBC_Council/`,
+  create: (chain: string, path: string, data: BN | number | string): string =>
+    `https://deepbrainchain.github.io/DBC-Wiki/council/${data.toString()}`,
   //`https://www.dbctreasury.com.com/${chain}/${path}/${data.toString()}`,
   isActive: true,
   logo: externalLogos.dbctreasury as string,
