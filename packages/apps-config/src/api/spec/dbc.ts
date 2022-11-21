@@ -12,6 +12,7 @@ const definitions: OverrideBundleDefinition = {
         URL: "Text",
         MachineId: "Text",
         TelecomName: "Text",
+        RentOrderId: "u64",
         FoundationIssueRewards: {
           who: "Vec<AccountId>",
           left_reward_times: "u32",
@@ -76,7 +77,7 @@ const definitions: OverrideBundleDefinition = {
         MachineInfo: {
           controller: "AccountId",
           machine_stash: "AccountId",
-          last_machine_renter: "Option<AccountId>",
+          renters: "Vec<AccountId>",
           last_machine_restake: "BlockNumber",
           bonding_height: "BlockNumber",
           online_height: "BlockNumber",
@@ -84,7 +85,7 @@ const definitions: OverrideBundleDefinition = {
           init_stake_per_gpu: "Balance",
           stake_amount: "Balance",
           machine_status: "MachineStatus",
-          total_rented_duration: "u64",
+          total_rented_duration: "BlockNumber",
           total_rented_times: "u64",
           total_rent_fee: "Balance",
           total_burn_fee: "Balance",
@@ -225,6 +226,8 @@ const definitions: OverrideBundleDefinition = {
           committee_stake: "Balance",
           slash_time: "BlockNumber",
           slash_exec_time: "BlockNumber",
+          reporter: "Option<AccountId>",
+          renters: "Vec<AccountId>",
           book_result: "OCBookResultType",
           slash_result: "OCSlashResult",
         },
@@ -301,6 +304,7 @@ const definitions: OverrideBundleDefinition = {
           reporter_stake: "Balance",
           first_book_time: "BlockNumber",
           machine_id: "MachineId",
+          rent_order_id: "RentOrderId",
           err_info: "Vec<u8>",
           verifying_committee: "Option<AccountId>",
           booked_committee: "Vec<AccountId>",
@@ -325,7 +329,7 @@ const definitions: OverrideBundleDefinition = {
         },
         MachineFaultType: {
           _enum: {
-            RentedInaccessible: "MachineId",
+            RentedInaccessible: "(MachineId, RentOrderId)",
             RentedHardwareMalfunction: "(ReportHash, BoxPubkey)",
             RentedHardwareCounterfeit: "(ReportHash, BoxPubkey)",
             OnlineRentFailed: "(ReportHash, BoxPubkey)",
@@ -380,15 +384,22 @@ const definitions: OverrideBundleDefinition = {
           snap_len: "u64",
         },
         RentOrderDetail: {
+          machine_id: "MachineId",
           renter: "AccountId",
           rent_start: "BlockNumber",
           confirm_rent: "BlockNumber",
           rent_end: "BlockNumber",
           stake_amount: "Balance",
           rent_status: "RentStatus",
+          gpu_num: "u32",
+          gpu_index: "Vec<u32>",
         },
         RentStatus: {
           _enum: ["WaitingVerifying", "Renting", "RentExpired"],
+        },
+        MachineGPUOrder: {
+          rent_order: "Vec<RentOrderId>",
+          used_gpu: "Vec<u32>",
         },
         CommitteeStakeParamsInfo: {
           stake_baseline: "Balance",
