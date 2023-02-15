@@ -12,7 +12,8 @@ export default {
     Polkadot: "dot",
   },
   create: (chain: string, path: string, data: BN | number | string): string =>
-    `https://deepbrainchain.github.io/DBC-Wiki/council/${data.toString()}`,
+  // `https://deepbrainchain.github.io/DBC-Wiki/council/${data.toString()}`,
+  `https://www.reddit.com/r/DBC_Council/`,
   //`https://www.dbctreasury.com.com/${chain}/${path}/${data.toString()}`,
   isActive: true,
   logo: externalLogos.dbctreasury as string,
