@@ -17,7 +17,7 @@ module.exports = merge(baseConfig(__dirname, "development"), {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      PAGE_TITLE: "Polkadot/Substrate Portal",
+      PAGE_TITLE: "DBC Wallet Protal",
       inject: true,
       template: path.join(__dirname, "public/index.html"),
     }),

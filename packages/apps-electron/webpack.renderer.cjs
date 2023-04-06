@@ -17,7 +17,7 @@ module.exports = merge(baseConfig(context, "development"), {
     // It must be placed before HtmlWebpackPlugin
     new CopyWebpackPlugin({ patterns: [{ from: "../apps/public" }] }),
     new HtmlWebpackPlugin({
-      PAGE_TITLE: "Polkadot/Substrate Portal",
+      PAGE_TITLE: "DBC Wallet Protal",
       inject: true,
       template: path.join(context, "../apps/public/index.html"),
     }),
