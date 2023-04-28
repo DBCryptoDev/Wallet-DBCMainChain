@@ -18,6 +18,7 @@ import styled, { ThemeContext } from "styled-components";
 import { ApiPromise } from "@polkadot/api";
 import {
   AddressInfo,
+  AddressInfoNew,
   AddressMini,
   AddressSmall,
   Badge,
@@ -547,6 +548,11 @@ function Account({
       <td className="number">
         <AddressInfo address={address} withBalance withBalanceToggle withExtended={false} />
       </td>
+
+      <td className="number">
+        <AddressInfoNew address={address} withBalance withBalanceToggle withExtended={false} />
+      </td>
+      
       <td className="button">
         {isFunction(api.api.tx.balances?.transfer) && (
           <Button icon="paper-plane" label={t<string>("send")} onClick={toggleTransfer} />

@@ -93,6 +93,9 @@ function Overview({ className = "", onStatusChange }: Props): React.ReactElement
     [t("tags"), "start"],
     [t("transactions"), "media--1500"],
     [t("balances"), "expand"],
+
+    [t("dlcAsset"), ""],
+    
     [],
     [undefined, "media--1400"],
   ]);

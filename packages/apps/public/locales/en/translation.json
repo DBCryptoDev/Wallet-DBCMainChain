@@ -47,6 +47,9 @@
   "Deploy a contract": "",
   "Derive account via derivation path": "",
   "Developer": "",
+  
+  "DLC_frozen": "freeze",
+
   "Distinct stash and controller accounts are recommended to ensure fund security. You will be allowed to make the transaction, but take care to not tie up all funds, only use a portion of the available funds during this period.": "",
   "Evaluated {{count}} keys in {{elapsed}}s ({{avg}} keys/s)": "",
   "Execute": "",
@@ -196,7 +199,10 @@
   "backed": "",
   "backing": "",
   "balance": "",
-  "balances": "",
+  "balances": "DBC balance",
+
+  "dlcAsset": "DLC balance",
+
   "beneficiary": "",
   "best #": "",
   "best hash": "",

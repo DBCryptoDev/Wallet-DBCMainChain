@@ -8,23 +8,20 @@ import type {
   DeriveDemocracyLock,
   DeriveStakingAccount,
 } from "@polkadot/api-derive/types";
-import type { BlockNumber, LockIdentifier, ValidatorPrefsTo145 } from "@polkadot/types/interfaces";
+import type { BlockNumber, ValidatorPrefsTo145 } from "@polkadot/types/interfaces";
 
 import BN from "bn.js";
 import React, { useRef } from "react";
 import styled from "styled-components";
 
 import { withCalls, withMulti } from "@polkadot/react-api/hoc";
-import { Expander, Icon, Tooltip } from "@polkadot/react-components";
+import { Expander } from "@polkadot/react-components";
 import { useBestNumber } from "@polkadot/react-hooks";
-import { BlockToTime, FormatBalance } from "@polkadot/react-query";
-import { BN_ZERO, formatBalance, formatNumber, hexToString, isObject } from "@polkadot/util";
+import {  FormatBalance, FormatBalancenew } from "@polkadot/react-query";
+import { BN_ZERO, formatNumber, isObject } from "@polkadot/util";
 
 import CryptoType from "./CryptoType";
-import DemocracyLocks from "./DemocracyLocks";
 import Label from "./Label";
-import StakingRedeemable from "./StakingRedeemable";
-import StakingUnbonding from "./StakingUnbonding";
 import { useTranslation } from "./translate";
 
 // true to display, or (for bonded) provided values [own, ...all extras]
@@ -100,18 +97,6 @@ const DEFAULT_PREFS = {
   unstakeThreshold: true,
   validatorPayment: true,
 };
-
-function lookupLock(lookup: Record<string, string>, lockId: LockIdentifier): string {
-  const lockHex = lockId.toHex();
-
-  try {
-    const lockName = hexToString(lockHex);
-
-    return lookup[lockName] || lockName;
-  } catch (error) {
-    return lockHex;
-  }
-}
 
 // skip balances retrieval of none of this matches
 function skipBalancesIf({ withBalance = true, withExtended = false }: Props): boolean {
@@ -269,21 +254,6 @@ function createBalanceItems(
   }
 ): React.ReactNode {
   const allItems: React.ReactNode[] = [];
-
-  !withBalanceToggle &&
-    balancesAll &&
-    balanceDisplay.total &&
-    allItems.push(
-      <React.Fragment key={0}>
-        <Label label={t<string>("total")} />
-        <FormatBalance
-          className="result"
-          formatIndex={formatIndex}
-          value={balancesAll.freeBalance.add(balancesAll.reservedBalance)}
-        />
-      </React.Fragment>
-    );
-  
   // dlcBalancesAll &&
   //   Number(dlcBalancesAll) &&
   //   allItems.push(
@@ -296,176 +266,38 @@ function createBalanceItems(
   //       />
   //     </React.Fragment>
   //   );
-  // dlcBalances &&
-  //   !dlcBalances.balance.isZero() &&
-  //   allItems.push(
-  //     <React.Fragment key={10}>
-  //       <Label label={dlcBalances.isFrozen.toString() == 'true' ? t<string>("DLC_frozen") : t<string>("DLC_trans")} />
-  //       <FormatBalancenew
-  //         className="result"
-  //         formatIndex={formatIndex}
-  //         value={dlcBalances.balance}
-  //       />
-  //     </React.Fragment>
-  //   );
-  // dlcBalancesLocks &&
-  //   !dlcBalancesLocks.isZero() &&
-  //   allItems.push(
-  //     <React.Fragment key={11}>
-  //       <Label label={t<string>("DLC_locked")} />
-  //       <FormatBalancenew
-  //         className="result"
-  //         formatIndex={formatIndex}
-  //         value={dlcBalancesLocks}
-  //       />
-  //     </React.Fragment>
-  //   );
-  
-  balancesAll &&
-    balanceDisplay.available &&
-    (balancesAll as DeriveBalancesAll).availableBalance &&
+  dlcBalances &&
+    !dlcBalances.balance.isZero() &&
     allItems.push(
-      <React.Fragment key={1}>
-        <Label label={t<string>("transferrable")} />
-        <FormatBalance
+      <React.Fragment key={10}>
+        <Label label={dlcBalances.isFrozen.toString() == 'true' ? t<string>("DLC_frozen") : t<string>("transferrable")} />
+        <FormatBalancenew
           className="result"
           formatIndex={formatIndex}
-          value={(balancesAll as DeriveBalancesAll).availableBalance}
+          value={dlcBalances.balance}
         />
       </React.Fragment>
     );
-  balanceDisplay.vested &&
-    (balancesAll as DeriveBalancesAll)?.isVesting &&
+  dlcBalancesLocks &&
+    !dlcBalancesLocks.isZero() &&
     allItems.push(
-      <React.Fragment key={2}>
-        <Label label={t<string>("vested")} />
-        <FormatBalance
-          className="result"
-          formatIndex={formatIndex}
-          label={<Icon icon="info-circle" tooltip={`${address}-vested-trigger`} />}
-          value={(balancesAll as DeriveBalancesAll).vestedBalance}
-        >
-          <Tooltip
-            text={
-              <>
-                <div>
-                  {formatBalance((balancesAll as DeriveBalancesAll).vestedClaimable, { forceUnit: "-" })}
-                  <div className="faded">{t("available to be unlocked")}</div>
-                </div>
-                {bestNumber.lt((balancesAll as DeriveBalancesAll).vestingEndBlock) && (
-                  <>
-                    <div>
-                      <BlockToTime value={(balancesAll as DeriveBalancesAll).vestingEndBlock.sub(bestNumber)} />
-                      <div className="faded">
-                        {t("until block")} {formatNumber((balancesAll as DeriveBalancesAll).vestingEndBlock)}
-                      </div>
-                    </div>
-                    <div>
-                      {formatBalance((balancesAll as DeriveBalancesAll).vestingPerBlock)}
-                      <div className="faded">{t("per block")}</div>
-                    </div>
-                  </>
-                )}
-              </>
-            }
-            trigger={`${address}-vested-trigger`}
-          />
-        </FormatBalance>
-      </React.Fragment>
-    );
-  balanceDisplay.locked &&
-    balancesAll &&
-    (isAllLocked || (balancesAll as DeriveBalancesAll).lockedBalance?.gtn(0)) &&
-    allItems.push(
-      <React.Fragment key={3}>
+      <React.Fragment key={11}>
         <Label label={t<string>("locked")} />
-        <FormatBalance
+        <FormatBalancenew
           className="result"
           formatIndex={formatIndex}
-          label={<Icon icon="info-circle" tooltip={`${address}-locks-trigger`} />}
-          value={isAllLocked ? "all" : (balancesAll as DeriveBalancesAll).lockedBalance}
-        >
-          <Tooltip
-            text={(balancesAll as DeriveBalancesAll).lockedBreakdown.map(
-              ({ amount, id, reasons }, index): React.ReactNode => (
-                <div key={index}>
-                  {amount.isMax() ? t<string>("everything") : formatBalance(amount, { forceUnit: "-" })}
-                  {id && <div className="faded">{lookupLock(lookup, id)}</div>}
-                  <div className="faded">{reasons.toString()}</div>
-                </div>
-              )
-            )}
-            trigger={`${address}-locks-trigger`}
-          />
-        </FormatBalance>
+          value={dlcBalancesLocks}
+        />
       </React.Fragment>
     );
-  balanceDisplay.reserved &&
-    balancesAll?.reservedBalance?.gtn(0) &&
-    allItems.push(
-      <React.Fragment key={4}>
-        <Label label={t<string>("reserved")} />
-        <FormatBalance className="result" formatIndex={formatIndex} value={balancesAll.reservedBalance} />
-      </React.Fragment>
-    );
-  balanceDisplay.bonded &&
-    (ownBonded.gtn(0) || otherBonded.length !== 0) &&
-    allItems.push(
-      <React.Fragment key={5}>
-        <Label label={t<string>("bonded")} />
-        <FormatBalance className="result" formatIndex={formatIndex} value={ownBonded}>
-          {otherBonded.length !== 0 && (
-            <>
-              &nbsp;(+
-              {otherBonded.map(
-                (bonded, index): React.ReactNode => (
-                  <FormatBalance formatIndex={formatIndex} key={index} value={bonded} />
-                )
-              )}
-              )
-            </>
-          )}
-        </FormatBalance>
-      </React.Fragment>
-    );
-  balanceDisplay.redeemable &&
-    stakingInfo?.redeemable?.gtn(0) &&
-    allItems.push(
-      <React.Fragment key={6}>
-        <Label label={t<string>("redeemable")} />
-        <StakingRedeemable className="result" stakingInfo={stakingInfo} />
-      </React.Fragment>
-    );
-  balanceDisplay.unlocking &&
-    stakingInfo?.unlocking &&
-    allItems.push(
-      <React.Fragment key={7}>
-        <Label label={t<string>("unbonding")} />
-        <div className="result">
-          <StakingUnbonding stakingInfo={stakingInfo} />
-        </div>
-      </React.Fragment>
-    );
-  balanceDisplay.unlocking &&
-    democracyLocks &&
-    democracyLocks.length !== 0 &&
-    allItems.push(
-      <React.Fragment key={8}>
-        <Label label={t<string>("democracy")} />
-        <div className="result">
-          <DemocracyLocks value={democracyLocks} />
-        </div>
-      </React.Fragment>
-    );
-
   if (withBalanceToggle) {
     return (
       <React.Fragment key={formatIndex}>
         <Expander
           summary={
-            <FormatBalance
+            <FormatBalancenew
               formatIndex={formatIndex}
-              value={balancesAll && balancesAll.freeBalance.add(balancesAll.reservedBalance)}
+              value={dlcBalancesAll}
             />
           }
         >
@@ -474,7 +306,6 @@ function createBalanceItems(
       </React.Fragment>
     );
   }
-
   return <React.Fragment key={formatIndex}>{allItems}</React.Fragment>;
 }
 

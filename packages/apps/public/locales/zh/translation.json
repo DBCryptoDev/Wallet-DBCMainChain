@@ -185,6 +185,9 @@
   "Do not include a tip for the block author": "不包含区块打包者小费",
   "Don't use a proxy for this call": "不要对此调用使用代理",
   "Download": "下载",
+ 
+  "DLC_frozen": "冻结",
+
   "Either approve or reject this call.": "赞成或者拒绝此调用。",
   "Election of new council candidates": "选举新的理事会候选人",
   "Enactment of the result of referendum {{id}}": "公投结果{{id}}的执行",
@@ -936,7 +939,10 @@
   "backing": "备份",
   "backup file": "备份文件",
   "balance": "余额",
-  "balances": "余额",
+  "balances": "DBC余额",
+
+  "dlcAsset": "DLC余额",
+
   "beneficiary": "受益者",
   "best": "最好",
   "best #": "最好 #",

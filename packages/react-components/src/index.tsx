@@ -98,3 +98,6 @@ export { default as VoteValue } from "./VoteValue";
 export { default as TextArea } from "./TextArea";
 
 export { default as media } from "./media";
+
+
+export { default as AddressInfoNew } from "./AddressInfoNew";

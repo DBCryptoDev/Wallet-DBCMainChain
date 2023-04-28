@@ -19,6 +19,7 @@ import { assert, isNull, isUndefined } from "@polkadot/util";
 import echoTransform from "../transform/echo";
 import { isEqual, triggerChange } from "../util";
 import withApi from "./api";
+import Address from "@polkadot/react-signer/Address";
 
 // FIXME This is not correct, we need some junction of derive, query & consts
 interface Method {
@@ -128,8 +129,13 @@ export default function withCall<P extends ApiProps>(
       }
 
       private getParams(props: any): [boolean, any[]] {
-        const paramValue = paramPick ? paramPick(props) : paramName ? props[paramName] : undefined;
-
+        let paramValue;
+        if (paramName == 'dlcAssets') {
+          paramValue = ['88', props['address']]
+        } else {
+          paramValue = paramPick ? paramPick(props) : paramName ? props[paramName] : undefined;
+        }
+        // const paramValue = paramPick ? paramPick(props) : paramName ? props[paramName] : undefined;
         if (atProp) {
           at = props[atProp];
         }
