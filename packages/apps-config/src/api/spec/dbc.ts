@@ -424,6 +424,29 @@ const definitions: OverrideBundleDefinition = {
           can_claim_reward: "Balance",
           claimed_reward: "Balance",
         },
+        AssetBalance: {
+          balance: "u64",
+          is_frozen: "bool",
+          is_zombie: "bool"
+        },
+        AssetLock: {
+          from: "AccountId",
+          balance: "u64",
+          unlock_time: "BlockNumber"
+        },
+        AssetDetails: {
+          owner: "AccountId",
+          issuer: "AccountId",
+          admin: "AccountId",
+          freezer: "AccountId",
+          supply: "u64",
+          deposit: "Balance",
+          max_zombies: "u32",
+          min_balance: "u64",
+          zombies: "u32",
+          accounts: "u32",
+          is_frozen: "bool",
+        },
       },
     },
   ],
