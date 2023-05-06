@@ -49,8 +49,8 @@ export interface ValidatorPrefsType {
 
 export interface DlcBalances {
   balance: BN;
-  isFrozen: boolean;
-  isSufficient: boolean;
+  is_frozen: boolean;
+  is_zombie: boolean;
 }
 
 interface Props {
@@ -73,8 +73,8 @@ interface Props {
 
 const DlcBalances_Defult: DlcBalances = {
   balance: BN_ZERO,
-  isFrozen: false,
-  isSufficient: false
+  is_frozen: false,
+  is_zombie: false
 }
 
 const DlcBalancesLocks_Defult = BN_ZERO
@@ -270,7 +270,7 @@ function createBalanceItems(
     !dlcBalances.balance.isZero() &&
     allItems.push(
       <React.Fragment key={10}>
-        <Label label={dlcBalances.isFrozen.toString() == 'true' ? t<string>("DLC_frozen") : t<string>("transferrable")} />
+        <Label label={dlcBalances.is_frozen.toString() == 'true' ? t<string>("DLC_frozen") : t<string>("transferrable")} />
         <FormatBalancenew
           className="result"
           formatIndex={formatIndex}

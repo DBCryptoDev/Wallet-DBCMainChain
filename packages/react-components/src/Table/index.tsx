@@ -76,7 +76,7 @@ export default React.memo(styled(Table)`
     &.isFixed {
       table-layout: fixed;
     }
-
+    th {      text-transform: none;    }
     tr {
       max-width: 100%;
       width: 100%;
@@ -104,7 +104,6 @@ export default React.memo(styled(Table)`
 
   tbody {
     position: relative;
-
     td {
       border-bottom: 1px solid var(--border-table);
       padding: 0.5rem 1rem;
