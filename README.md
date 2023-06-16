@@ -1,6 +1,6 @@
 # 优化版本
 
-## 安装
+## 安装依赖
 
 ```bash
 $ yarn
@@ -13,6 +13,8 @@ $ yarn
 ```bash
 $ npm run build:www
 ```
+
+> 编译后的目录为 `packages/apps/build`
 
 ## 说明
 
